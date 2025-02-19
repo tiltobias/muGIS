@@ -1,34 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useRef } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
+import 'mapbox-gl'
+
+import MapContainer from './components/MapContainer'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+    setTimeout(() => {
+      mapRef.current?.resize();
+    }, 1);
+    setTimeout(() => { // just in case
+      mapRef.current?.resize();
+    }, 100);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="pageContainer">
+      <header className="mainHeader">
+        μGIS
+        <button onClick={handleSidebarToggle}>BUTTON</button>
+      </header>
+      <main className="mainContainer">
+        <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+
+        </aside>
+        <div className="mapFlexContainer">
+          <MapContainer mapRef={mapRef} />
+        </div>
+      </main>
+    </div>
   )
 }
 
