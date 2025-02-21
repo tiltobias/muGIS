@@ -20,8 +20,8 @@ const MapContainer:FC<MapContainerProps> = ({mapRef}) => {
         style: 'mapbox://styles/mapbox/streets-v12', // style URL
         center: [10.4, 63.425], // starting position [lng, lat]
         zoom: 12, // starting zoom
+        attributionControl: false,
       });
-      return () => mapRef.current?.remove(); // cleanup on unmount
     };
   }, [mapRef]);
 

@@ -27,6 +27,7 @@
   width: auto;
   position: relative;
   display: flex;
+  overflow: hidden;
 }
 .sidebarContainer:not(.open) {
   width: 0;

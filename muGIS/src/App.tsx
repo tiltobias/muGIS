@@ -22,11 +22,38 @@ function App() {
     }, 100);
   }
 
+  const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.item(0);
+    if (!file) {
+      console.log("no file selected");
+      return;
+    }
+
+    console.log("Load Data Layer")
+    mapRef.current?.addSource("source-vann", {
+      type: "geojson",
+      // data: "./geodata/vann.geojson",
+      data: URL.createObjectURL(file),
+    });
+    mapRef.current?.addLayer({
+      id: "layer-vann",
+      type: "fill",
+      source: "source-vann",
+      paint: {
+        "fill-color": "#00ff00",
+        "fill-opacity": 0.5,
+      },
+    });
+  }
+
   return (
     <div className="pageContainer">
       <header className="mainHeader">
-        μGIS
+        <h1>
+          μGIS
+        </h1>
         <button onClick={handleSidebarToggle}>Sidebar</button>
+        <input type="file" accept=".geojson,.json" onChange={handleLoadDataLayer} />
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
