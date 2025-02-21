@@ -26,12 +26,14 @@ function App() {
     <div className="pageContainer">
       <header className="mainHeader">
         μGIS
-        <button onClick={handleSidebarToggle}>BUTTON</button>
+        <button onClick={handleSidebarToggle}>Sidebar</button>
       </header>
       <main className="mainContainer">
-        <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-
-        </aside>
+        <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
+          <aside className="sidebar">
+            
+          </aside>
+        </div>
         <div className="mapFlexContainer">
           <MapContainer mapRef={mapRef} />
         </div>

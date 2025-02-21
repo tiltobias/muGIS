@@ -23,13 +23,19 @@
   position: relative;
 }
 
+.sidebarContainer {
+  width: auto;
+  position: relative;
+  display: flex;
+}
+.sidebarContainer:not(.open) {
+  width: 0;
+}
+
 .sidebar {
-  width: 50px;
+  width: 200px;
   background-color: #282c34;
   color: white;
   padding: 1rem;
   /* transition: width .5s ease; */
-}
-.sidebar.open {
-  width: 300px;
 }
