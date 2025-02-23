@@ -9,7 +9,14 @@
 .mainHeader {
   background-color: #282c34;
   color: white;
-  padding: 1rem;
+  padding: .5rem;
+  display: flex;
+}
+
+.mainHeader h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: initial;
 }
 
 .mainContainer {
