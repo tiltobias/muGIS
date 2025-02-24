@@ -5,6 +5,7 @@ import './App.css'
 import 'mapbox-gl'
 
 import MapContainer from './components/MapContainer'
+import Layer from './components/Layer';
 
 interface Layer {
   id: string;
@@ -44,8 +45,8 @@ function App() {
       type: "fill",
       source: "source-"+file.name,
       paint: {
-        "fill-color": "#00ff00",
-        "fill-opacity": 0.5,
+        "fill-color": "rgba(0,255,0,0.5)",
+        // "fill-opacity": 0.5,
       },
     });
     setLayers([...layers, {
@@ -69,16 +70,7 @@ function App() {
             <h2>Sidebar</h2>
             <ol>
               {layers.map((layer) => (
-                <li key={layer.id}>
-                  <div>{layer.name}</div>
-                  <button onClick={()=>{
-                    if (mapRef.current?.getLayoutProperty(layer.id, "visibility") === "none") {
-                      mapRef.current?.setLayoutProperty(layer.id, "visibility", "visible");
-                    } else {
-                      mapRef.current?.setLayoutProperty(layer.id, "visibility", "none");
-                    }
-                  }}>Eye</button>
-                </li>
+                <Layer key={layer.id} mapRef={mapRef} id={layer.id} name={layer.name} />
               ))}
             </ol>
           </aside>
