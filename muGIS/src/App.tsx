@@ -8,6 +8,7 @@ import MapContainer from './components/MapContainer'
 import Layer from './components/Layer';
 
 interface Layer {
+  source: string;
   id: string;
   name: string;
 }
@@ -26,7 +27,7 @@ function App() {
     setTimeout(() => { // just in case
       mapRef.current?.resize();
     }, 100);
-  }
+  };
 
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.item(0);
@@ -35,25 +36,17 @@ function App() {
       return;
     }
 
-    console.log("Load Data Layer: " + file.name);
     mapRef.current?.addSource("source-"+file.name, {
       type: "geojson",
       data: URL.createObjectURL(file),
     });
-    mapRef.current?.addLayer({
-      id: "layer-"+file.name,
-      type: "fill",
-      source: "source-"+file.name,
-      paint: {
-        "fill-color": "rgba(0,255,0,0.5)",
-        // "fill-opacity": 0.5,
-      },
-    });
+
     setLayers([...layers, {
+      source: "source-"+file.name,
       id: "layer-"+file.name,
       name: file.name,
     }]);
-  }
+  };
 
   return (
     <div className="pageContainer">
@@ -70,7 +63,7 @@ function App() {
             <h2>Sidebar</h2>
             <ol>
               {layers.map((layer) => (
-                <Layer key={layer.id} mapRef={mapRef} id={layer.id} name={layer.name} />
+                <Layer key={layer.id} mapRef={mapRef} source={layer.source} id={layer.id} name={layer.name} />
               ))}
             </ol>
           </aside>
@@ -80,7 +73,7 @@ function App() {
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
 export default App

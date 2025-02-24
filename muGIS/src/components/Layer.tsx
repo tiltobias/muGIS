@@ -1,14 +1,36 @@
-import { FC, RefObject, useState } from 'react';
-// import { RgbaColorPicker } from 'react-colorful';
+import { FC, RefObject, useState, useEffect } from 'react';
+import { RgbaColorPicker, RgbaColor } from 'react-colorful';
 
 interface LayerProps {
   mapRef: RefObject<mapboxgl.Map | null>;
+  source: string;
   id: string;
   name: string;
 }
 
-const Layer:FC<LayerProps> = ({mapRef, id, name}) => {
+const Layer:FC<LayerProps> = ({mapRef, source, id, name}) => {
   const [layerName] = useState<string>(name);
+  const [layerColor, setLayerColor] = useState<RgbaColor>({
+    r: Math.floor(Math.random()*255), 
+    g: Math.floor(Math.random()*255), 
+    b: Math.floor(Math.random()*255), 
+    a: 0.7,
+  });
+
+  // Add layer to map on mount of layer component
+  useEffect(()=>{
+    mapRef.current?.addLayer({
+      id: id,
+      type: "fill",
+      source: source,
+      paint: {
+        "fill-color": `rgb(${layerColor.r},${layerColor.g},${layerColor.b})`,
+        "fill-opacity": layerColor.a,
+      },
+    });
+    console.log("Load Data Layer: " + name);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   return (
     <li>
@@ -21,19 +43,14 @@ const Layer:FC<LayerProps> = ({mapRef, id, name}) => {
           mapRef.current?.setLayoutProperty(id, "visibility", "none");
         }
       }}>Eye</button>
-      <input type="color" 
-        value={mapRef.current?.getPaintProperty(id, "fill-color") as string}
-        onChange={(event)=>{
-          console.log(event.target.value);
-          mapRef.current?.setPaintProperty(id, "fill-color", event.target.value);
+      <RgbaColorPicker 
+        color={layerColor}
+        onChange={(color)=>{
+          setLayerColor(color);
+          mapRef.current?.setPaintProperty(id, "fill-color", `rgb(${color.r},${color.g},${color.b})`);
+          mapRef.current?.setPaintProperty(id, "fill-opacity", color.a);
         }}
       />
-      {/* <RgbaColorPicker 
-        color={mapRef.current?.getPaintProperty(layer.id, "fill-color") as string}
-        onChange={(color)=>{
-          mapRef.current?.setPaintProperty(layer.id, "fill-color", color);
-        }}
-      /> */}
     </li>
   );
 }
