@@ -1,5 +1,5 @@
 import { FC, RefObject, useState, useEffect } from 'react';
-import { RgbaColorPicker, RgbaColor } from 'react-colorful';
+import ColorPicker, { RgbaColor } from "./ColorPicker";
 
 interface LayerProps {
   mapRef: RefObject<mapboxgl.Map | null>;
@@ -43,7 +43,7 @@ const Layer:FC<LayerProps> = ({mapRef, source, id, name}) => {
           mapRef.current?.setLayoutProperty(id, "visibility", "none");
         }
       }}>Eye</button>
-      <RgbaColorPicker 
+      <ColorPicker 
         color={layerColor}
         onChange={(color)=>{
           setLayerColor(color);
