@@ -8,7 +8,7 @@ import MapContainer from './components/MapContainer'
 import Layer from './components/Layer';
 
 interface Layer {
-  source: string;
+  file: File;
   id: string;
   name: string;
 }
@@ -29,22 +29,24 @@ function App() {
     }, 100);
   };
 
+  const makeUniqueFileId = (id: string): string => {
+    if (layers.some(layer => layer.id === id)) {
+      return makeUniqueFileId(id + "1");
+    } else {
+      return id;
+    };
+  };
+
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) {
       console.log("no file selected");
       return;
     }
-    Array.from(files).forEach((file) => {
-      console.log("Load Data Layer: " + file.name);
-      mapRef.current?.addSource("source-"+file.name, {
-        type: "geojson",
-        data: URL.createObjectURL(file),
-      });
-  
-      setLayers(layers => [...layers, { // anon function ensures that newest state is used in setLayers (because of async)
-        source: "source-"+file.name,
-        id: "layer-"+file.name,
+    Array.from(files).forEach((file) => {  
+      setLayers(layers => [...layers, { // "functional update" ensures that newest state is used in setLayers (because of async)
+        file: file,
+        id: makeUniqueFileId(file.name),
         name: file.name,
       }]);
     });
@@ -65,7 +67,7 @@ function App() {
             <h2>Sidebar</h2>
             <ol>
               {layers.map((layer) => (
-                <Layer key={layer.id} mapRef={mapRef} source={layer.source} id={layer.id} name={layer.name} />
+                <Layer key={layer.id} mapRef={mapRef} file={layer.file} id={layer.id} name={layer.name} />
               ))}
             </ol>
           </aside>
