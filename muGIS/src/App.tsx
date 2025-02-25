@@ -30,22 +30,24 @@ function App() {
   };
 
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.item(0);
-    if (!file) {
+    const files = event.target.files;
+    if (!files) {
       console.log("no file selected");
       return;
     }
-
-    mapRef.current?.addSource("source-"+file.name, {
-      type: "geojson",
-      data: URL.createObjectURL(file),
+    Array.from(files).forEach((file) => {
+      console.log("Load Data Layer: " + file.name);
+      mapRef.current?.addSource("source-"+file.name, {
+        type: "geojson",
+        data: URL.createObjectURL(file),
+      });
+  
+      setLayers(layers => [...layers, { // anon function ensures that newest state is used in setLayers (because of async)
+        source: "source-"+file.name,
+        id: "layer-"+file.name,
+        name: file.name,
+      }]);
     });
-
-    setLayers([...layers, {
-      source: "source-"+file.name,
-      id: "layer-"+file.name,
-      name: file.name,
-    }]);
   };
 
   return (
@@ -55,7 +57,7 @@ function App() {
           μGIS
         </h1>
         <button onClick={handleSidebarToggle}>Sidebar</button>
-        <input type="file" accept=".geojson,.json" onChange={handleLoadDataLayer} />
+        <input type="file" multiple accept=".geojson,.json" onChange={handleLoadDataLayer} />
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
