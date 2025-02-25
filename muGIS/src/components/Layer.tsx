@@ -1,5 +1,5 @@
 import { FC, RefObject, useState, useEffect } from 'react';
-import ColorPicker, { RgbaColor } from "./ColorPicker";
+import ColorPicker, { HslaColor } from "./ColorPicker";
 
 interface LayerProps {
   mapRef: RefObject<mapboxgl.Map | null>;
@@ -10,10 +10,10 @@ interface LayerProps {
 
 const Layer:FC<LayerProps> = ({mapRef, source, id, name}) => {
   const [layerName] = useState<string>(name);
-  const [layerColor, setLayerColor] = useState<RgbaColor>({
-    r: Math.floor(Math.random()*255), 
-    g: Math.floor(Math.random()*255), 
-    b: Math.floor(Math.random()*255), 
+  const [layerColor, setLayerColor] = useState<HslaColor>({
+    h: Math.floor(Math.random()*360), 
+    s: 90, 
+    l: 48, 
     a: 0.7,
   });
 
@@ -24,7 +24,7 @@ const Layer:FC<LayerProps> = ({mapRef, source, id, name}) => {
       type: "fill",
       source: source,
       paint: {
-        "fill-color": `rgb(${layerColor.r},${layerColor.g},${layerColor.b})`,
+        "fill-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
         "fill-opacity": layerColor.a,
       },
     });
@@ -47,7 +47,8 @@ const Layer:FC<LayerProps> = ({mapRef, source, id, name}) => {
         color={layerColor}
         onChange={(color)=>{
           setLayerColor(color);
-          mapRef.current?.setPaintProperty(id, "fill-color", `rgb(${color.r},${color.g},${color.b})`);
+          console.log(color);
+          mapRef.current?.setPaintProperty(id, "fill-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
           mapRef.current?.setPaintProperty(id, "fill-opacity", color.a);
         }}
       />
