@@ -1,11 +1,11 @@
 import { FC, useState, useRef } from 'react';
-import { RgbaColorPicker, RgbaColor } from 'react-colorful';
+import { HslaColorPicker, HslaColor } from 'react-colorful';
 import './ColorPicker.css';
 import useClickOutside from '../hooks/useClickOutside';
 
 interface ColorPickerProps {
-  color: RgbaColor;
-  onChange: (color: RgbaColor) => void;
+  color: HslaColor;
+  onChange: (color: HslaColor) => void;
 }
 
 const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
@@ -22,7 +22,7 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
           setOpenPicker(!openPicker);
         }}
         style={{
-          backgroundColor: `rgb(${color.r},${color.g},${color.b})`
+          backgroundColor: `hsl(${color.h},${color.s}%,${color.l}%)`
         }}
       >
         
@@ -32,7 +32,7 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
         <div className="colorPickerPopover" ref={colorPicker}>
           {/* <div className="popoverCover" onClick={()=>{setOpenPicker(false)}}></div> */}
           {/* Cover element underneath is an alternative to useClickOutside.ts */}
-          <RgbaColorPicker
+          <HslaColorPicker
             color={color}
             onChange={(color)=>{
               onChange(color);
@@ -46,4 +46,4 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
 }
 
 export default ColorPicker;
-export type { RgbaColor } from 'react-colorful';
+export type { HslaColor } from 'react-colorful';
