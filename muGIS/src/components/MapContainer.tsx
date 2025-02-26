@@ -22,8 +22,12 @@ const MapContainer:FC<MapContainerProps> = ({mapRef}) => {
         zoom: 12, // starting zoom
         // attributionControl: false,
       });
+      mapRef.current?.addControl(new mapboxgl.FullscreenControl(), "top-right"); // Add fullscreen button
+      mapRef.current?.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), "top-right"); // Add compass and zoom buttons
+      mapRef.current?.addControl(new mapboxgl.ScaleControl(), "bottom-right"); // Add scale bar
     };
-  }, [mapRef]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div id="mapContainer" className="mapContainer"></div>
