@@ -1,5 +1,6 @@
 import { FC, RefObject, useState, useEffect } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
+import "./Layer.css";
 
 interface LayerProps {
   mapRef: RefObject<mapboxgl.Map | null>;
@@ -41,15 +42,7 @@ const Layer:FC<LayerProps> = ({mapRef, file, id, name}) => {
   },[]);
 
   return (
-    <li>
-      <div>{layerName}</div>
-      <button onClick={()=>{
-        if (mapRef.current?.getLayoutProperty(id, "visibility") === "none") {
-          mapRef.current?.setLayoutProperty(id, "visibility", "visible");
-        } else {
-          mapRef.current?.setLayoutProperty(id, "visibility", "none");
-        }
-      }}>Eye</button>
+    <li className="layerListItem">
       <ColorPicker 
         color={layerColor}
         onChange={(color)=>{
@@ -58,6 +51,18 @@ const Layer:FC<LayerProps> = ({mapRef, file, id, name}) => {
           mapRef.current?.setPaintProperty(id, "fill-opacity", color.a);
         }}
       />
+      <div className="layerName">
+        {layerName}
+      </div>
+      <button onClick={()=>{
+        if (mapRef.current?.getLayoutProperty(id, "visibility") === "none") {
+          mapRef.current?.setLayoutProperty(id, "visibility", "visible");
+        } else {
+          mapRef.current?.setLayoutProperty(id, "visibility", "none");
+        }
+      }}>
+        Eye
+      </button>
     </li>
   );
 }

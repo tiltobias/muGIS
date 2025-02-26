@@ -59,17 +59,22 @@ function App() {
           μGIS
         </h1>
         <button onClick={handleSidebarToggle}>Sidebar</button>
-        <input type="file" multiple accept=".geojson,.json" onChange={handleLoadDataLayer} />
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
           <aside className="sidebar">
             <h2>Sidebar</h2>
-            <ol>
+            <ol className="layerList">
               {layers.map((layer) => (
                 <Layer key={layer.id} mapRef={mapRef} file={layer.file} id={layer.id} name={layer.name} />
               ))}
             </ol>
+            <div className="sidebarFooter">
+              <label htmlFor="layerFileInput">
+                Upload Layer Data
+              </label>
+              <input id="layerFileInput" type="file" multiple accept=".geojson,.json" onChange={handleLoadDataLayer} />
+            </div>
           </aside>
         </div>
         <div className="mapFlexContainer">
