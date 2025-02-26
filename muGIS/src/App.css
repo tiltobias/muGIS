@@ -48,7 +48,7 @@
 }
 
 .sidebar {
-  width: 16rem;
+  width: 20rem;
   background-color: #282c34;
   color: white;
   /* transition: width .5s ease; */
@@ -59,16 +59,11 @@
 }
 
 .layerList {
-  list-style-type: none;
-  /* padding: 0 0 0 1rem; */
-  padding: 0;
+  padding: 0 0 0 2rem;
   margin: 0;
   overflow-y: auto;
   scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
+  /* scrollbar-width: thin; */
   flex-grow: 1;
 }
 
