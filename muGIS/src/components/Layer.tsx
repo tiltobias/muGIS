@@ -4,10 +4,13 @@ import "./Layer.css";
 import { FeatureCollection } from "geojson";
 import { Eye, EyeOff, ChevronUp, ChevronDown } from "lucide-react";
 
+type LayerRenderingType = "fill"|"line"|"circle";
+
 interface LayerData {
   featureCollection: FeatureCollection;
   id: string;
   name: string;
+  type: string;
 }
 
 interface LayerProps {
@@ -27,6 +30,7 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     a: 0.7,
   });
   const [layerVisible, setLayerVisible] = useState<boolean>(true);
+  const [layerRenderingType, setLayerRenderingType] = useState<LayerRenderingType>("circle");
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
@@ -37,15 +41,33 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
       });
     }
     if (!mapRef.current?.getLayer(layerData.id)) {
+      const renderingType = 
+        layerData.type === "Polygon" || layerData.type === "MultiPolygon" ? "fill" : 
+        layerData.type === "LineString" || layerData.type === "MultiLineString" ? "line" : 
+        layerData.type === "Point" || layerData.type === "MultiPoint" ? "circle" : 
+        "circle";
       mapRef.current?.addLayer({
         id: layerData.id,
-        type: "fill",
+        type: renderingType,
         source: layerData.id,
-        paint: {
-          "fill-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
-          "fill-opacity": layerColor.a,
-        },
+        paint: 
+          renderingType === "fill" ? {
+            "fill-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
+            "fill-opacity": layerColor.a,
+          } :
+          renderingType === "line" ? {
+            "line-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
+            "line-opacity": layerColor.a,
+            "line-width": 2,
+          } :
+          renderingType === "circle" ? {
+            "circle-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
+            "circle-opacity": layerColor.a,
+            "circle-radius": 5,
+          } :
+          {},
       });
+      setLayerRenderingType(renderingType); // async so cant use it in addLayer
     }
     // return ()=>{
     //   mapRef.current?.removeLayer(layerData.id);
@@ -63,23 +85,29 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
 
   const handleToggleVisibility = () => {
     setLayerVisible(!layerVisible);
-    if (layerVisible) {
-      mapRef.current?.setLayoutProperty(layerData.id, "visibility", "none");
-    } else {
-      mapRef.current?.setLayoutProperty(layerData.id, "visibility", "visible");
-    }
+    mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerVisible ? "none" : "visible");
   };
+  
+  const handleChangeColor = (color: HslaColor) => {
+    setLayerColor(color);
+    if (layerRenderingType === "fill") {
+      mapRef.current?.setPaintProperty(layerData.id, "fill-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
+      mapRef.current?.setPaintProperty(layerData.id, "fill-opacity", color.a);
+    } else if (layerRenderingType === "line") {
+      mapRef.current?.setPaintProperty(layerData.id, "line-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
+      mapRef.current?.setPaintProperty(layerData.id, "line-opacity", color.a);
+    } else if (layerRenderingType === "circle") {
+      mapRef.current?.setPaintProperty(layerData.id, "circle-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
+      mapRef.current?.setPaintProperty(layerData.id, "circle-opacity", color.a);
+    };
+  }
 
   return (
     <li className="layerListItem">
       <div className="layerItem">
         <ColorPicker 
           color={layerColor}
-          onChange={(color)=>{
-            setLayerColor(color);
-            mapRef.current?.setPaintProperty(layerData.id, "fill-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
-            mapRef.current?.setPaintProperty(layerData.id, "fill-opacity", color.a);
-          }}
+          onChange={handleChangeColor}
         />
         <div className="layerName">
           {layerName}

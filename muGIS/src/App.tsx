@@ -47,10 +47,13 @@ function App() {
             throw new Error("Not a valid GeoJSON filem, must be a FeatureCollection");
           }
 
+          const type = geojson.features[0].geometry.type;
+
           setLayers(layers => [...layers, { // "functional update" ensures that newest state is used in setLayers (because of async)
             featureCollection: geojson,
             id: makeUniqueFileId(file.name),
             name: file.name,
+            type: type,
           }]);
 
         } catch (error) {
