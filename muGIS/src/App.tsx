@@ -5,7 +5,7 @@ import './App.css'
 import 'mapbox-gl'
 
 import MapContainer from './components/MapContainer'
-import Layer, { LayerData } from './components/Layer';
+import Layer, { LayerData, LayerRenderingType } from './components/Layer';
 import { FeatureCollection } from 'geojson';
 
 function App() {
@@ -47,13 +47,21 @@ function App() {
             throw new Error("Not a valid GeoJSON filem, must be a FeatureCollection");
           }
 
-          const type = geojson.features[0].geometry.type;
+          const t = geojson.features[0].geometry.type;
+          const renderingType: LayerRenderingType | null = 
+            t === "Polygon" || t === "MultiPolygon" ? "fill" :
+            t === "LineString" || t === "MultiLineString" ? "line" :
+            t === "Point" || t === "MultiPoint" ? "circle" :
+            null;
+          if (!renderingType) {
+            throw new Error("Unsupported geometry type: " + t);
+          }
 
           setLayers(layers => [...layers, { // "functional update" ensures that newest state is used in setLayers (because of async)
             featureCollection: geojson,
             id: makeUniqueFileId(file.name),
             name: file.name,
-            type: type,
+            renderingType: renderingType,
           }]);
 
         } catch (error) {

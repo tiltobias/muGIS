@@ -10,7 +10,7 @@ interface LayerData {
   featureCollection: FeatureCollection;
   id: string;
   name: string;
-  type: string;
+  renderingType: LayerRenderingType;
 }
 
 interface LayerProps {
@@ -27,10 +27,9 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     h: Math.floor(Math.random()*360), 
     s: 90, 
     l: 48, 
-    a: 0.7,
+    a: layerData.renderingType === "fill" ? 0.7 : 1,
   });
   const [layerVisible, setLayerVisible] = useState<boolean>(true);
-  const [layerRenderingType, setLayerRenderingType] = useState<LayerRenderingType>("circle");
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
@@ -41,33 +40,27 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
       });
     }
     if (!mapRef.current?.getLayer(layerData.id)) {
-      const renderingType = 
-        layerData.type === "Polygon" || layerData.type === "MultiPolygon" ? "fill" : 
-        layerData.type === "LineString" || layerData.type === "MultiLineString" ? "line" : 
-        layerData.type === "Point" || layerData.type === "MultiPoint" ? "circle" : 
-        "circle";
       mapRef.current?.addLayer({
         id: layerData.id,
-        type: renderingType,
+        type: layerData.renderingType,
         source: layerData.id,
         paint: 
-          renderingType === "fill" ? {
+          layerData.renderingType === "fill" ? {
             "fill-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
             "fill-opacity": layerColor.a,
           } :
-          renderingType === "line" ? {
+          layerData.renderingType === "line" ? {
             "line-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
             "line-opacity": layerColor.a,
             "line-width": 2,
           } :
-          renderingType === "circle" ? {
+          layerData.renderingType === "circle" ? {
             "circle-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
             "circle-opacity": layerColor.a,
             "circle-radius": 5,
           } :
           {},
       });
-      setLayerRenderingType(renderingType); // async so cant use it in addLayer
     }
     // return ()=>{
     //   mapRef.current?.removeLayer(layerData.id);
@@ -90,13 +83,13 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
   
   const handleChangeColor = (color: HslaColor) => {
     setLayerColor(color);
-    if (layerRenderingType === "fill") {
+    if (layerData.renderingType === "fill") {
       mapRef.current?.setPaintProperty(layerData.id, "fill-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
       mapRef.current?.setPaintProperty(layerData.id, "fill-opacity", color.a);
-    } else if (layerRenderingType === "line") {
+    } else if (layerData.renderingType === "line") {
       mapRef.current?.setPaintProperty(layerData.id, "line-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
       mapRef.current?.setPaintProperty(layerData.id, "line-opacity", color.a);
-    } else if (layerRenderingType === "circle") {
+    } else if (layerData.renderingType === "circle") {
       mapRef.current?.setPaintProperty(layerData.id, "circle-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
       mapRef.current?.setPaintProperty(layerData.id, "circle-opacity", color.a);
     };
@@ -127,4 +120,4 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
 }
 
 export default Layer;
-export type { LayerData };
+export type { LayerData, LayerRenderingType };
