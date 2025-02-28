@@ -105,12 +105,14 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
         <div className="layerName">
           {layerName}
         </div>
-        <button type="button" onClick={handleLayerUp}>
-          <ChevronUp />
-        </button>
-        <button type="button" onClick={handleLayerDown}>
-          <ChevronDown />
-        </button>
+        <div className="layerMoveControls">
+          <button type="button" onClick={handleLayerUp}>
+            <ChevronUp />
+          </button>
+          <button type="button" onClick={handleLayerDown}>
+            <ChevronDown />
+          </button>
+        </div>
         <button type="button" onClick={()=>handleToggleVisibility()}>
           {layerVisible ? <Eye /> : <EyeOff />}
         </button>

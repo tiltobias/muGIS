@@ -13,3 +13,19 @@
   flex-grow: 1;
   overflow: hidden;
 }
+
+.layerMoveControls {
+  display: flex;
+  flex-direction: column;
+}
+
+.layerMoveControls > * {
+  display: flex;
+  padding: 0 .5rem;
+  border: none;
+  color: gray;
+  transition: color .3s;
+}
+.layerMoveControls > *:hover {
+  color: black;
+}
