@@ -63,11 +63,11 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
           {},
       });
     }
-    return ()=>{
-      mapRef.current?.removeLayer(layerData.id);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      mapRef.current?.removeSource(layerData.id);
-    };
+    // return ()=>{
+    //   mapRef.current?.removeLayer(layerData.id);
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   mapRef.current?.removeSource(layerData.id);
+    // };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 

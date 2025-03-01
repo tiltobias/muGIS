@@ -95,6 +95,8 @@ function App() {
 
   const deleteLayer = (id: string) => {
     setLayers(layers => layers.filter(layer => layer.id !== id));
+    mapRef.current?.removeLayer(id);
+    mapRef.current?.removeSource(id);
   }
 
   const handleToolBuffer = () => {
