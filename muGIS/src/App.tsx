@@ -7,6 +7,7 @@ import 'mapbox-gl'
 import MapContainer from './components/MapContainer'
 import Layer, { LayerData, LayerRenderingType } from './components/Layer';
 import { FeatureCollection } from 'geojson';
+import { buffer } from '@turf/buffer';
 
 function App() {
 
@@ -44,7 +45,7 @@ function App() {
         try {
           const geojson = JSON.parse(e.target?.result as string) as FeatureCollection;
           if (geojson.type !== "FeatureCollection") {
-            throw new Error("Not a valid GeoJSON filem, must be a FeatureCollection");
+            throw new Error("Not a valid GeoJSON file, must be a FeatureCollection");
           }
 
           const t = geojson.features[0].geometry.type;
@@ -92,6 +93,21 @@ function App() {
     })
   }
 
+  const handleToolBuffer = () => {
+    const inLayer = layers[0];
+    const bufferLayer = buffer(inLayer.featureCollection, 0.05);
+    if (bufferLayer) {
+      setLayers(layers => [...layers, {
+        featureCollection: bufferLayer,
+        id: makeUniqueFileId(inLayer.id + "_buffer"),
+        name: inLayer.name + "_buffer",
+        renderingType: "fill",
+      }]);
+    } else {
+      console.error("Buffer operation failed");
+    }
+  }
+
   return (
     <div className="pageContainer">
       <header className="mainHeader">
@@ -99,6 +115,7 @@ function App() {
           μGIS
         </h1>
         <button type="button" onClick={handleSidebarToggle}>Sidebar</button>
+        <button type="button" onClick={handleToolBuffer}>Buffer</button>
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
