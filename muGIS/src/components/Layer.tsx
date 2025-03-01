@@ -1,8 +1,9 @@
-import { FC, RefObject, useState, useEffect } from 'react';
+import { FC, RefObject, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
 import { FeatureCollection } from "geojson";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2 } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis } from "lucide-react";
+import useClickOutside from '../hooks/useClickOutside';
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -32,6 +33,9 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     l: 48, 
     a: layerData.renderingType === "fill" ? 0.7 : 1,
   });
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const layerMenu = useRef<HTMLDivElement>(null);
+  useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
@@ -107,9 +111,22 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
         <div className="layerName">
           {layerName}
         </div>
-        <button type="button" onClick={handleDeleteLayer}>
-          <Trash2 />
-        </button>
+        <div className="layerMenu">
+          <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
+            <Ellipsis />
+          </button>
+          {menuOpen && (
+            <div className="layerMenuPopover" ref={layerMenu}>
+              <ul>
+                <li>
+                  <button type="button" onClick={handleDeleteLayer}>
+                    <Trash2 />
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
         <div className="layerMoveControls">
           <button type="button" onClick={handleLayerUp}>
             <ChevronUp />

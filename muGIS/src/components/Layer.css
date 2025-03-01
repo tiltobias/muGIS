@@ -29,3 +29,21 @@
 .layerMoveControls > *:hover {
   color: black;
 }
+
+.layerMenu {
+  position: relative;
+}
+
+.layerMenuPopover {
+  position: absolute;
+  z-index: 2;
+  top: 100%;
+  box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
+  background-color: white;
+}
+
+.layerMenuPopover > ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
