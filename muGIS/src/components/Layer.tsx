@@ -11,6 +11,7 @@ interface LayerData {
   id: string;
   name: string;
   renderingType: LayerRenderingType;
+  visible: boolean;
 }
 
 interface LayerProps {
@@ -20,9 +21,10 @@ interface LayerProps {
   handleLayerDown: () => void;
   layerAboveId: string | undefined;
   handleDeleteLayer: () => void;
+  handleToggleVisibility: () => void;
 }
 
-const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown, layerAboveId, handleDeleteLayer}) => {
+const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown, layerAboveId, handleDeleteLayer, handleToggleVisibility}) => {
   const [layerName] = useState<string>(layerData.name);
   const [layerColor, setLayerColor] = useState<HslaColor>({
     h: Math.floor(Math.random()*360), 
@@ -30,7 +32,6 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     l: 48, 
     a: layerData.renderingType === "fill" ? 0.7 : 1,
   });
-  const [layerVisible, setLayerVisible] = useState<boolean>(true);
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
@@ -77,10 +78,10 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[layerAboveId]);
 
-  const handleToggleVisibility = () => {
-    setLayerVisible(!layerVisible);
-    mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerVisible ? "none" : "visible");
-  };
+  useEffect(()=>{
+    mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerData.visible ? "visible" : "none");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[layerData.visible]);
   
   const handleChangeColor = (color: HslaColor) => {
     setLayerColor(color);
@@ -117,8 +118,8 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
             <ChevronDown />
           </button>
         </div>
-        <button type="button" onClick={()=>handleToggleVisibility()}>
-          {layerVisible ? <Eye /> : <EyeOff />}
+        <button type="button" onClick={handleToggleVisibility}>
+          {layerData.visible ? <Eye /> : <EyeOff />}
         </button>
       </div> 
     </li>

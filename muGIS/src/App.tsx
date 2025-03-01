@@ -8,6 +8,7 @@ import MapContainer from './components/MapContainer'
 import Layer, { LayerData, LayerRenderingType } from './components/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
+import { Eye, EyeOff } from 'lucide-react';
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
             id: makeUniqueFileId(file.name),
             name: file.name,
             renderingType: renderingType,
+            visible: true,
           }]);
 
         } catch (error) {
@@ -99,6 +101,17 @@ function App() {
     mapRef.current?.removeSource(id);
   }
 
+  const toggleLayerVisibility = (id: string) => {
+    const layer = layers.find(layer => layer.id === id);
+    setLayers(layers => layers.map(layer => layer.id === id ? {...layer, visible: !layer.visible} : layer));
+    mapRef.current?.setLayoutProperty(id, "visibility", layer?.visible ? "none" : "visible");
+  }
+
+  const toggleLayerVisibilityAll = () => {
+    const allVisible = layers.every(layer => layer.visible);
+    setLayers(layers => layers.map(layer => ({...layer, visible: !allVisible})));
+  }
+
   const handleToolBuffer = () => {
     const inLayer = layers[0];
     const bufferLayer = buffer(inLayer.featureCollection, 0.05);
@@ -108,6 +121,7 @@ function App() {
         id: makeUniqueFileId(inLayer.id + "_buffer"),
         name: inLayer.name + "_buffer",
         renderingType: "fill",
+        visible: true,
       }]);
     } else {
       console.error("Buffer operation failed");
@@ -127,6 +141,9 @@ function App() {
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
           <aside className="sidebar">
             <h2>Sidebar</h2>
+            <button type="button" onClick={toggleLayerVisibilityAll}>
+              {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
+            </button>
             <ol className="layerList">
               {layers.map((layer, index) => (
                 <Layer 
@@ -137,6 +154,7 @@ function App() {
                   handleLayerDown={()=>moveLayerDown(layer.id)} 
                   layerAboveId={index === 0 ? undefined : layers[index-1].id}
                   handleDeleteLayer={()=>deleteLayer(layer.id)}
+                  handleToggleVisibility={()=>toggleLayerVisibility(layer.id)}
                 />
               ))}
             </ol>
