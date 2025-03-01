@@ -2,7 +2,7 @@ import { FC, RefObject, useState, useEffect } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
 import { FeatureCollection } from "geojson";
-import { Eye, EyeOff, ChevronUp, ChevronDown } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2 } from "lucide-react";
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -19,9 +19,10 @@ interface LayerProps {
   handleLayerUp: () => void;
   handleLayerDown: () => void;
   layerAboveId: string | undefined;
+  handleDeleteLayer: () => void;
 }
 
-const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown, layerAboveId}) => {
+const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown, layerAboveId, handleDeleteLayer}) => {
   const [layerName] = useState<string>(layerData.name);
   const [layerColor, setLayerColor] = useState<HslaColor>({
     h: Math.floor(Math.random()*360), 
@@ -62,11 +63,11 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
           {},
       });
     }
-    // return ()=>{
-    //   mapRef.current?.removeLayer(layerData.id);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    //   mapRef.current?.removeSource(layerData.id);
-    // };
+    return ()=>{
+      mapRef.current?.removeLayer(layerData.id);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      mapRef.current?.removeSource(layerData.id);
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -105,6 +106,9 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
         <div className="layerName">
           {layerName}
         </div>
+        <button type="button" onClick={handleDeleteLayer}>
+          <Trash2 />
+        </button>
         <div className="layerMoveControls">
           <button type="button" onClick={handleLayerUp}>
             <ChevronUp />

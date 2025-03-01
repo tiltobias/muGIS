@@ -93,6 +93,10 @@ function App() {
     })
   }
 
+  const deleteLayer = (id: string) => {
+    setLayers(layers => layers.filter(layer => layer.id !== id));
+  }
+
   const handleToolBuffer = () => {
     const inLayer = layers[0];
     const bufferLayer = buffer(inLayer.featureCollection, 0.05);
@@ -130,6 +134,7 @@ function App() {
                   handleLayerUp={()=>moveLayerUp(layer.id)} 
                   handleLayerDown={()=>moveLayerDown(layer.id)} 
                   layerAboveId={index === 0 ? undefined : layers[index-1].id}
+                  handleDeleteLayer={()=>deleteLayer(layer.id)}
                 />
               ))}
             </ol>
