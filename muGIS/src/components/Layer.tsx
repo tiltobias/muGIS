@@ -2,7 +2,7 @@ import { FC, RefObject, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
 import { FeatureCollection } from "geojson";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 
 type LayerRenderingType = "fill"|"line"|"circle";
@@ -101,6 +101,18 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     };
   }
 
+  const handleDownloadLayer = () => {
+    const blob = new Blob([JSON.stringify(layerData.featureCollection)], {type: "application/geo+json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = layerData.id + ".geojson";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <li className="layerListItem">
       <div className="layerItem">
@@ -121,6 +133,11 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
                 <li>
                   <button type="button" onClick={handleDeleteLayer}>
                     <Trash2 />
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={handleDownloadLayer}>
+                    <FileDown />
                   </button>
                 </li>
               </ul>
