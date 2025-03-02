@@ -2,8 +2,9 @@ import { FC, RefObject, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
 import { FeatureCollection } from "geojson";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
+import { bbox } from '@turf/bbox';
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -113,6 +114,11 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     URL.revokeObjectURL(url);
   }
 
+  const handleZoomToLayer = () => {
+    const bounds = bbox(layerData.featureCollection).slice(0, 4) as [number, number, number, number];
+    mapRef.current?.fitBounds(bounds, {padding: 20});
+  }
+
   return (
     <li className="layerListItem">
       <div className="layerItem">
@@ -138,6 +144,11 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
                 <li>
                   <button type="button" onClick={handleDownloadLayer}>
                     <FileDown />
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={handleZoomToLayer}>
+                    <ZoomIn />
                   </button>
                 </li>
               </ul>
