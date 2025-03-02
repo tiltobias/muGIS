@@ -59,13 +59,13 @@ function App() {
             throw new Error("Unsupported geometry type: " + t);
           }
 
-          setLayers(layers => [...layers, { // "functional update" ensures that newest state is used in setLayers (because of async)
+          setLayers(layers => [{ // "functional update" ensures that newest state is used in setLayers (because of async)
             featureCollection: geojson,
             id: makeUniqueFileId(file.name),
             name: file.name,
             renderingType: renderingType,
             visible: true,
-          }]);
+          }, ...layers]);
 
         } catch (error) {
           console.log(error);
@@ -116,13 +116,13 @@ function App() {
     const inLayer = layers[0];
     const bufferLayer = buffer(inLayer.featureCollection, 0.05);
     if (bufferLayer) {
-      setLayers(layers => [...layers, {
+      setLayers(layers => [{
         featureCollection: bufferLayer,
         id: makeUniqueFileId(inLayer.id + "_buffer"),
         name: inLayer.name + "_buffer",
         renderingType: "fill",
         visible: true,
-      }]);
+      }, ...layers]);
     } else {
       console.error("Buffer operation failed");
     }
