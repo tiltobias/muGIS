@@ -7,7 +7,7 @@ import MapContainer from './components/MapContainer'
 import Layer, { LayerData, LayerRenderingType } from './components/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Upload } from 'lucide-react';
 
 function App() {
 
@@ -159,9 +159,10 @@ function App() {
             </ol>
             <div className="sidebarFooter">
               <label htmlFor="layerFileInput">
-                Upload Layer Data
+                <Upload />
+                Upload GeoJSON file
               </label>
-              <input id="layerFileInput" type="file" multiple accept=".geojson,.json" onChange={handleLoadDataLayer} />
+              <input id="layerFileInput" type="file" multiple accept=".geojson" onChange={handleLoadDataLayer} />
             </div>
           </aside>
         </div>
