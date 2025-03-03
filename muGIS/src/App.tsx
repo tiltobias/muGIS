@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import 'mapbox-gl'
 
 import MapContainer from './components/MapContainer'
 import Layer, { LayerData, LayerRenderingType } from './components/Layer';
