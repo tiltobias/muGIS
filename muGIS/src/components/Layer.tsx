@@ -129,12 +129,12 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
         <div className="layerName">
           {layerName}
         </div>
-        <div className="layerMenu">
+        <div className="layerMenu" ref={layerMenu}>
           <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
             <Ellipsis />
           </button>
           {menuOpen && (
-            <div className="layerMenuPopover" ref={layerMenu}>
+            <div className="layerMenuPopover">
               <ul>
                 <li>
                   <button type="button" onClick={handleDeleteLayer}>
