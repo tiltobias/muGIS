@@ -4,16 +4,26 @@ import { useState, useRef } from 'react'
 import './App.css'
 
 import MapContainer from './components/MapContainer'
-import Layer, { LayerData, LayerRenderingType } from './components/Layer';
+import Layer, { LayerRenderingType } from './components/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
+import useLayerStore from './hooks/useLayerStore';
 
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const [layers, setLayers] = useState<LayerData[]>([]);
+  const { 
+    layers, 
+    // setLayers, 
+    addLayer, 
+    moveLayerUp, 
+    moveLayerDown, 
+    deleteLayer, 
+    toggleLayerVisibility, 
+    toggleLayerVisibilityAll 
+  } = useLayerStore();
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -58,13 +68,13 @@ function App() {
             throw new Error("Unsupported geometry type: " + t);
           }
 
-          setLayers(layers => [{ // "functional update" ensures that newest state is used in setLayers (because of async)
+          addLayer({ // "functional update" ensures that newest state is used in setLayers (because of async)
             featureCollection: geojson,
             id: makeUniqueFileId(file.name),
             name: file.name,
             renderingType: renderingType,
             visible: true,
-          }, ...layers]);
+          });
 
         } catch (error) {
           console.log(error);
@@ -74,54 +84,23 @@ function App() {
     });
   };
 
-  const moveLayerUp = (id: string) => {
-    setLayers(layers => {
-      const index = layers.findIndex(layer => layer.id === id);
-      if (index === 0) {return layers;} // already at top
-      const newLayers = [...layers];
-      newLayers.splice(index-1, 0, newLayers.splice(index, 1)[0]); // move layer up
-      return newLayers;
-    })
-  }
-
-  const moveLayerDown = (id: string) => {
-    setLayers(layers => {
-      const index = layers.findIndex(layer => layer.id === id);
-      if (index === layers.length - 1) {return layers;} // already at bottom
-      const newLayers = [...layers];
-      newLayers.splice(index+1, 0, newLayers.splice(index, 1)[0]); // move layer down
-      return newLayers;
-    })
-  }
-
-  const deleteLayer = (id: string) => {
-    setLayers(layers => layers.filter(layer => layer.id !== id));
+  const handleDeleteLayer = (id: string) => {
+    deleteLayer(id)
     mapRef.current?.removeLayer(id);
     mapRef.current?.removeSource(id);
-  }
-
-  const toggleLayerVisibility = (id: string) => {
-    const layer = layers.find(layer => layer.id === id);
-    setLayers(layers => layers.map(layer => layer.id === id ? {...layer, visible: !layer.visible} : layer));
-    mapRef.current?.setLayoutProperty(id, "visibility", layer?.visible ? "none" : "visible");
-  }
-
-  const toggleLayerVisibilityAll = () => {
-    const allVisible = layers.every(layer => layer.visible);
-    setLayers(layers => layers.map(layer => ({...layer, visible: !allVisible})));
   }
 
   const handleToolBuffer = () => {
     const inLayer = layers[0];
     const bufferLayer = buffer(inLayer.featureCollection, 0.05);
     if (bufferLayer) {
-      setLayers(layers => [{
+      addLayer({
         featureCollection: bufferLayer,
         id: makeUniqueFileId(inLayer.id + "_buffer"),
         name: inLayer.name + "_buffer",
         renderingType: "fill",
         visible: true,
-      }, ...layers]);
+      });
     } else {
       console.error("Buffer operation failed");
     }
@@ -152,7 +131,7 @@ function App() {
                   handleLayerUp={()=>moveLayerUp(layer.id)} 
                   handleLayerDown={()=>moveLayerDown(layer.id)} 
                   layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                  handleDeleteLayer={()=>deleteLayer(layer.id)}
+                  handleDeleteLayer={()=>handleDeleteLayer(layer.id)}
                   handleToggleVisibility={()=>toggleLayerVisibility(layer.id)}
                 />
               ))}
