@@ -16,12 +16,7 @@ function App() {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const { 
     layers, 
-    // setLayers, 
-    addLayer, 
-    moveLayerUp, 
-    moveLayerDown, 
-    deleteLayer, 
-    toggleLayerVisibility, 
+    addLayer,  
     toggleLayerVisibilityAll 
   } = useLayerStore();
 
@@ -84,11 +79,7 @@ function App() {
     });
   };
 
-  const handleDeleteLayer = (id: string) => {
-    deleteLayer(id)
-    mapRef.current?.removeLayer(id);
-    mapRef.current?.removeSource(id);
-  }
+  
 
   const handleToolBuffer = () => {
     const inLayer = layers[0];
@@ -128,11 +119,7 @@ function App() {
                   key={layer.id} 
                   mapRef={mapRef} 
                   layerData={layer} 
-                  handleLayerUp={()=>moveLayerUp(layer.id)} 
-                  handleLayerDown={()=>moveLayerDown(layer.id)} 
                   layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                  handleDeleteLayer={()=>handleDeleteLayer(layer.id)}
-                  handleToggleVisibility={()=>toggleLayerVisibility(layer.id)}
                 />
               ))}
             </ol>

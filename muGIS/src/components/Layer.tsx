@@ -5,6 +5,7 @@ import { FeatureCollection } from "geojson";
 import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
+import useLayerStore from '../hooks/useLayerStore';
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -19,14 +20,10 @@ interface LayerData {
 interface LayerProps {
   mapRef: RefObject<mapboxgl.Map | null>;
   layerData: LayerData;
-  handleLayerUp: () => void;
-  handleLayerDown: () => void;
   layerAboveId: string | undefined;
-  handleDeleteLayer: () => void;
-  handleToggleVisibility: () => void;
 }
 
-const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown, layerAboveId, handleDeleteLayer, handleToggleVisibility}) => {
+const Layer:FC<LayerProps> = ({mapRef, layerData, layerAboveId}) => {
   const [layerName] = useState<string>(layerData.name);
   const [layerColor, setLayerColor] = useState<HslaColor>({
     h: Math.floor(Math.random()*360), 
@@ -37,6 +34,12 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerMenu = useRef<HTMLDivElement>(null);
   useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
+  const { 
+    moveLayerUp, 
+    moveLayerDown, 
+    deleteLayer, 
+    toggleLayerVisibility, 
+  } = useLayerStore();
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
@@ -102,6 +105,12 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
     };
   }
 
+  const handleDeleteLayer = (id: string) => {
+    mapRef.current?.removeLayer(id);
+    mapRef.current?.removeSource(id);
+    deleteLayer(id)
+  }
+
   const handleDownloadLayer = () => {
     const blob = new Blob([JSON.stringify(layerData.featureCollection)], {type: "application/geo+json"});
     const url = URL.createObjectURL(blob);
@@ -137,7 +146,7 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
             <div className="layerMenuPopover">
               <ul>
                 <li>
-                  <button type="button" onClick={handleDeleteLayer}>
+                  <button type="button" onClick={()=>handleDeleteLayer(layerData.id)}>
                     <Trash2 />
                   </button>
                 </li>
@@ -156,14 +165,14 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, handleLayerUp, handleLayerDown
           )}
         </div>
         <div className="layerMoveControls">
-          <button type="button" onClick={handleLayerUp}>
+          <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
             <ChevronUp />
           </button>
-          <button type="button" onClick={handleLayerDown}>
+          <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
             <ChevronDown />
           </button>
         </div>
-        <button type="button" onClick={handleToggleVisibility}>
+        <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
           {layerData.visible ? <Eye /> : <EyeOff />}
         </button>
       </div> 
