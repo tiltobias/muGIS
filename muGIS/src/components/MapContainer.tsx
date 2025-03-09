@@ -16,6 +16,8 @@ const MapContainer:FC<MapContainerProps> = () => {
     mapRef 
   } = useMapStore();
   
+  
+  // Initialize map on mount of map component (Runs only on mount/component creation)
   useEffect(() => {
     if (!mapRef.current) { // dont reinitialize the map if it already exists
       mapRef.current = new mapboxgl.Map({
@@ -29,8 +31,7 @@ const MapContainer:FC<MapContainerProps> = () => {
       mapRef.current?.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), "top-right"); // Add compass and zoom buttons
       mapRef.current?.addControl(new mapboxgl.ScaleControl(), "bottom-right"); // Add scale bar
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mapRef]);
 
   return (
     <div id="mapContainer" className="mapContainer"></div>

@@ -9,8 +9,11 @@ interface ColorPickerProps {
 }
 
 const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
+
   const [openPicker, setOpenPicker] = useState<boolean>(false);
   const colorPicker = useRef<HTMLDivElement>(null);
+
+
   useClickOutside(colorPicker, ()=>{setOpenPicker(false)});
 
   return (
@@ -24,14 +27,10 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
         style={{
           backgroundColor: `hsl(${color.h},${color.s}%,${color.l}%)`
         }}
-      >
-        
-      </button>
+      ></button>
     
       {openPicker && (
         <div className="colorPickerPopover" >
-          {/* <div className="popoverCover" onClick={()=>{setOpenPicker(false)}}></div> */}
-          {/* Cover element underneath is an alternative to useClickOutside.ts */}
           <HslaColorPicker
             color={color}
             onChange={(color)=>{

@@ -22,6 +22,7 @@ function App() {
   const {
     mapRef
   } = useMapStore();
+  
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -66,7 +67,7 @@ function App() {
             throw new Error("Unsupported geometry type: " + t);
           }
 
-          addLayer({ // "functional update" ensures that newest state is used in setLayers (because of async)
+          addLayer({
             featureCollection: geojson,
             id: makeUniqueFileId(file.name),
             name: file.name,

@@ -24,6 +24,7 @@ interface LayerProps {
 }
 
 const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
+
   const [layerName] = useState<string>(layerData.name);
   const [layerColor, setLayerColor] = useState<HslaColor>({
     h: Math.floor(Math.random()*360), 
@@ -43,8 +44,9 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const { 
     mapRef 
   } = useMapStore();
+  
 
-  // Add layer to map on mount of layer component
+  // Add layer to map on mount of layer component (Runs only on mount/component creation)
   useEffect(()=>{
     if (!mapRef.current?.getSource(layerData.id)) {
       mapRef.current?.addSource(layerData.id, {
@@ -75,24 +77,17 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
           {},
       });
     }
-    // return ()=>{
-    //   mapRef.current?.removeLayer(layerData.id);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    //   mapRef.current?.removeSource(layerData.id);
-    // };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  },[mapRef, layerData, layerColor]);
 
-  // Always keep layer under layerAboveId
+  // Always keep layer under layerAboveId (Runs on layerAboveId change)
   useEffect(()=>{
     mapRef.current?.moveLayer(layerData.id, layerAboveId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[layerAboveId]);
+  },[layerAboveId, layerData.id, mapRef]);
 
+  // Update layer visibility (Runs on layerData.visible change)
   useEffect(()=>{
     mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerData.visible ? "visible" : "none");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[layerData.visible]);
+  },[layerData.visible, layerData.id, mapRef]);
   
   const handleChangeColor = (color: HslaColor) => {
     setLayerColor(color);
