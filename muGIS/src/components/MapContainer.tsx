@@ -1,17 +1,20 @@
-import { FC, useEffect, RefObject } from 'react';
+import { FC, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapContainer.css';
+import useMapStore from '../hooks/useMapStore';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapContainerProps {
   test?: string;
-  mapRef: RefObject<mapboxgl.Map | null>;
 }
 
-const MapContainer:FC<MapContainerProps> = ({mapRef}) => {
+const MapContainer:FC<MapContainerProps> = () => {
 
+  const { 
+    mapRef 
+  } = useMapStore();
   
   useEffect(() => {
     if (!mapRef.current) { // dont reinitialize the map if it already exists

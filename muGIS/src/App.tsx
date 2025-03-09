@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -9,16 +9,19 @@ import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
+import useMapStore from './hooks/useMapStore';
 
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
   const { 
     layers, 
     addLayer,  
     toggleLayerVisibilityAll 
   } = useLayerStore();
+  const {
+    mapRef
+  } = useMapStore();
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -117,7 +120,6 @@ function App() {
               {layers.map((layer, index) => (
                 <Layer 
                   key={layer.id} 
-                  mapRef={mapRef} 
                   layerData={layer} 
                   layerAboveId={index === 0 ? undefined : layers[index-1].id}
                 />
@@ -133,7 +135,7 @@ function App() {
           </aside>
         </div>
         <div className="mapFlexContainer">
-          <MapContainer mapRef={mapRef} />
+          <MapContainer />
         </div>
       </main>
     </div>

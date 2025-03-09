@@ -1,4 +1,4 @@
-import { FC, RefObject, useState, useEffect, useRef } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
 import { FeatureCollection } from "geojson";
@@ -6,6 +6,7 @@ import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore from '../hooks/useLayerStore';
+import useMapStore from '../hooks/useMapStore';
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -18,12 +19,11 @@ interface LayerData {
 }
 
 interface LayerProps {
-  mapRef: RefObject<mapboxgl.Map | null>;
   layerData: LayerData;
   layerAboveId: string | undefined;
 }
 
-const Layer:FC<LayerProps> = ({mapRef, layerData, layerAboveId}) => {
+const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const [layerName] = useState<string>(layerData.name);
   const [layerColor, setLayerColor] = useState<HslaColor>({
     h: Math.floor(Math.random()*360), 
@@ -40,6 +40,9 @@ const Layer:FC<LayerProps> = ({mapRef, layerData, layerAboveId}) => {
     deleteLayer, 
     toggleLayerVisibility, 
   } = useLayerStore();
+  const { 
+    mapRef 
+  } = useMapStore();
 
   // Add layer to map on mount of layer component
   useEffect(()=>{
