@@ -14,14 +14,8 @@ interface LayerProps {
 }
 
 const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
-
+  
   const [layerName] = useState<string>(layerData.name);
-  const [layerColor, setLayerColor] = useState<HslaColor>({
-    h: Math.floor(Math.random()*360), 
-    s: 90, 
-    l: 48, 
-    a: layerData.renderingType === "fill" ? 0.7 : 1,
-  });
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerMenu = useRef<HTMLDivElement>(null);
   useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
@@ -30,6 +24,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     moveLayerDown, 
     deleteLayer, 
     toggleLayerVisibility, 
+    changeLayerColor,
   } = useLayerStore();
   const { 
     mapRef 
@@ -51,23 +46,23 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
         source: layerData.id,
         paint: 
           layerData.renderingType === "fill" ? {
-            "fill-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
-            "fill-opacity": layerColor.a,
+            "fill-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+            "fill-opacity": layerData.color.a,
           } :
           layerData.renderingType === "line" ? {
-            "line-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
-            "line-opacity": layerColor.a,
+            "line-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+            "line-opacity": layerData.color.a,
             "line-width": 2,
           } :
           layerData.renderingType === "circle" ? {
-            "circle-color": `hsl(${layerColor.h},${layerColor.s}%,${layerColor.l}%)`,
-            "circle-opacity": layerColor.a,
+            "circle-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+            "circle-opacity": layerData.color.a,
             "circle-radius": 5,
           } :
           {},
       });
     }
-  },[mapRef, layerData, layerColor]);
+  },[mapRef, layerData, layerData.color]);
 
   // Always keep layer under layerAboveId (Runs on layerAboveId change)
   useEffect(()=>{
@@ -80,7 +75,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   },[layerData.visible, layerData.id, mapRef]);
   
   const handleChangeColor = (color: HslaColor) => {
-    setLayerColor(color);
+    changeLayerColor(layerData.id, color);
     if (layerData.renderingType === "fill") {
       mapRef.current?.setPaintProperty(layerData.id, "fill-color", `hsl(${color.h},${color.s}%,${color.l}%)`);
       mapRef.current?.setPaintProperty(layerData.id, "fill-opacity", color.a);
@@ -120,7 +115,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     <li className="layerListItem">
       <div className="layerItem">
         <ColorPicker 
-          color={layerColor}
+          color={layerData.color}
           onChange={handleChangeColor}
         />
         <div className="layerName">

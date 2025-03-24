@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { FeatureCollection } from "geojson";
+import { HslaColor } from "../components/ColorPicker";
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -9,6 +10,7 @@ interface LayerData {
   name: string;
   renderingType: LayerRenderingType;
   visible: boolean;
+  color: HslaColor;
 }
 
 interface NewLayerData {
@@ -24,6 +26,7 @@ interface LayerStore {
     deleteLayer: (id: string) => void;
     toggleLayerVisibility: (id: string) => void;
     toggleLayerVisibilityAll: () => void;
+    changeLayerColor: (id: string, color: HslaColor) => void;
 }
 
 const useLayerStore = create<LayerStore>((set) => ({
@@ -52,6 +55,12 @@ const useLayerStore = create<LayerStore>((set) => ({
                 renderingType === "line" ? "line layer" :
                 renderingType === "circle" ? "point layer" : "not possible";
         };
+        const color: HslaColor = {
+            h: Math.floor(Math.random()*360), 
+            s: 90, 
+            l: 48, 
+            a: renderingType === "fill" ? 0.7 : 1,
+        }
 
         const layerData: LayerData = {
             featureCollection: newLayer.featureCollection,
@@ -59,6 +68,7 @@ const useLayerStore = create<LayerStore>((set) => ({
             name: newLayer.name,
             renderingType: renderingType,
             visible: true,
+            color: color,
         };
         return { layers: [layerData, ...state.layers] }
     }),
@@ -91,6 +101,10 @@ const useLayerStore = create<LayerStore>((set) => ({
         const allVisible = state.layers.every(layer => layer.visible);
         return { layers: state.layers.map(layer => ({...layer, visible: !allVisible})) };
     }),
+
+    changeLayerColor: (id: string, color: HslaColor) => set((state) => (
+        { layers: state.layers.map(layer => layer.id === id ? {...layer, color: color} : layer) }
+    )),
     
 }));
 
