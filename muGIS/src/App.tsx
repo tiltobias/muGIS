@@ -22,10 +22,13 @@ function App() {
   const { 
     layers, 
     addLayer,  
-    toggleLayerVisibilityAll 
+    toggleLayerVisibilityAll,
+    resetLayerStore,
   } = useLayerStore();
   const {
-    mapRef
+    mapRef,
+    mapReady,
+    setMapReady,
   } = useMapStore();
   
 
@@ -81,6 +84,12 @@ function App() {
     }
   }
 
+  const handleResetProject = () => {
+    resetLayerStore();
+    setMapReady(false);
+    // window.location.reload(); // 
+  }
+
   return (
     <div className="pageContainer">
       <header className="mainHeader">
@@ -98,8 +107,8 @@ function App() {
             <div className="settingsPopover">
               <ul>
                 <li>
-                  <button type="button" onClick={()=>{}}>
-                    Restart project
+                  <button type="button" onClick={handleResetProject}>
+                    Reset project
                   </button>
                 </li>
                 <li>
@@ -124,15 +133,19 @@ function App() {
             <button type="button" onClick={toggleLayerVisibilityAll}>
               {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
             </button>
-            <ol className="layerList">
-              {layers.map((layer, index) => (
-                <Layer 
-                  key={layer.id} 
-                  layerData={layer} 
-                  layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                />
-              ))}
-            </ol>
+            <div className="layerListContainer">
+              {mapReady && (
+                <ol className="layerList">
+                  {layers.map((layer, index) => (
+                    <Layer 
+                      key={layer.id} 
+                      layerData={layer} 
+                      layerAboveId={index === 0 ? undefined : layers[index-1].id}
+                    />
+                  ))}
+                </ol>
+              )}
+            </div>
             <div className="sidebarFooter">
               <label htmlFor="layerFileInput">
                 <Upload />

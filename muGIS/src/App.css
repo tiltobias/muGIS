@@ -58,13 +58,16 @@
   box-sizing: border-box;
 }
 
+.layerListContainer {
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
 .layerList {
   padding: 0 0 0 2rem;
   margin: 0;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
   /* scrollbar-width: thin; */
-  flex-grow: 1;
 }
 
 .sidebarFooter {
