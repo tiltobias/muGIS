@@ -22,7 +22,8 @@ function App() {
     toggleLayerVisibilityAll 
   } = useLayerStore();
   const {
-    mapRef
+    mapRef,
+    mapReady,
   } = useMapStore();
   
 
@@ -96,15 +97,19 @@ function App() {
             <button type="button" onClick={toggleLayerVisibilityAll}>
               {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
             </button>
-            <ol className="layerList">
-              {layers.map((layer, index) => (
-                <Layer 
-                  key={layer.id} 
-                  layerData={layer} 
-                  layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                />
-              ))}
-            </ol>
+            <div className="layerListContainer">
+              {mapReady && (
+                <ol className="layerList">
+                  {layers.map((layer, index) => (
+                    <Layer 
+                      key={layer.id} 
+                      layerData={layer} 
+                      layerAboveId={index === 0 ? undefined : layers[index-1].id}
+                    />
+                  ))}
+                </ol>
+              )}
+            </div>
             <div className="sidebarFooter">
               <label htmlFor="layerFileInput">
                 <Upload />

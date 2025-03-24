@@ -20,6 +20,7 @@ interface NewLayerData {
 
 interface LayerStore {
     layers: LayerData[];
+    resetLayerStore: () => void;
     addLayer: (newLayer: NewLayerData) => void;
     moveLayerUp: (id: string) => void;
     moveLayerDown: (id: string) => void;
@@ -31,6 +32,10 @@ interface LayerStore {
 
 const useLayerStore = create<LayerStore>((set) => ({
     layers: [],
+
+    resetLayerStore: () => set(()=>{
+        return { layers: [] }
+    }),
 
     addLayer: (newLayer: NewLayerData) => set((state) => {
         const makeUniqueFileId = (id: string): string => {

@@ -16,7 +16,9 @@ interface MapContainerProps {
 const MapContainer:FC<MapContainerProps> = () => {
 
   const { 
-    mapRef 
+    mapRef,
+    mapReady,
+    setMapReady, 
   } = useMapStore();
   
   const { 
@@ -25,7 +27,7 @@ const MapContainer:FC<MapContainerProps> = () => {
   
   // Initialize map on mount of map component (Runs only on mount/component creation)
   useEffect(() => {
-    if (!mapRef.current) { // dont reinitialize the map if it already exists
+    if (!mapReady) {
       mapRef.current = new mapboxgl.Map({
         container: 'mapContainer', // container ID
         style: 'mapbox://styles/mapbox/streets-v12', // style URL
@@ -56,8 +58,12 @@ const MapContainer:FC<MapContainerProps> = () => {
         draw.deleteAll();
       });
 
+      mapRef.current?.on("style.load", () => {
+        setMapReady(true);
+      });
+
     };
-  }, [mapRef, addLayer]);
+  }, [mapRef, addLayer, mapReady, setMapReady]);
 
   return (
     <div id="mapContainer" className="mapContainer"></div>

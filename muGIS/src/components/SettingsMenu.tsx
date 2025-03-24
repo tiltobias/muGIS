@@ -2,6 +2,8 @@ import { FC, useState, useRef } from 'react';
 import "./SettingsMenu.css";
 import useClickOutside from '../hooks/useClickOutside';
 import { Settings, File, Save, FolderOpen, Map, GraduationCap } from 'lucide-react';
+import useLayerStore from '../hooks/useLayerStore';
+import useMapStore from '../hooks/useMapStore';
 
 interface SettingsMenuProps {
   test?: string;
@@ -12,7 +14,18 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
   const settingsContainer = useRef<HTMLDivElement>(null);
   useClickOutside(settingsContainer, ()=>{setSettingsOpen(false)});
 
+  const { 
+    resetLayerStore,
+  } = useLayerStore();
+  const {
+    setMapReady,
+  } = useMapStore();
 
+  const handleResetProject = () => {
+    resetLayerStore();
+    setMapReady(false);
+    // window.location.reload(); // 
+  }
 
   return (
     <div className="settings" ref={settingsContainer}>
@@ -23,7 +36,7 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
         <div className="settingsPopover">
           <ul>
             <li>
-              <button type="button" onClick={()=>{}}>
+              <button type="button" onClick={handleResetProject}>
                 <File /> New project
               </button>
             </li>
