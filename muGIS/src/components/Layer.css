@@ -12,6 +12,8 @@
 .layerName {
   flex-grow: 1;
   overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }
 
 .layerMoveControls {

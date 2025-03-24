@@ -51,7 +51,7 @@ const MapContainer:FC<MapContainerProps> = () => {
       mapRef.current?.on('draw.create', () => {
         addLayer({
           featureCollection: draw.getAll(),
-          name: "draw",
+          name: null,
         });
         draw.deleteAll();
       });

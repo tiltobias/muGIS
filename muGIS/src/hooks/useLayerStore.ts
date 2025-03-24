@@ -13,7 +13,7 @@ interface LayerData {
 
 interface NewLayerData {
     featureCollection: FeatureCollection;
-    name: string;
+    name: string | null;
 }
 
 interface LayerStore {
@@ -46,6 +46,12 @@ const useLayerStore = create<LayerStore>((set) => ({
         if (!renderingType) {
             throw new Error("Unsupported geometry type: " + t);
         }
+        if (!newLayer.name) {
+            newLayer.name = 
+                renderingType === "fill" ? "polygon layer" :
+                renderingType === "line" ? "line layer" :
+                renderingType === "circle" ? "point layer" : "not possible";
+        };
 
         const layerData: LayerData = {
             featureCollection: newLayer.featureCollection,
