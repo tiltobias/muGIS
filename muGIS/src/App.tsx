@@ -4,7 +4,7 @@ import { useState } from 'react'
 import './App.css'
 
 import MapContainer from './components/MapContainer'
-import Layer, { LayerRenderingType } from './components/Layer';
+import Layer from './components/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
@@ -34,13 +34,6 @@ function App() {
     }, 100);
   };
 
-  const makeUniqueFileId = (id: string): string => {
-    if (layers.some(layer => layer.id === id)) {
-      return makeUniqueFileId(id + "1");
-    } else {
-      return id;
-    };
-  };
 
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -56,25 +49,10 @@ function App() {
           if (geojson.type !== "FeatureCollection") {
             throw new Error("Not a valid GeoJSON file, must be a FeatureCollection");
           }
-
-          const t = geojson.features[0].geometry.type;
-          const renderingType: LayerRenderingType | null = 
-            t === "Polygon" || t === "MultiPolygon" ? "fill" :
-            t === "LineString" || t === "MultiLineString" ? "line" :
-            t === "Point" || t === "MultiPoint" ? "circle" :
-            null;
-          if (!renderingType) {
-            throw new Error("Unsupported geometry type: " + t);
-          }
-
           addLayer({
             featureCollection: geojson,
-            id: makeUniqueFileId(file.name),
             name: file.name,
-            renderingType: renderingType,
-            visible: true,
           });
-
         } catch (error) {
           console.log(error);
         }
@@ -91,10 +69,7 @@ function App() {
     if (bufferLayer) {
       addLayer({
         featureCollection: bufferLayer,
-        id: makeUniqueFileId(inLayer.id + "_buffer"),
         name: inLayer.name + "_buffer",
-        renderingType: "fill",
-        visible: true,
       });
     } else {
       console.error("Buffer operation failed");

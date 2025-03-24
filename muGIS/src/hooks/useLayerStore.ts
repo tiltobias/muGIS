@@ -1,10 +1,24 @@
 import { create } from 'zustand';
-import { LayerData } from "../components/Layer";
+import { FeatureCollection } from "geojson";
+
+type LayerRenderingType = "fill"|"line"|"circle";
+
+interface LayerData {
+  featureCollection: FeatureCollection;
+  id: string;
+  name: string;
+  renderingType: LayerRenderingType;
+  visible: boolean;
+}
+
+interface NewLayerData {
+    featureCollection: FeatureCollection;
+    name: string;
+}
 
 interface LayerStore {
     layers: LayerData[];
-    setLayers: (newLayers: LayerData[]) => void;
-    addLayer: (newLayer: LayerData) => void;
+    addLayer: (newLayer: NewLayerData) => void;
     moveLayerUp: (id: string) => void;
     moveLayerDown: (id: string) => void;
     deleteLayer: (id: string) => void;
@@ -15,11 +29,33 @@ interface LayerStore {
 const useLayerStore = create<LayerStore>((set) => ({
     layers: [],
 
-    setLayers: (newLayers: LayerData[]) => set({ layers: newLayers}),
+    addLayer: (newLayer: NewLayerData) => set((state) => {
+        const makeUniqueFileId = (id: string): string => {
+            if (state.layers.some(layer => layer.id === id)) {
+                return makeUniqueFileId(id + "1");
+            } else {
+                return id;
+            };
+        };
+        const t = newLayer.featureCollection.features[0].geometry.type;
+        const renderingType: LayerRenderingType | null = 
+            t === "Polygon" || t === "MultiPolygon" ? "fill" :
+            t === "LineString" || t === "MultiLineString" ? "line" :
+            t === "Point" || t === "MultiPoint" ? "circle" :
+            null;
+        if (!renderingType) {
+            throw new Error("Unsupported geometry type: " + t);
+        }
 
-    addLayer: (newLayer: LayerData) => set((state) => (
-        { layers: [newLayer, ...state.layers] }
-    )),
+        const layerData: LayerData = {
+            featureCollection: newLayer.featureCollection,
+            id: makeUniqueFileId(newLayer.name),
+            name: newLayer.name,
+            renderingType: renderingType,
+            visible: true,
+        };
+        return { layers: [layerData, ...state.layers] }
+    }),
 
     moveLayerUp: (id: string) => set((state) => {
         const index = state.layers.findIndex(layer => layer.id === id);
@@ -53,3 +89,4 @@ const useLayerStore = create<LayerStore>((set) => ({
 }));
 
 export default useLayerStore;
+export type { LayerData, LayerRenderingType };

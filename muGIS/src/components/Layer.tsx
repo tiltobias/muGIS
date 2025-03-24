@@ -1,22 +1,12 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
-import { FeatureCollection } from "geojson";
 import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore from '../hooks/useLayerStore';
 import useMapStore from '../hooks/useMapStore';
-
-type LayerRenderingType = "fill"|"line"|"circle";
-
-interface LayerData {
-  featureCollection: FeatureCollection;
-  id: string;
-  name: string;
-  renderingType: LayerRenderingType;
-  visible: boolean;
-}
+import { LayerData } from '../hooks/useLayerStore';
 
 interface LayerProps {
   layerData: LayerData;
@@ -179,4 +169,3 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
 }
 
 export default Layer;
-export type { LayerData, LayerRenderingType };
