@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -7,17 +7,14 @@ import MapContainer from './components/MapContainer'
 import Layer from './components/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
-import { Eye, EyeOff, Upload, Settings } from 'lucide-react';
+import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
-import useClickOutside from './hooks/useClickOutside';
+import SettingsMenu from './components/SettingsMenu';
 
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
-  const settingsContainer = useRef<HTMLDivElement>(null);
-  useClickOutside(settingsContainer, ()=>{setSettingsOpen(false)});
 
   const { 
     layers, 
@@ -90,32 +87,7 @@ function App() {
         <button type="button" onClick={handleSidebarToggle}>Sidebar</button>
         <button type="button" onClick={handleToolBuffer}>Buffer</button>
         
-        <div className="settings" ref={settingsContainer}>
-          <button type="button" onClick={()=>{setSettingsOpen(!settingsOpen)}}>
-            <Settings />
-          </button>
-          {settingsOpen && (
-            <div className="settingsPopover">
-              <ul>
-                <li>
-                  <button type="button" onClick={()=>{}}>
-                    Restart project
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={()=>{}}>
-                    Change basemap
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={()=>{}}>
-                    Start tutorial
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
+        <SettingsMenu />
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>

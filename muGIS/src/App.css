@@ -92,22 +92,3 @@ label[for="layerFileInput"] {
   flex-direction: row;
 }
 
-
-.settings {
-  position: relative;
-  text-wrap: nowrap;
-  margin-left: auto;
-}
-.settingsPopover {
-  position: absolute;
-  z-index: 200;
-  top: 100%;
-  right: 0;
-  box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
-  background-color: white;
-}
-.settingsPopover > ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
