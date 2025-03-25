@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapContainer.css';
@@ -24,12 +24,16 @@ const MapContainer:FC<MapContainerProps> = () => {
   const { 
     addLayer,
   } = useLayerStore();
+
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   
   // Initialize map on mount of map component (Runs only on mount/component creation)
   useEffect(() => {
-    if (!mapReady) {
+    if (!mapReady && mapContainerRef.current) {
+      mapContainerRef.current.innerHTML = ""; // remove old controls and such
+
       mapRef.current = new mapboxgl.Map({
-        container: 'mapContainer', // container ID
+        container: mapContainerRef.current, // should be stable, if not use Id and remove from if statement
         style: 'mapbox://styles/mapbox/streets-v12', // style URL
         center: [10.4, 63.425], // starting position [lng, lat]
         zoom: 12, // starting zoom
@@ -38,7 +42,6 @@ const MapContainer:FC<MapContainerProps> = () => {
       mapRef.current?.addControl(new mapboxgl.FullscreenControl(), "top-right"); // Add fullscreen button
       mapRef.current?.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), "top-right"); // Add compass and zoom buttons
       mapRef.current?.addControl(new mapboxgl.ScaleControl(), "bottom-right"); // Add scale bar
-
       const draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
@@ -66,7 +69,7 @@ const MapContainer:FC<MapContainerProps> = () => {
   }, [mapRef, addLayer, mapReady, setMapReady]);
 
   return (
-    <div id="mapContainer" className="mapContainer"></div>
+    <div ref={mapContainerRef} className="mapContainer"></div>
   );
 }
 
