@@ -2,7 +2,7 @@ import { FC, useState, useRef } from 'react';
 import "./SettingsMenu.css";
 import useClickOutside from '../hooks/useClickOutside';
 import { Settings, File, Save, FolderOpen, Map, GraduationCap } from 'lucide-react';
-import useLayerStore from '../hooks/useLayerStore';
+import useLayerStore, { LayerData } from '../hooks/useLayerStore';
 import useMapStore from '../hooks/useMapStore';
 
 interface SettingsMenuProps {
@@ -14,8 +14,10 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
   const settingsContainer = useRef<HTMLDivElement>(null);
   useClickOutside(settingsContainer, ()=>{setSettingsOpen(false)});
 
-  const { 
+  const {
+    layers,
     resetLayerStore,
+    loadProjectLayers,
   } = useLayerStore();
   const {
     setMapReady,
@@ -24,7 +26,41 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
   const handleResetProject = () => {
     resetLayerStore();
     setMapReady(false);
-    // window.location.reload(); // 
+  }
+
+  const handleDownloadProject = () => {
+    const blob = new Blob([JSON.stringify(layers)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "μGIS_project.mugis";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  const projectFileInput = useRef<HTMLInputElement>(null);
+  const handleUploadProject = () => {
+    projectFileInput.current?.click();
+  }
+  const loadProjectFromFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) {
+      console.log("no file selected");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const loadedLayers = JSON.parse(e.target?.result as string) as LayerData[];
+        loadProjectLayers(loadedLayers);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    handleResetProject(); // clear current project to reset map
+    reader.readAsText(files[0]);
   }
 
   return (
@@ -41,12 +77,13 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
               </button>
             </li>
             <li>
-              <button type="button" onClick={()=>{}}>
+              <button type="button" onClick={handleDownloadProject}>
                 <Save /> Save project
               </button>
             </li>
             <li>
-              <button type="button" onClick={()=>{}}>
+              <input ref={projectFileInput} type="file" accept=".mugis" onChange={loadProjectFromFile} />
+              <button type="button" onClick={handleUploadProject}>
                 <FolderOpen /> Load project
               </button>
             </li>

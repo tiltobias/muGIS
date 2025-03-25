@@ -21,6 +21,7 @@ interface NewLayerData {
 interface LayerStore {
     layers: LayerData[];
     resetLayerStore: () => void;
+    loadProjectLayers: (loadedLayers: LayerData[]) => void
     addLayer: (newLayer: NewLayerData) => void;
     moveLayerUp: (id: string) => void;
     moveLayerDown: (id: string) => void;
@@ -35,6 +36,10 @@ const useLayerStore = create<LayerStore>((set) => ({
 
     resetLayerStore: () => set(()=>{
         return { layers: [] }
+    }),
+
+    loadProjectLayers: (loadedLayers: LayerData[]) => set(() => {
+        return { layers: loadedLayers }
     }),
 
     addLayer: (newLayer: NewLayerData) => set((state) => {
