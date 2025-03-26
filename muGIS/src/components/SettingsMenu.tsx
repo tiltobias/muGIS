@@ -3,8 +3,13 @@ import "./SettingsMenu.css";
 import useClickOutside from '../hooks/useClickOutside';
 import { Settings, File, Save, FolderOpen, GraduationCap } from 'lucide-react';
 import useLayerStore, { LayerData } from '../hooks/useLayerStore';
-import useMapStore from '../hooks/useMapStore';
+import useMapStore, { Basemap } from '../hooks/useMapStore';
 import BasemapMenu from './BasemapMenu';
+
+interface MugisFile {
+  layers: LayerData[];
+  basemap: Basemap;
+}
 
 interface SettingsMenuProps {
   test?: string;
@@ -21,6 +26,8 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     loadProjectLayers,
   } = useLayerStore();
   const {
+    basemap,
+    setBasemap,
     resetMapStore,
   } = useMapStore();
 
@@ -30,7 +37,11 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
   }
 
   const handleDownloadProject = () => {
-    const blob = new Blob([JSON.stringify(layers)], {type: "application/json"});
+    const mugisFile: MugisFile = {
+      layers: layers,
+      basemap: basemap,
+    };
+    const blob = new Blob([JSON.stringify(mugisFile)], {type: "application/json"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -54,13 +65,15 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const loadedLayers = JSON.parse(e.target?.result as string) as LayerData[];
-        loadProjectLayers(loadedLayers);
+        // const loadedLayers = JSON.parse(e.target?.result as string) as LayerData[]; // saved in case reading old file format
+        // loadProjectLayers(loadedLayers);
+        const mugisFile = JSON.parse(e.target?.result as string) as MugisFile;
+        loadProjectLayers(mugisFile.layers);
+        setBasemap(mugisFile.basemap);
       } catch (error) {
         console.log(error);
       }
     }
-    handleResetProject(); // clear current project to reset map
     reader.readAsText(files[0]);
   }
 
