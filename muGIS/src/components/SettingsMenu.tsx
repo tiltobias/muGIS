@@ -1,9 +1,10 @@
 import { FC, useState, useRef } from 'react';
 import "./SettingsMenu.css";
 import useClickOutside from '../hooks/useClickOutside';
-import { Settings, File, Save, FolderOpen, Map, GraduationCap } from 'lucide-react';
+import { Settings, File, Save, FolderOpen, GraduationCap } from 'lucide-react';
 import useLayerStore, { LayerData } from '../hooks/useLayerStore';
-import useMapStore from '../hooks/useMapStore';
+// import useMapStore from '../hooks/useMapStore';
+import BasemapMenu from './BasemapMenu';
 
 interface SettingsMenuProps {
   test?: string;
@@ -19,13 +20,13 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     resetLayerStore,
     loadProjectLayers,
   } = useLayerStore();
-  const {
-    setMapReady,
-  } = useMapStore();
+  // const {
+  //   resetMapStore,
+  // } = useMapStore();
 
   const handleResetProject = () => {
+    // resetMapStore();
     resetLayerStore();
-    setMapReady(false);
   }
 
   const handleDownloadProject = () => {
@@ -59,7 +60,7 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
         console.log(error);
       }
     }
-    handleResetProject(); // clear current project to reset map
+    // handleResetProject(); // clear current project to reset map
     reader.readAsText(files[0]);
   }
 
@@ -88,9 +89,10 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
               </button>
             </li>
             <li>
-              <button type="button" onClick={()=>{}}>
+              <BasemapMenu />
+              {/* <button type="button" onClick={()=>{}}>
                 <Map /> Change basemap
-              </button>
+              </button> */}
             </li>
             <li>
               <button type="button" onClick={()=>{}}>

@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { FeatureCollection } from "geojson";
 import { HslaColor } from "../components/ColorPicker";
+import { createRef } from 'react';
+
+interface Basemap {
+    url: string;
+    name: string;
+}
 
 type LayerRenderingType = "fill"|"line"|"circle";
 
@@ -19,9 +25,18 @@ interface NewLayerData {
 }
 
 interface LayerStore {
+    mapRef: React.RefObject<mapboxgl.Map | null>;
+    mapReady: boolean;
+    setMapReady: (ready: boolean) => void;
+    basemap: Basemap;
+    setBasemap: (newBasemap: Basemap) => void;
+
     layers: LayerData[];
     resetLayerStore: () => void;
     loadProjectLayers: (loadedLayers: LayerData[]) => void
+    renderLayer: (layer: LayerData) => void;
+    unrenderLayer: (id: string) => void;
+    renderAllLayers: () => void;
     addLayer: (newLayer: NewLayerData) => void;
     moveLayerUp: (id: string) => void;
     moveLayerDown: (id: string) => void;
@@ -31,16 +46,81 @@ interface LayerStore {
     changeLayerColor: (id: string, color: HslaColor) => void;
 }
 
-const useLayerStore = create<LayerStore>((set) => ({
+const useLayerStore = create<LayerStore>((set, get) => ({
+    mapRef: createRef(),
+
+    mapReady: false,
+
+    setMapReady: (ready: boolean) => set({ mapReady: ready }),
+
+    basemap: {
+        url: "mapbox://styles/mapbox/streets-v12",
+        name: "Streets",
+    },
+
+    setBasemap: (newBasemap: Basemap) => set(()=>{
+        return { basemap: newBasemap }
+    }),
+
+
+
     layers: [],
 
-    resetLayerStore: () => set(()=>{
-        return { layers: [] }
-    }),
+    resetLayerStore: () => {
+        get().layers.forEach(layer => get().deleteLayer(layer.id));
+        get().setBasemap({
+            url: "mapbox://styles/mapbox/streets-v12",
+            name: "Streets",
+        });
+    },
 
-    loadProjectLayers: (loadedLayers: LayerData[]) => set(() => {
+    loadProjectLayers: (loadedLayers: LayerData[]) => set((state) => {
+        state.resetLayerStore();
+        state.mapRef.current?.once("style.load", () => {
+            // loadedLayers.forEach(layer => {
+            //     state.renderLayer(layer);
+            // });
+            get().renderAllLayers();
+        });
         return { layers: loadedLayers }
     }),
+
+    renderLayer: (layerData: LayerData) => {
+        // get().mapRef.current?.once("style.load", () => {
+            get().mapRef.current?.addSource(layerData.id, {
+                type: "geojson",
+                data: layerData.featureCollection,
+            });
+            get().mapRef.current?.addLayer({
+                id: layerData.id,
+                type: layerData.renderingType,
+                source: layerData.id,
+                paint: 
+                    layerData.renderingType === "fill" ? {
+                        "fill-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+                        "fill-opacity": layerData.color.a,
+                    } :
+                    layerData.renderingType === "line" ? {
+                        "line-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+                        "line-opacity": layerData.color.a,
+                        "line-width": 2,
+                    } :
+                    layerData.renderingType === "circle" ? {
+                        "circle-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+                        "circle-opacity": layerData.color.a,
+                        "circle-radius": 5,
+                    } :
+                    {},
+            });
+        // });
+    },
+
+    unrenderLayer: (id: string) => {
+        get().mapRef.current?.removeLayer(id);
+        get().mapRef.current?.removeSource(id);
+    },
+
+    renderAllLayers: () => get().layers.forEach(layer => get().renderLayer(layer)),
 
     addLayer: (newLayer: NewLayerData) => set((state) => {
         const makeUniqueFileId = (id: string): string => {
@@ -80,6 +160,7 @@ const useLayerStore = create<LayerStore>((set) => ({
             visible: true,
             color: color,
         };
+        state.renderLayer(layerData); // render layer on map
         return { layers: [layerData, ...state.layers] }
     }),
 
@@ -99,9 +180,10 @@ const useLayerStore = create<LayerStore>((set) => ({
         return { layers: newLayers };
     }),
 
-    deleteLayer: (id: string) => set((state) => (
-        { layers: state.layers.filter(layer => layer.id !== id) }
-    )),
+    deleteLayer: (id: string) => set((state) => {
+        state.unrenderLayer(id);
+        return { layers: state.layers.filter(layer => layer.id !== id) }
+    }),
     
     toggleLayerVisibility: (id: string) => set((state) => (
         { layers: state.layers.map(layer => layer.id === id ? {...layer, visible: !layer.visible} : layer) }
@@ -119,4 +201,4 @@ const useLayerStore = create<LayerStore>((set) => ({
 }));
 
 export default useLayerStore;
-export type { LayerData, LayerRenderingType };
+export type { Basemap, LayerData, LayerRenderingType };

@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapContainer.css';
-import useMapStore from '../hooks/useMapStore';
+// import useMapStore from '../hooks/useMapStore';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import useLayerStore from '../hooks/useLayerStore';
@@ -15,14 +15,20 @@ interface MapContainerProps {
 
 const MapContainer:FC<MapContainerProps> = () => {
 
-  const { 
+  // const { 
+  //   mapRef,
+  //   mapReady,
+  //   setMapReady,
+  //   basemap,
+  // } = useMapStore();
+  
+  const {
     mapRef,
     mapReady,
-    setMapReady, 
-  } = useMapStore();
-  
-  const { 
+    setMapReady,
+    basemap,
     addLayer,
+    renderAllLayers,
   } = useLayerStore();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -67,6 +73,21 @@ const MapContainer:FC<MapContainerProps> = () => {
 
     };
   }, [mapRef, addLayer, mapReady, setMapReady]);
+
+  // Set basemap on change
+  useEffect(() => {
+    if (mapReady && mapRef.current) {
+      mapRef.current.setStyle(basemap.url);
+    }
+    mapRef.current?.once("style.load", () => {
+      renderAllLayers();
+      // toggleLayerVisibilityAll();
+      // setTimeout(() => {
+      //   toggleLayerVisibilityAll();
+      // }, 1);
+    }
+    );
+  }, [basemap, mapRef, renderAllLayers, mapReady]);
 
   return (
     <div ref={mapContainerRef} className="mapContainer"></div>

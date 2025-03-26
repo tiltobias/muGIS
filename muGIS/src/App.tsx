@@ -9,7 +9,7 @@ import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
-import useMapStore from './hooks/useMapStore';
+// import useMapStore from './hooks/useMapStore';
 import SettingsMenu from './components/SettingsMenu';
 
 function App() {
@@ -17,14 +17,15 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
   const { 
+    mapRef,
     layers, 
     addLayer,  
     toggleLayerVisibilityAll 
   } = useLayerStore();
-  const {
-    mapRef,
-    mapReady,
-  } = useMapStore();
+  // const {
+  //   mapRef,
+  //   mapReady,
+  // } = useMapStore();
   
 
   const handleSidebarToggle = () => {
@@ -98,17 +99,17 @@ function App() {
               {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
             </button>
             <div className="layerListContainer">
-              {mapReady && (
-                <ol className="layerList">
-                  {layers.map((layer, index) => (
-                    <Layer 
-                      key={layer.id} 
-                      layerData={layer} 
-                      layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                    />
-                  ))}
-                </ol>
-              )}
+               
+              <ol className="layerList">
+                {layers.map((layer, index) => (
+                  <Layer 
+                    key={layer.id} 
+                    layerData={layer} 
+                    layerAboveId={index === 0 ? undefined : layers[index-1].id}
+                  />
+                ))}
+              </ol>
+              
             </div>
             <div className="sidebarFooter">
               <label htmlFor="layerFileInput">

@@ -5,7 +5,7 @@ import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore from '../hooks/useLayerStore';
-import useMapStore from '../hooks/useMapStore';
+// import useMapStore from '../hooks/useMapStore';
 import { LayerData } from '../hooks/useLayerStore';
 
 interface LayerProps {
@@ -20,59 +20,60 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const layerMenu = useRef<HTMLDivElement>(null);
   useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
   const { 
+    mapRef,
     moveLayerUp, 
     moveLayerDown, 
     deleteLayer, 
     toggleLayerVisibility, 
     changeLayerColor,
   } = useLayerStore();
-  const { 
-    mapRef 
-  } = useMapStore();
+  // const { 
+  //   mapRef,
+  // } = useMapStore();
   
 
   // Add layer to map on mount of layer component (Runs only on mount/component creation)
-  useEffect(()=>{
-    if (!mapRef.current?.getSource(layerData.id)) {
-      mapRef.current?.addSource(layerData.id, {
-        type: "geojson",
-        data: layerData.featureCollection,
-      });
-    }
-    if (!mapRef.current?.getLayer(layerData.id)) {
-      mapRef.current?.addLayer({
-        id: layerData.id,
-        type: layerData.renderingType,
-        source: layerData.id,
-        paint: 
-          layerData.renderingType === "fill" ? {
-            "fill-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
-            "fill-opacity": layerData.color.a,
-          } :
-          layerData.renderingType === "line" ? {
-            "line-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
-            "line-opacity": layerData.color.a,
-            "line-width": 2,
-          } :
-          layerData.renderingType === "circle" ? {
-            "circle-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
-            "circle-opacity": layerData.color.a,
-            "circle-radius": 5,
-          } :
-          {},
-      });
-    }
-  },[mapRef, layerData, layerData.color]);
+  // useEffect(()=>{
+  //   if (!mapRef.current?.getSource(layerData.id)) {
+  //     mapRef.current?.addSource(layerData.id, {
+  //       type: "geojson",
+  //       data: layerData.featureCollection,
+  //     });
+  //   }
+  //   if (!mapRef.current?.getLayer(layerData.id)) {
+  //     mapRef.current?.addLayer({
+  //       id: layerData.id,
+  //       type: layerData.renderingType,
+  //       source: layerData.id,
+  //       paint: 
+  //         layerData.renderingType === "fill" ? {
+  //           "fill-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+  //           "fill-opacity": layerData.color.a,
+  //         } :
+  //         layerData.renderingType === "line" ? {
+  //           "line-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+  //           "line-opacity": layerData.color.a,
+  //           "line-width": 2,
+  //         } :
+  //         layerData.renderingType === "circle" ? {
+  //           "circle-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
+  //           "circle-opacity": layerData.color.a,
+  //           "circle-radius": 5,
+  //         } :
+  //         {},
+  //     });
+  //   }
+  // },[mapRef, layerData, layerData.color]);
 
-  // Always keep layer under layerAboveId (Runs on layerAboveId change)
-  useEffect(()=>{
-    mapRef.current?.moveLayer(layerData.id, layerAboveId);
-  },[layerAboveId, layerData.id, mapRef]);
+  // // Always keep layer under layerAboveId (Runs on layerAboveId change)
+  // useEffect(()=>{
+  //   mapRef.current?.moveLayer(layerData.id, layerAboveId);
+  // },[layerAboveId, layerData.id, mapRef]);
 
-  // Update layer visibility (Runs on layerData.visible change)
-  useEffect(()=>{
-    mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerData.visible ? "visible" : "none");
-  },[layerData.visible, layerData.id, mapRef]);
+  // // Update layer visibility (Runs on layerData.visible change)
+  // useEffect(()=>{
+  //   mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerData.visible ? "visible" : "none");
+  // },[layerData.visible, layerData.id, mapRef]);
   
   const handleChangeColor = (color: HslaColor) => {
     changeLayerColor(layerData.id, color);
