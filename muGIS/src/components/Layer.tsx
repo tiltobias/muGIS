@@ -4,9 +4,8 @@ import "./Layer.css";
 import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
-import useLayerStore from '../hooks/useLayerStore';
+import useLayerStore, { LayerData } from '../hooks/useLayerStore';
 import useMapStore from '../hooks/useMapStore';
-import { LayerData } from '../hooks/useLayerStore';
 
 interface LayerProps {
   layerData: LayerData;
@@ -62,17 +61,17 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
           {},
       });
     }
-  },[mapRef, layerData, layerData.color]);
+  },[mapRef, layerData]);
 
   // Always keep layer under layerAboveId (Runs on layerAboveId change)
   useEffect(()=>{
     mapRef.current?.moveLayer(layerData.id, layerAboveId);
-  },[layerAboveId, layerData.id, mapRef]);
+  },[layerAboveId, layerData.id, mapRef, layerData.updater]);
 
   // Update layer visibility (Runs on layerData.visible change)
   useEffect(()=>{
     mapRef.current?.setLayoutProperty(layerData.id, "visibility", layerData.visible ? "visible" : "none");
-  },[layerData.visible, layerData.id, mapRef]);
+  },[layerData.visible, mapRef, layerData.id, layerData.updater]);
   
   const handleChangeColor = (color: HslaColor) => {
     changeLayerColor(layerData.id, color);

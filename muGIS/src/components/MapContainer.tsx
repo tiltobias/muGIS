@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapContainer.css';
-import useMapStore from '../hooks/useMapStore';
+import useMapStore, { Basemap } from '../hooks/useMapStore';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import useLayerStore from '../hooks/useLayerStore';
@@ -19,10 +19,12 @@ const MapContainer:FC<MapContainerProps> = () => {
     mapRef,
     mapReady,
     setMapReady, 
+    basemap,
   } = useMapStore();
   
   const { 
     addLayer,
+    updateAllLayers,
   } = useLayerStore();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -34,7 +36,7 @@ const MapContainer:FC<MapContainerProps> = () => {
 
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current, // should be stable, if not use Id and remove from if statement
-        style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        style: basemap.url, // style URL
         center: [10.4, 63.425], // starting position [lng, lat]
         zoom: 12, // starting zoom
         // attributionControl: false,
@@ -64,9 +66,33 @@ const MapContainer:FC<MapContainerProps> = () => {
       mapRef.current?.on("style.load", () => {
         setMapReady(true);
       });
-
     };
-  }, [mapRef, addLayer, mapReady, setMapReady]);
+  }, [mapRef, addLayer, mapReady, setMapReady, basemap]);
+
+
+  const [basemapCooldown, setBasemapCooldown] = useState<boolean>(false);
+  const queuedBasemap = useRef<Basemap>(basemap);
+  const [currentBasemap, setCurrentBasemap] = useState<Basemap>(basemap);
+  // Set basemap on change
+   useEffect(() => {
+    if (queuedBasemap.current.url !== basemap.url) {
+      queuedBasemap.current = basemap;
+    };
+    if (!basemapCooldown && currentBasemap.url !== queuedBasemap.current.url) {
+      setBasemapCooldown(true);
+      if (mapReady && mapRef.current) {
+        mapRef.current.setStyle(queuedBasemap.current.url);
+        setCurrentBasemap(basemap);
+      };
+      mapRef.current?.once("style.load", () => {
+        updateAllLayers();
+      });
+      setTimeout(() => {
+        setBasemapCooldown(false);
+      }, 100);
+    };
+  }, [basemap, mapRef, mapReady, basemapCooldown, currentBasemap, updateAllLayers]);
+
 
   return (
     <div ref={mapContainerRef} className="mapContainer"></div>

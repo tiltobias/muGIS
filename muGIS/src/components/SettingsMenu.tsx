@@ -1,9 +1,10 @@
 import { FC, useState, useRef } from 'react';
 import "./SettingsMenu.css";
 import useClickOutside from '../hooks/useClickOutside';
-import { Settings, File, Save, FolderOpen, Map, GraduationCap } from 'lucide-react';
+import { Settings, File, Save, FolderOpen, GraduationCap } from 'lucide-react';
 import useLayerStore, { LayerData } from '../hooks/useLayerStore';
 import useMapStore from '../hooks/useMapStore';
+import BasemapMenu from './BasemapMenu';
 
 interface SettingsMenuProps {
   test?: string;
@@ -20,12 +21,12 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     loadProjectLayers,
   } = useLayerStore();
   const {
-    setMapReady,
+    resetMapStore,
   } = useMapStore();
 
   const handleResetProject = () => {
     resetLayerStore();
-    setMapReady(false);
+    resetMapStore();
   }
 
   const handleDownloadProject = () => {
@@ -88,9 +89,7 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
               </button>
             </li>
             <li>
-              <button type="button" onClick={()=>{}}>
-                <Map /> Change basemap
-              </button>
+              <BasemapMenu />
             </li>
             <li>
               <button type="button" onClick={()=>{}}>
