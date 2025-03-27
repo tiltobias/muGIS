@@ -56,6 +56,22 @@ import { FC, useState, useRef } from 'react';
        url: "mapbox://styles/mapbox/navigation-night-v1",
        name: "Navigation Night",
      },
+    //  {
+    //   url: "mapbox://styles/tobiand/cm8rb3aur00bo01sh8ifqccos",
+    //   name: "μGIS test",
+    //  },
+    //  {
+    //   url: "mapbox://styles/tobiand/cm8rbbblx00bp01sh42j77jz0",
+    //   name: "μGIS blank",
+    //  },
+     {
+      url: "mapbox://styles/tobiand/cm8rbg7j900be01sa5wc6d4lq",
+      name: "Off (white)",
+     },
+     {
+      url: "mapbox://styles/tobiand/cm8rbd89l00az01sb97a8hfyh",
+      name: "Off (black)",
+     },
    ];
    
  

@@ -40,6 +40,7 @@ const MapContainer:FC<MapContainerProps> = () => {
         center: [10.4, 63.425], // starting position [lng, lat]
         zoom: 12, // starting zoom
         // attributionControl: false,
+        // projection: "mercator",
       });
       mapRef.current?.addControl(new mapboxgl.FullscreenControl(), "top-right"); // Add fullscreen button
       mapRef.current?.addControl(new mapboxgl.NavigationControl({visualizePitch:true}), "top-right"); // Add compass and zoom buttons
@@ -69,11 +70,10 @@ const MapContainer:FC<MapContainerProps> = () => {
     };
   }, [mapRef, addLayer, mapReady, setMapReady, basemap]);
 
-
+  // Set basemap on state change, with cooldown to prevent change while layers are loading
   const [basemapCooldown, setBasemapCooldown] = useState<boolean>(false);
-  const queuedBasemap = useRef<Basemap>(basemap);
-  const [currentBasemap, setCurrentBasemap] = useState<Basemap>(basemap);
-  // Set basemap on change
+  const queuedBasemap = useRef<Basemap>(basemap); // If basemap changes while cooldown is active, save it here
+  const [currentBasemap, setCurrentBasemap] = useState<Basemap>(basemap); // Don't update if basemap is the same (prevents infinite loop)
    useEffect(() => {
     if (queuedBasemap.current.url !== basemap.url) {
       queuedBasemap.current = basemap;
@@ -89,7 +89,7 @@ const MapContainer:FC<MapContainerProps> = () => {
       });
       setTimeout(() => {
         setBasemapCooldown(false);
-      }, 100);
+      }, 200); // Cooldown time in ms
     };
   }, [basemap, mapRef, mapReady, basemapCooldown, currentBasemap, updateAllLayers]);
 
