@@ -83,14 +83,14 @@ const BasemapMenu:FC<BasemapMenuProps> = () => {
       {basemapOpen && (
         <div className="basemapPopover">
           <ul 
-          onMouseEnter={()=>{
-            setSavedBasemap(basemap)
-          }}
-          onMouseLeave={()=>{
-            setBasemap(savedBasemap as Basemap);
-            setSavedBasemap(null);
-          }}
-        >
+            onMouseEnter={()=>{
+              setSavedBasemap(basemap)
+            }}
+            onMouseLeave={()=>{
+              setBasemap(savedBasemap as Basemap);
+              setSavedBasemap(null);
+            }}
+          >
             {basemaps.map((basemapOption) => (
               <li key={basemapOption.name}>
                 <button type="button" 
