@@ -11,6 +11,7 @@ import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
 import SettingsMenu from './components/SettingsMenu';
+import Toolbar from './components/Toolbar';
 
 function App() {
 
@@ -87,6 +88,7 @@ function App() {
         </h1>
         <button type="button" onClick={handleSidebarToggle}>Sidebar</button>
         <button type="button" onClick={handleToolBuffer}>Buffer</button>
+        <Toolbar />
         
         <SettingsMenu />
       </header>
