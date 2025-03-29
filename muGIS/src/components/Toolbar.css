@@ -21,18 +21,19 @@
     animation: fadeIn .3s ease-in-out;
 }
 
-.modalContainer {
+.modal {
+    font-size: 1rem;
     background-color: #282c34;
-    border-radius: 8px;
-    padding: 20px;
-    width: 20rem;
-    max-width: 90%;
-    min-height: 10rem;
-    max-height: 90%;
+    border-radius: .6em;
+    padding: 2em;
+    margin: 1em;
+    width: 20em;
     overflow-y: auto;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.3);
+}
+
+.modal > form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    gap: 1em;
 }

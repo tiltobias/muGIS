@@ -529,6 +529,17 @@
     "@types/geojson" "^7946.0.10"
     tslib "^2.8.1"
 
+"@turf/intersect@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/intersect/-/intersect-7.2.0.tgz#4ee2ae61e40b4a95883a45ea743c685f89ab1069"
+  integrity sha512-81GMzKS9pKqLPa61qSlFxLFeAC8XbwyCQ9Qv4z6o5skWk1qmMUbEHeMqaGUTEzk+q2XyhZ0sju1FV4iLevQ/aw==
+  dependencies:
+    "@turf/helpers" "^7.2.0"
+    "@turf/meta" "^7.2.0"
+    "@types/geojson" "^7946.0.10"
+    polyclip-ts "^0.16.8"
+    tslib "^2.8.1"
+
 "@turf/jsts@^2.7.1":
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/@turf/jsts/-/jsts-2.7.2.tgz#b327aa54ef065cbf1768ad69bd6ae1087385d32b"
@@ -845,6 +856,11 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+bignumber.js@^9.1.0:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
+  integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -2246,6 +2262,14 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
+polyclip-ts@^0.16.8:
+  version "0.16.8"
+  resolved "https://registry.yarnpkg.com/polyclip-ts/-/polyclip-ts-0.16.8.tgz#503160d05e9d56380533aab0bc2dae835d6da5f9"
+  integrity sha512-JPtKbDRuPEuAjuTdhR62Gph7Is2BS1Szx69CFOO3g71lpJDFo78k4tFyi+qFOMVPePEzdSKkpGU3NBXPHHjvKQ==
+  dependencies:
+    bignumber.js "^9.1.0"
+    splaytree-ts "^1.0.2"
+
 possible-typed-array-names@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz#93e3582bc0e5426586d9d07b79ee40fc841de4ae"
@@ -2548,6 +2572,11 @@ source-map-js@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz"
   integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
+
+splaytree-ts@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/splaytree-ts/-/splaytree-ts-1.0.2.tgz#34963704587aff45eaa09c24713f552bbf56e8f0"
+  integrity sha512-0kGecIZNIReCSiznK3uheYB8sbstLjCZLiwcQwbmLhgHJj2gz6OnSPkVzJQCMnmEz1BQ4gPK59ylhBoEWOhGNA==
 
 string.prototype.matchall@^4.0.12:
   version "4.0.12"

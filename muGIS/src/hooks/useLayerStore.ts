@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import { FeatureCollection } from "geojson";
+import { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import { HslaColor } from "../components/ColorPicker";
 
-type LayerRenderingType = "fill"|"line"|"circle";
+export type LayerRenderingType = "fill"|"line"|"circle";
 
-interface LayerData {
+export interface LayerData {
   featureCollection: FeatureCollection;
   id: string;
   name: string;
@@ -14,10 +14,18 @@ interface LayerData {
   updater?: number;
 }
 
-interface NewLayerData {
+export interface NewLayerData {
     featureCollection: FeatureCollection;
     name: string | null;
 }
+
+export interface LayerOption {
+    id: string;
+    name: string;
+    renderingType: LayerRenderingType;
+}
+
+export type FeatureCollectionPolygon = FeatureCollection<Polygon | MultiPolygon>;
 
 interface LayerStore {
     layers: LayerData[];
@@ -125,4 +133,3 @@ const useLayerStore = create<LayerStore>((set) => ({
 }));
 
 export default useLayerStore;
-export type { LayerData, LayerRenderingType };
