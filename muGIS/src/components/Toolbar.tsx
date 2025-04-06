@@ -27,8 +27,14 @@ const Toolbar:FC<ToolbarProps> = () => {
 
   const [selectedLayer1, setSelectedLayer1] = useState<LayerData | null>(null);
   const [selectedLayer2, setSelectedLayer2] = useState<LayerData | null>(null);
+  const [newLayerName, setNewLayerName] = useState<string>("");
 
- 
+  // Update the new layer name when the selected layers change
+  useEffect(() => {
+    if (selectedLayer1 && selectedLayer2) {
+      setNewLayerName(`intersect: ${selectedLayer1.name} & ${selectedLayer2.name}`);
+    }
+  }, [selectedLayer1, selectedLayer2]);
 
   return (
     <>
@@ -67,7 +73,7 @@ const Toolbar:FC<ToolbarProps> = () => {
                 } else {
                   addLayer({
                     featureCollection: outLayer,
-                    name: `${selectedLayer1?.name} & ${selectedLayer2?.name}`,
+                    name: newLayerName,
                   })
                 }
               }
@@ -101,14 +107,14 @@ const Toolbar:FC<ToolbarProps> = () => {
                 {polygonLayers
                   .filter((layer) => layer.id !== selectedLayer1?.id) // don't choose the same layer twice
                   .map((layer) => (
-                    <option key={layer.id} value={layer.id} selected={selectedLayer1?.id===layer.id}>{layer.name}</option>
+                    <option key={layer.id} value={layer.id} selected={selectedLayer2?.id===layer.id}>{layer.name}</option>
                 ))}
               </select>
 
               <button type="button" onClick={()=>{
                 setModalOpen(false);
               }}>Close</button>
-              <input type="text" />
+              <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
               <button type="submit">Submit</button>
             </form>
           </div>
