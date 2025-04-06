@@ -1,11 +1,12 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore, { LayerData } from '../hooks/useLayerStore';
 import useMapStore from '../hooks/useMapStore';
+import LayerName from './LayerName';
 
 interface LayerProps {
   layerData: LayerData;
@@ -14,7 +15,6 @@ interface LayerProps {
 
 const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   
-  const [layerName] = useState<string>(layerData.name);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerMenu = useRef<HTMLDivElement>(null);
   useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
@@ -87,10 +87,10 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     };
   }
 
-  const handleDeleteLayer = (id: string) => {
-    mapRef.current?.removeLayer(id);
-    mapRef.current?.removeSource(id);
-    deleteLayer(id)
+  const handleDeleteLayer = () => {
+    mapRef.current?.removeLayer(layerData.id);
+    mapRef.current?.removeSource(layerData.id);
+    deleteLayer(layerData.id)
   }
 
   const handleDownloadLayer = () => {
@@ -110,6 +110,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     mapRef.current?.fitBounds(bounds, {padding: 20});
   }
 
+
   return (
     <li className="layerListItem">
       <div className="layerItem">
@@ -117,9 +118,10 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
           color={layerData.color}
           onChange={handleChangeColor}
         />
-        <div className="layerName">
-          {layerName}
-        </div>
+        <LayerName 
+          layerId={layerData.id}
+          initialLayerName={layerData.name}
+        />
         <div className="layerMenu" ref={layerMenu}>
           <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
             <Ellipsis />
@@ -128,7 +130,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
             <div className="layerMenuPopover">
               <ul>
                 <li>
-                  <button type="button" onClick={()=>handleDeleteLayer(layerData.id)}>
+                  <button type="button" onClick={handleDeleteLayer}>
                     <Trash2 />
                   </button>
                 </li>
@@ -140,6 +142,11 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
                 <li>
                   <button type="button" onClick={handleZoomToLayer}>
                     <ZoomIn />
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={()=>{}}>
+                    <PencilLine />
                   </button>
                 </li>
               </ul>

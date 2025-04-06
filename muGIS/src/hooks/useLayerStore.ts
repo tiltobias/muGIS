@@ -39,6 +39,7 @@ interface LayerStore {
     toggleLayerVisibilityAll: () => void;
     changeLayerColor: (id: string, color: HslaColor) => void;
     updateAllLayers: () => void;
+    changeLayerName: (id: string, name: string) => void;
 }
 
 const useLayerStore = create<LayerStore>((set) => ({
@@ -128,6 +129,10 @@ const useLayerStore = create<LayerStore>((set) => ({
 
     updateAllLayers: () => set((state) => (
         { layers: state.layers.map(layer => ({...layer, updater: layer.updater ? layer.updater + 1 : 1})) }
+    )),
+
+    changeLayerName: (id: string, name: string) => set((state) => (
+        { layers: state.layers.map(layer => layer.id === id ? {...layer, name: name} : layer) }
     )),
     
 }));
