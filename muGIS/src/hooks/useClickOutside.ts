@@ -1,10 +1,20 @@
 import { useEffect, RefObject } from "react";
 
-const useClickOutside = (ref: RefObject<Element | null>, handler: ()=>void) => {
-  useEffect(() => {
+const useClickOutside = (
+  ref: RefObject<Element | null>, 
+  handler: ()=>void, 
+  ignoreRefs: RefObject<Element | null>[] = [], // empty array if none given
+) => {
 
+  useEffect(() => {
+    
     const handleClick = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        ref.current && 
+        !ref.current.contains(target) && 
+        !ignoreRefs.some((ignoreRef) => ignoreRef.current?.contains(target))
+      ) {
         handler();
       }
     };
@@ -14,7 +24,7 @@ const useClickOutside = (ref: RefObject<Element | null>, handler: ()=>void) => {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [ref, handler]);
+  }, [ref, handler, ignoreRefs]);
 };
 
 export default useClickOutside;

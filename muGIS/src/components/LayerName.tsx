@@ -1,25 +1,22 @@
 import { FC, useState, useRef, useEffect } from 'react';
-import useClickOutside from '../hooks/useClickOutside';
 import useLayerStore from '../hooks/useLayerStore';
 
 interface LayerNameProps {
   layerId: string;
   initialLayerName: string;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName}) => {
+const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, setIsEditing}) => {
 
   const { 
     changeLayerName, 
   } = useLayerStore();
 
   const [layerName, setLayerName] = useState<string>(initialLayerName);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  useClickOutside(inputRef, ()=>{
-    handleSubmit();
-  });
 
   useEffect(()=>{
     if (isEditing && inputRef.current) {
@@ -47,6 +44,7 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName}) => {
             onChange={(e)=>setLayerName(e.target.value)} 
             ref={inputRef} 
             onFocus={()=>setIsEditing(true)}
+            onBlur={()=>handleSubmit()} // instead of useClickOutside (more reliable)
           />
         </form>
 

@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from "./ColorPicker";
 import "./Layer.css";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine } from "lucide-react";
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from "lucide-react";
 import useClickOutside from '../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore, { LayerData } from '../hooks/useLayerStore';
@@ -110,6 +110,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     mapRef.current?.fitBounds(bounds, {padding: 20});
   }
 
+  const [layerNameEditing, setLayerNameEditing] = useState<boolean>(false);
 
   return (
     <li className="layerListItem">
@@ -121,6 +122,8 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
         <LayerName 
           layerId={layerData.id}
           initialLayerName={layerData.name}
+          isEditing={layerNameEditing}
+          setIsEditing={setLayerNameEditing}
         />
         <div className="layerMenu" ref={layerMenu}>
           <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
@@ -145,8 +148,11 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={()=>{}}>
-                    <PencilLine />
+                  <button type="button" onClick={(e)=>{
+                    e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
+                    setLayerNameEditing(!layerNameEditing);
+                  }}>
+                    {!layerNameEditing ? <PencilLine /> : <PencilOff />}
                   </button>
                 </li>
               </ul>
