@@ -1,5 +1,6 @@
 import { FC, useState, useRef, useEffect } from 'react';
 import useLayerStore from '../hooks/useLayerStore';
+import "./LayerName.css";
 
 interface LayerNameProps {
   layerId: string;
@@ -50,7 +51,9 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
 
       ) : (
 
-        <span onDoubleClick={()=>setIsEditing(true)}>{layerName}</span>
+        <div>
+          <span onDoubleClick={()=>setIsEditing(true)}>{layerName}</span>
+        </div>
 
       )}
     </div>
