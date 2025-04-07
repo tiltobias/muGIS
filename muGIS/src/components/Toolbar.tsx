@@ -80,7 +80,7 @@ const Toolbar:FC<ToolbarProps> = () => {
             }}>
               <h3>Intersect</h3>
               selected layer1: {selectedLayer1?.name}
-              <select name="layer1" id="" required onChange={(e)=>{
+              <select name="layer1" id="" required value={selectedLayer1?.id} onChange={(e)=>{
                 const layer = layers.find((layer) => layer.id === e.target.value);
                 if (layer) {
                   setSelectedLayer1(layer);
@@ -90,12 +90,12 @@ const Toolbar:FC<ToolbarProps> = () => {
               }}>
                 <option value={undefined}>Select a layer</option>
                 {polygonLayers.map((layer) => (
-                  <option key={layer.id} value={layer.id} selected={selectedLayer1?.id===layer.id}>{layer.name}</option> // selected= makes sure the select value is synced with the state on reopen of the modal
+                  <option key={layer.id} value={layer.id}>{layer.name}</option>
                 ))}
               </select>
 
               selected layer2: {selectedLayer2?.name}
-              <select name="layer1" id="" required onChange={(e)=>{
+              <select name="layer1" id="" required value={selectedLayer2?.id} onChange={(e)=>{
                 const layer = layers.find((layer) => layer.id === e.target.value);
                 if (layer) {
                   setSelectedLayer2(layer);
@@ -107,7 +107,7 @@ const Toolbar:FC<ToolbarProps> = () => {
                 {polygonLayers
                   .filter((layer) => layer.id !== selectedLayer1?.id) // don't choose the same layer twice
                   .map((layer) => (
-                    <option key={layer.id} value={layer.id} selected={selectedLayer2?.id===layer.id}>{layer.name}</option>
+                    <option key={layer.id} value={layer.id}>{layer.name}</option>
                 ))}
               </select>
 
