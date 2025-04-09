@@ -1,7 +1,8 @@
 import { FC, useState, useEffect } from 'react';
-import "./Toolbar.css";
+// import "./Toolbar.css";
 import useLayerStore, { LayerData, LayerOption, FeatureCollectionPolygon } from '../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
+import ToolModal from './tools/ToolModal';
 
 interface ToolbarProps {
   test?: string;
@@ -9,8 +10,6 @@ interface ToolbarProps {
 
 const Toolbar:FC<ToolbarProps> = () => {
   
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-
   const {
     layers,
     addLayer,
@@ -36,91 +35,72 @@ const Toolbar:FC<ToolbarProps> = () => {
     }
   }, [selectedLayer1, selectedLayer2]);
 
+  const onFormSubmit = () => {
+    if (!selectedLayer1 || !selectedLayer2) {
+      alert("Please select two layers");
+      return false;
+    };
+    const outLayer: FeatureCollectionPolygon = {
+      type: "FeatureCollection",
+      features: [],
+    };
+    const layer1 = selectedLayer1.featureCollection as FeatureCollectionPolygon;
+    const layer2 = selectedLayer2.featureCollection as FeatureCollectionPolygon;
+    layer1.features.forEach((feature1) => {
+      layer2.features.forEach((feature2) => {
+        const intersection = intersect({type:"FeatureCollection",features:[feature1, feature2]});
+        if (intersection) {
+          outLayer.features.push(intersection);
+        }
+      });
+    });
+    if (!outLayer) {
+      alert("No intersection found");
+      return false;
+    }
+    addLayer({
+      featureCollection: outLayer,
+      name: newLayerName,
+    })
+    return true;
+  }
+
   return (
-    <>
-      <button type="button" onClick={()=>{
-        setModalOpen(!modalOpen);
-      }}>Intersect</button>
-      {modalOpen && (
-        <div className="cover" onClick={(e)=>{
-          if (e.target === e.currentTarget) setModalOpen(false);  // only close if clicked on the cover
-        }}>
-          <div className="modal">
-            <form onSubmit={(e)=>{
-              e.preventDefault();
-              if (!selectedLayer1 || !selectedLayer2) {
-                alert("Please select two layers");
-                return;
-              } else {
-                setModalOpen(false);
-                const outLayer: FeatureCollectionPolygon = {
-                  type: "FeatureCollection",
-                  features: [],
-                };
-                const layer1 = selectedLayer1.featureCollection as FeatureCollectionPolygon;
-                const layer2 = selectedLayer2.featureCollection as FeatureCollectionPolygon;
-                layer1.features.forEach((feature1) => {
-                  layer2.features.forEach((feature2) => {
-                    const intersection = intersect({type:"FeatureCollection",features:[feature1, feature2]});
-                    if (intersection) {
-                      outLayer.features.push(intersection);
-                    }
-                  });
-                });
-                if (!outLayer) {
-                  alert("No intersection found");
-                  return;
-                } else {
-                  addLayer({
-                    featureCollection: outLayer,
-                    name: newLayerName,
-                  })
-                }
-              }
-            }}>
-              <h3>Intersect</h3>
-              selected layer1: {selectedLayer1?.name}
-              <select name="layer1" id="" required value={selectedLayer1?.id} onChange={(e)=>{
-                const layer = layers.find((layer) => layer.id === e.target.value);
-                if (layer) {
-                  setSelectedLayer1(layer);
-                } else {
-                  setSelectedLayer1(null);
-                }
-              }}>
-                <option value={undefined}>Select a layer</option>
-                {polygonLayers.map((layer) => (
-                  <option key={layer.id} value={layer.id}>{layer.name}</option>
-                ))}
-              </select>
+    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}> 
+      selected layer1: {selectedLayer1?.name}
+      <select name="layer1" id="" required value={selectedLayer1?.id} onChange={(e)=>{
+        const layer = layers.find((layer) => layer.id === e.target.value);
+        if (layer) {
+          setSelectedLayer1(layer);
+        } else {
+          setSelectedLayer1(null);
+        }
+      }}>
+        <option value={undefined}>Select a layer</option>
+        {polygonLayers.map((layer) => (
+          <option key={layer.id} value={layer.id}>{layer.name}</option>
+        ))}
+      </select>
 
-              selected layer2: {selectedLayer2?.name}
-              <select name="layer1" id="" required value={selectedLayer2?.id} onChange={(e)=>{
-                const layer = layers.find((layer) => layer.id === e.target.value);
-                if (layer) {
-                  setSelectedLayer2(layer);
-                } else {
-                  setSelectedLayer2(null);
-                }
-              }}>
-                <option value={undefined}>Select a layer</option>
-                {polygonLayers
-                  .filter((layer) => layer.id !== selectedLayer1?.id) // don't choose the same layer twice
-                  .map((layer) => (
-                    <option key={layer.id} value={layer.id}>{layer.name}</option>
-                ))}
-              </select>
+      selected layer2: {selectedLayer2?.name}
+      <select name="layer1" id="" required value={selectedLayer2?.id} onChange={(e)=>{
+        const layer = layers.find((layer) => layer.id === e.target.value);
+        if (layer) {
+          setSelectedLayer2(layer);
+        } else {
+          setSelectedLayer2(null);
+        }
+      }}>
+        <option value={undefined}>Select a layer</option>
+        {polygonLayers
+          .filter((layer) => layer.id !== selectedLayer1?.id) // don't choose the same layer twice
+          .map((layer) => (
+            <option key={layer.id} value={layer.id}>{layer.name}</option>
+        ))}
+      </select>
 
-              <button type="button" onClick={()=>{
-                setModalOpen(false);
-              }}>Close</button>
-              <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
-              <button type="submit">Submit</button>
-            </form>
-          </div>
-        </div>
-      )}
-    </>
+      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+    </ToolModal>
   )
 }
 
