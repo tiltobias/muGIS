@@ -12,6 +12,15 @@
     position: absolute;
     z-index: 2;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
+    border-radius: var(--border-radius);
+}
+
+div.react-colorful > :first-child {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+div.react-colorful > :last-child {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 .popoverCover {
