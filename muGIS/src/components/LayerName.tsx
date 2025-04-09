@@ -17,7 +17,6 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
 
   const [layerName, setLayerName] = useState<string>(initialLayerName);
   const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(()=>{
     if (isEditing && inputRef.current) {
@@ -36,7 +35,6 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
       {isEditing ? (
 
         <form 
-          ref={formRef} 
           onSubmit={handleSubmit}
         >
           <input 
