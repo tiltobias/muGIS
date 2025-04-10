@@ -3,6 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, LayerOption, FeatureCollectionPolygon } from '../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from './tools/ToolModal';
+import PolygonTool from './tools/PolygonTool';
 
 interface ToolbarProps {
   test?: string;
@@ -16,13 +17,13 @@ const Toolbar:FC<ToolbarProps> = () => {
   } = useLayerStore();
 
   const [polygonLayers, setPolygonLayers] = useState<LayerOption[]>([]);
-  useEffect(() => {
-    setPolygonLayers(
-      layers
-        .filter((layer)=>layer.renderingType === "fill")
-        .map(({ id, name, renderingType }) => ({ id, name, renderingType }))
-    );
-  }, [layers]);
+  // useEffect(() => {
+  //   setPolygonLayers(
+  //     layers
+  //       .filter((layer)=>layer.renderingType === "fill")
+  //       .map(({ id, name, renderingType }) => ({ id, name, renderingType }))
+  //   );
+  // }, [layers]);
 
   const [selectedLayer1, setSelectedLayer1] = useState<LayerData | null>(null);
   const [selectedLayer2, setSelectedLayer2] = useState<LayerData | null>(null);
@@ -67,6 +68,7 @@ const Toolbar:FC<ToolbarProps> = () => {
 
   return (
     <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}> 
+      <PolygonTool setPolygonLayers={setPolygonLayers} />
       selected layer1: {selectedLayer1?.name}
       <select name="layer1" id="" required value={selectedLayer1?.id} onChange={(e)=>{
         const layer = layers.find((layer) => layer.id === e.target.value);
