@@ -12,6 +12,7 @@ import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
 import SettingsMenu from './components/SettingsMenu';
 import Toolbar from './components/Toolbar';
+import ResizeHandle from './components/ResizeHandle';
 
 function App() {
 
@@ -80,6 +81,8 @@ function App() {
     }
   }
 
+  const [sidebarWidth, setSidebarWidth] = useState(300);
+
   return (
     <div className="pageContainer">
       <header className="mainHeader">
@@ -94,7 +97,8 @@ function App() {
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
-          <aside className="sidebar">
+          <aside className="sidebar" style={{ width: `${sidebarWidth}px` }}>
+            <ResizeHandle setWidth={setSidebarWidth} />
             <h2>Sidebar</h2>
             <button type="button" onClick={toggleLayerVisibilityAll}>
               {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}

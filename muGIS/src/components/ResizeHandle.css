@@ -1,0 +1,32 @@
+.resizeHandle {
+    font-size: .4rem;
+    background-color: rgba(0, 0, 0, 0.0);
+    cursor: ew-resize;
+    position: absolute;
+    height: 100%;
+    width: .5em;
+    right: -.5em;
+    top: 0;
+    z-index: 10;
+}
+.resizeHandle:active {
+    width: calc(var(--min-sidebar-width) * 2);
+    right: calc(-1 * var(--min-sidebar-width));
+}
+.resizeHandle::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 1em;
+    top: 0;
+    left: -.5em;
+    background-color: transparent;
+    transition: background-color .2s ease;
+}
+.resizeHandle:hover::before {
+    background-color: black;
+}
+.resizeHandle:active::before {
+    background-color: #61dafb;
+    left: calc(var(--min-sidebar-width) - .5em);
+}

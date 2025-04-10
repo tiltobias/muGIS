@@ -3,6 +3,7 @@
   --secondary-color: #61dafb; */
   --header-height: 4rem;
   --border-radius: 0.5rem;
+  --min-sidebar-width: 15rem;
 }
 
 .pageContainer {
@@ -49,7 +50,9 @@
 }
 
 .sidebar {
-  width: 20rem;
+  position: relative;
+  min-width: var(--min-sidebar-width);
+  max-width: calc(100vw - var(--min-sidebar-width));
   background-color: #282c34;
   color: white;
   /* transition: width .5s ease; */
