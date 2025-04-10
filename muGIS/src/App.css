@@ -1,100 +1,100 @@
 :root {
-  /* --primary-color: #282c34;
-  --secondary-color: #61dafb; */
-  --header-height: 4rem;
-  --border-radius: 0.5rem;
-  --min-sidebar-width: 15rem;
+    /* --primary-color: #282c34;
+    --secondary-color: #61dafb; */
+    --header-height: 4rem;
+    --border-radius: 0.5rem;
+    --min-sidebar-width: 15rem;
 }
 
 .pageContainer {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .mainHeader {
-  background-color: #282c34;
-  color: white;
-  padding: .5rem;
-  display: flex;
-  height: var(--header-height);
-  box-sizing: border-box;
+    background-color: #282c34;
+    color: white;
+    padding: .5rem;
+    display: flex;
+    height: var(--header-height);
+    box-sizing: border-box;
 }
 
 .mainHeader h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  line-height: initial;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: initial;
 }
 
 .mainContainer {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  height: calc(100vh - var(--header-height));
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    height: calc(100vh - var(--header-height));
+    box-sizing: border-box;
 }
 
 .mapFlexContainer {
-  flex: 1;
-  position: relative;
+    flex: 1;
+    position: relative;
 }
 
 .sidebarContainer {
-  width: auto;
-  position: relative;
+    width: auto;
+    position: relative;
 }
 .sidebarContainer:not(.open) {
-  width: 0;
+    width: 0;
 }
 
 .sidebar {
-  min-width: var(--min-sidebar-width);
-  max-width: calc(100vw - var(--min-sidebar-width));
-  background-color: #282c34;
-  color: white;
-  /* transition: width .5s ease; */
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-sizing: border-box;
+    min-width: var(--min-sidebar-width);
+    max-width: calc(100vw - var(--min-sidebar-width));
+    background-color: #282c34;
+    color: white;
+    /* transition: width .5s ease; */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .layerListContainer {
-  flex-grow: 1;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
 
 .layerList {
-  padding: 0 0 0 2rem;
-  margin: 0;
-  /* scrollbar-width: thin; */
+    padding: 0 0 0 2rem;
+    margin: 0;
+    /* scrollbar-width: thin; */
 }
 
 .sidebarFooter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem;
 }
 
 #layerFileInput {
-  display: none;
+    display: none;
 }
 
 label[for="layerFileInput"] {
-  cursor: pointer;
-  padding: .5rem;
-  text-align: center;
-  
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-  border-radius: .5rem;
-  font-weight: 500;
-  display: flex;
-  flex-direction: row;
+    cursor: pointer;
+    padding: .5rem;
+    text-align: center;
+    
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: .5rem;
+    font-weight: 500;
+    display: flex;
+    flex-direction: row;
 }
 

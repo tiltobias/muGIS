@@ -17,6 +17,7 @@ import ResizeHandle from './components/ResizeHandle';
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [sidebarWidth, setSidebarWidth] = useState(300);
 
   const { 
     layers, 
@@ -81,7 +82,6 @@ function App() {
     }
   }
 
-  const [sidebarWidth, setSidebarWidth] = useState(300);
 
   return (
     <div className="pageContainer">

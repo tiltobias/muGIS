@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-// import "./Toolbar.css";
+import "./Toolbar.css";
 import useLayerStore, { LayerData, LayerOption, FeatureCollectionPolygon } from '../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from './tools/ToolModal';
