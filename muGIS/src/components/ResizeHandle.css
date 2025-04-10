@@ -30,3 +30,7 @@
     background-color: #61dafb;
     left: calc(var(--min-sidebar-width) - .5em);
 }
+
+.sidebarContainer:not(.open) > .resizeHandle::before {
+    width: 1.5em;
+}

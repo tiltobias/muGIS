@@ -97,8 +97,8 @@ function App() {
       </header>
       <main className="mainContainer">
         <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
+          <ResizeHandle setWidth={setSidebarWidth} setOpen={setSidebarOpen} />
           <aside className="sidebar" style={{ width: `${sidebarWidth}px` }}>
-            <ResizeHandle setWidth={setSidebarWidth} />
             <h2>Sidebar</h2>
             <button type="button" onClick={toggleLayerVisibilityAll}>
               {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}

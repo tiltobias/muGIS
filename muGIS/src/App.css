@@ -50,7 +50,6 @@
 }
 
 .sidebar {
-  position: relative;
   min-width: var(--min-sidebar-width);
   max-width: calc(100vw - var(--min-sidebar-width));
   background-color: #282c34;
