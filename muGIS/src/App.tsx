@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -29,16 +29,15 @@ function App() {
     mapReady,
   } = useMapStore();
   
-
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-    setTimeout(() => {
+  // Resize map smoothly when sidebar is opened or closed
+  useEffect(() => {
+    const interval = setInterval(() => {
       mapRef.current?.resize();
     }, 1);
-    setTimeout(() => { // just in case
-      mapRef.current?.resize();
-    }, 100);
-  };
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 301); // time of sidebarContainer transition
+  }, [mapRef, sidebarOpen]);
 
 
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +88,7 @@ function App() {
         <h1>
           μGIS
         </h1>
-        <button type="button" onClick={handleSidebarToggle}>Sidebar</button>
+        <button type="button" onClick={()=>setSidebarOpen(!sidebarOpen)}>Sidebar</button>
         <button type="button" onClick={handleToolBuffer}>Buffer</button>
         <Toolbar />
         

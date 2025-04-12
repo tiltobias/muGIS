@@ -33,8 +33,8 @@ const ResizeHandle: FC<ResizeHandleProps> = ({ setWidth, setOpen }) => {
   }, [mapRef]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    mapRef.current?.resize();
     if (resizing) {
+      mapRef.current?.resize();
       setWidth(e.clientX);
       if (e.clientX < 100) {
         setOpen(false);
