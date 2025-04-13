@@ -56,7 +56,7 @@ const ResizeHandle: FC<ResizeHandleProps> = ({ setWidth, setOpen }) => {
 
   return (
     <div
-      className="resizeHandle"
+      className={`resizeHandle ${resizing ? "resizing" : ""}`}
       onMouseDown={startResize}
       ref={resizeHandle}
     ></div>
