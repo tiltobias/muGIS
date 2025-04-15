@@ -1,9 +1,9 @@
 import { FC, useState, useRef } from 'react';
-import "./SettingsMenu.css";
-import useClickOutside from '../hooks/useClickOutside';
+import './SettingsMenu.css';
+import useClickOutside from '../../hooks/useClickOutside';
 import { Settings, File, Save, FolderOpen, GraduationCap } from 'lucide-react';
-import useLayerStore, { LayerData } from '../hooks/useLayerStore';
-import useMapStore, { Basemap } from '../hooks/useMapStore';
+import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
+import useMapStore, { Basemap } from '../../hooks/useMapStore';
 import BasemapMenu from './BasemapMenu';
 
 interface MugisFile {

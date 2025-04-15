@@ -1,8 +1,8 @@
 import { FC, useState, useRef } from 'react';
-import "./BasemapMenu.css";
-import useClickOutside from '../hooks/useClickOutside';
+import './BasemapMenu.css';
+import useClickOutside from '../../hooks/useClickOutside';
 import { Map } from 'lucide-react';
-import useMapStore, { Basemap } from '../hooks/useMapStore';
+import useMapStore, { Basemap } from '../../hooks/useMapStore';
 
 interface BasemapMenuProps {
   test?: string;

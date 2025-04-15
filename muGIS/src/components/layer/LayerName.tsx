@@ -1,6 +1,6 @@
 import { FC, useState, useRef, useEffect } from 'react';
-import useLayerStore from '../hooks/useLayerStore';
-import "./LayerName.css";
+import useLayerStore from '../../hooks/useLayerStore';
+import './LayerName.css';
 
 interface LayerNameProps {
   layerId: string;

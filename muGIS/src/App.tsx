@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 import MapContainer from './components/MapContainer'
-import Layer from './components/Layer';
+import Layer from './components/layer/Layer';
 import { FeatureCollection } from 'geojson';
 import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
-import SettingsMenu from './components/SettingsMenu';
+import SettingsMenu from './components/settings/SettingsMenu';
 import Toolbar from './components/Toolbar';
 import ResizeHandle from './components/ResizeHandle';
 
