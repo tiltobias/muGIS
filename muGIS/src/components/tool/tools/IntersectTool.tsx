@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
-import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../hooks/useLayerStore';
+import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
-import ToolModal from './ToolModal';
+import ToolModal from '../ToolModal';
 
 const IntersectTool: FC = () => {
 

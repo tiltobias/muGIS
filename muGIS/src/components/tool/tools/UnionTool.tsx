@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
-import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../hooks/useLayerStore';
+import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { union } from '@turf/union';
-import ToolModal from './ToolModal';
+import ToolModal from '../ToolModal';
 
 const UnionTool: FC = () => {
 

@@ -13,9 +13,7 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => 
 
   return (
     <div>
-      <button type="button" onClick={()=>{
-        setModalOpen(!modalOpen);
-      }}>
+      <button type="button" onClick={()=>setModalOpen(!modalOpen)}>
         {buttonLabel}
       </button>
       
@@ -26,19 +24,14 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => 
           <div className="modal">
             <form onSubmit={(e)=>{
               e.preventDefault();
-              if (onFormSubmit()) {
-                setModalOpen(false);
-              } else {
-                return; // do not close the modal if the form is not valid
-              }
+              if (onFormSubmit()) setModalOpen(false); // only close the modal if the form is valid
             }}>
               <h3>{buttonLabel}</h3>
 
               {children}
 
-              <button type="button" onClick={()=>{
-                setModalOpen(false);
-              }}>Close</button>
+              <button type="button" onClick={()=>setModalOpen(false)}>Close</button>
+
               <button type="submit">Submit</button>
             </form>
           </div>
