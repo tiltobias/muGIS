@@ -2,11 +2,11 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { union } from '@turf/union';
 import ToolModal from '../ToolModal';
+import SelectLayer from '../SelectLayer';
 
 const UnionTool: FC = () => {
 
   const {
-    layers,
     addLayer,
   } = useLayerStore();
 
@@ -48,26 +48,21 @@ const UnionTool: FC = () => {
 
   return (
     <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit}>
+      
       selected layer1: {selectedLayer1?.name}
-      <select name="layer1" id="" required value={selectedLayer1?.id} onChange={(e)=>setSelectedLayer1(layers.find((layer) => layer.id === e.target.value))}>
-        <option value={undefined}>Select a layer</option>
-        {layers
-          .filter((layer)=>layer.renderingType === "fill")
-          .map((layer) => (
-            <option key={layer.id} value={layer.id}>{layer.name}</option>
-        ))}
-      </select>
+      <SelectLayer 
+        selectedLayer={selectedLayer1} 
+        setSelectedLayer={setSelectedLayer1} 
+        renderingType="fill"
+      />
 
       selected layer2: {selectedLayer2?.name}
-      <select name="layer1" id="" required value={selectedLayer2?.id} onChange={(e)=>setSelectedLayer2(layers.find((layer) => layer.id === e.target.value))}>
-        <option value={undefined}>Select a layer</option>
-        {layers
-          .filter((layer)=>layer.renderingType === "fill" && layer.id !== selectedLayer1?.id) // don't choose the same layer twice
-          .map((layer) => (
-            <option key={layer.id} value={layer.id}>{layer.name}</option>
-          ))
-        }
-      </select>
+      <SelectLayer
+        selectedLayer={selectedLayer2} 
+        setSelectedLayer={setSelectedLayer2} 
+        renderingType="fill"
+        unselectableLayerIds={[selectedLayer1?.id]}
+      />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
