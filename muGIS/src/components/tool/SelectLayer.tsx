@@ -19,7 +19,7 @@ const SelectLayer: FC<SelectLayerProps> = ({
   } = useLayerStore();
 
   return (
-    <select name="layer1" id="" required value={selectedLayer?.id} onChange={(e)=>setSelectedLayer(layers.find((layer) => layer.id === e.target.value))}>
+    <select required value={selectedLayer?.id} onChange={(e)=>setSelectedLayer(layers.find((layer) => layer.id === e.target.value))}>
       <option value={undefined}>Select a layer1</option>
       {layers
         .filter((layer) => renderingType ? layer.renderingType === renderingType : true) // filter by rendering type if provided

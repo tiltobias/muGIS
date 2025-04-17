@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import './Toolbar.css';
-import { IntersectTool, UnionTool } from './tool/tools';
+import { BufferTool, IntersectTool, UnionTool, DifferenceTool, DissolveTool } from './tool/tools';
 
 const Toolbar: FC = () => {
   return (
     <>
+      <BufferTool />
       <IntersectTool />
       <UnionTool />
+      <DifferenceTool />
+      <DissolveTool />
     </>
   )
 }

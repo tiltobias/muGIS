@@ -6,7 +6,6 @@ import './App.css'
 import MapContainer from './components/MapContainer'
 import Layer from './components/layer/Layer';
 import { FeatureCollection } from 'geojson';
-import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
@@ -66,21 +65,6 @@ function App() {
     });
   };
 
-  
-
-  const handleToolBuffer = () => {
-    const inLayer = layers[0];
-    const bufferLayer = buffer(inLayer.featureCollection, 0.05);
-    if (bufferLayer) {
-      addLayer({
-        featureCollection: bufferLayer,
-        name: inLayer.name + "_buffer",
-      });
-    } else {
-      console.error("Buffer operation failed");
-    }
-  }
-
 
   return (
     <div className="pageContainer">
@@ -89,7 +73,6 @@ function App() {
           μGIS
         </h1>
         <button type="button" onClick={()=>setSidebarOpen(!sidebarOpen)}>Sidebar</button>
-        <button type="button" onClick={handleToolBuffer}>Buffer</button>
         <Toolbar />
         
         <SettingsMenu />
