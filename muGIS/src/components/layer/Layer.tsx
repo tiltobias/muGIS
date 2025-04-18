@@ -98,7 +98,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = layerData.id + ".geojson";
+    a.download = layerData.name + ".geojson";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

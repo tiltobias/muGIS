@@ -1,11 +1,12 @@
 import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData } from '../../../hooks/useLayerStore';
-import { union } from '@turf/union';
+import { bbox } from '@turf/bbox';
 import ToolModal from '../ToolModal';
 import ReactSelect from 'react-select';
 import { Feature, Polygon, MultiPolygon } from 'geojson';
+import { bboxPolygon } from '@turf/bbox-polygon';
 
-const UnionTool: FC = () => {
+const BboxTool: FC = () => {
 
   const {
     layers,
@@ -25,7 +26,7 @@ const UnionTool: FC = () => {
           inNames += ", ";
         }
       });
-      setNewLayerName(`union(${inNames})`);
+      setNewLayerName(`bbox(${inNames})`);
     }
   }, [selectedLayers]);
 
@@ -35,10 +36,10 @@ const UnionTool: FC = () => {
       return false;
     };
     const features = selectedLayers.flatMap(layer => layer.featureCollection.features) as Feature<Polygon | MultiPolygon>[];
-    const result = union({
+    const result = bboxPolygon(bbox({
       type:"FeatureCollection",
       features: features,
-    });
+    }));
     if (!result) {
       alert("No results found");
       return false;
@@ -54,13 +55,12 @@ const UnionTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit}>
       
       <ReactSelect 
         isMulti={true}
         options={
           layers
-            .filter(layer => layer.renderingType === "fill")
             .map(layer => ({value: layer.id, label: layer.name, color: layer.color}))
         }
         value={selectedLayers?.map(layer => ({value: layer.id, label: layer.name, color: layer.color}))}
@@ -93,4 +93,4 @@ const UnionTool: FC = () => {
     </ToolModal>
   );
 }
-export default UnionTool;
+export default BboxTool;
