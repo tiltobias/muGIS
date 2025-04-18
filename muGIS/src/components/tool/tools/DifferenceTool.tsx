@@ -40,7 +40,7 @@ const DifferenceTool: FC = () => {
           outLayer.features.push(result);
       }
     });
-    if (!outLayer) {
+    if (!outLayer || outLayer.features.length === 0) {
       alert("No results found");
       return false;
     }

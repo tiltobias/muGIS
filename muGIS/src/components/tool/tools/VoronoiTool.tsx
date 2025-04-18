@@ -30,7 +30,7 @@ const VoronoiTool: FC = () => {
     };
     const layer = flatten(selectedLayer.featureCollection) as FeatureCollection<Point>;
     const result = voronoi(layer, {bbox: bbox(layer)}) as FeatureCollectionPolygon;
-    if (!result) {
+    if (!result || result.features.length === 0) {
       alert("No results found");
       return false;
     }

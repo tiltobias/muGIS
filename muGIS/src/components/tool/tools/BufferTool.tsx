@@ -28,7 +28,7 @@ const BufferTool: FC = () => {
     };
     const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
     const result = buffer(layer, radius as unknown as number * 0.001, { units: 'kilometers' });
-    if (!result) {
+    if (!result || result.features.length === 0) {
       alert("No results found");
       return false;
     }

@@ -34,7 +34,7 @@ const DissolveTool: FC = () => {
     };
     const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
     const result = !(propertyEnabled && selectedProperty) ? dissolve(flatten(layer)) : dissolve(flatten(layer), { propertyName: selectedProperty });
-    if (!result) {
+    if (!result || result.features.length === 0) {
       alert("No results found");
       return false;
     }
