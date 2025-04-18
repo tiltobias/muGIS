@@ -21,6 +21,7 @@
     "@turf/flatten": "^7.2.0",
     "@turf/intersect": "^7.2.0",
     "@turf/union": "^7.2.0",
+    "@turf/voronoi": "^7.2.0",
     "lucide-react": "^0.476.0",
     "mapbox-gl": "^3.10.0",
     "react": "^19.0.0",

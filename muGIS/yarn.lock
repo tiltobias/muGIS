@@ -630,6 +630,24 @@
     polyclip-ts "^0.16.8"
     tslib "^2.8.1"
 
+"@turf/voronoi@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/voronoi/-/voronoi-7.2.0.tgz#677b562cc836fa1f4e62f9bf59673d373144203e"
+  integrity sha512-3K6N0LtJsWTXxPb/5N2qD9e8f4q8+tjTbGV3lE3v8x06iCnNlnuJnqM5NZNPpvgvCatecBkhClO3/3RndE61Fw==
+  dependencies:
+    "@turf/clone" "^7.2.0"
+    "@turf/helpers" "^7.2.0"
+    "@turf/invariant" "^7.2.0"
+    "@types/d3-voronoi" "^1.1.12"
+    "@types/geojson" "^7946.0.10"
+    d3-voronoi "1.1.2"
+    tslib "^2.8.1"
+
+"@types/d3-voronoi@^1.1.12":
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/@types/d3-voronoi/-/d3-voronoi-1.1.12.tgz#99d1bbf5438ac222727493bef2283da62ffc0aa3"
+  integrity sha512-DauBl25PKZZ0WVJr42a6CNvI6efsdzofl9sajqZr2Gf5Gu733WkDdUGiPkUHXiUvYGzNNlFQde2wdZdfQPG+yw==
+
 "@types/estree@1.0.6", "@types/estree@^1.0.6":
   version "1.0.6"
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.6.tgz"
@@ -1049,6 +1067,11 @@ d3-geo@1.7.1:
   integrity sha512-O4AempWAr+P5qbk2bC2FuN/sDW4z+dN2wDf9QV3bxQt4M5HfOEeXLgJ/UKQW0+o1Dj8BE+L5kiDbdWUMjsmQpw==
   dependencies:
     d3-array "1"
+
+d3-voronoi@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/d3-voronoi/-/d3-voronoi-1.1.2.tgz#1687667e8f13a2d158c80c1480c5a29cb0d8973c"
+  integrity sha512-RhGS1u2vavcO7ay7ZNAPo4xeDh/VYeGof3x5ZLJBQgYhLegxr3s5IykvWmJ94FTU6mcbtp4sloqZ54mP6R4Utw==
 
 data-view-buffer@^1.0.2:
   version "1.0.2"

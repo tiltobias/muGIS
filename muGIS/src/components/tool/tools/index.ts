@@ -3,6 +3,7 @@ import IntersectTool from "./IntersectTool";
 import UnionTool from "./UnionTool";
 import DifferenceTool from "./DifferenceTool";
 import DissolveTool from "./DissolveTool";
+import VoronoiTool from "./VoronoiTool";
 
 export { 
     BufferTool,
@@ -10,4 +11,5 @@ export {
     UnionTool,
     DifferenceTool,
     DissolveTool,
+    VoronoiTool,
 };

@@ -1,37 +1,40 @@
 import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
-import { buffer } from '@turf/buffer';
+import { voronoi } from '@turf/voronoi';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
+import { FeatureCollection, Point } from 'geojson';
+import { flatten } from '@turf/flatten';
+import { bbox } from '@turf/bbox';
 
-const BufferTool: FC = () => {
+const VoronoiTool: FC = () => {
 
   const {
     addLayer,
   } = useLayerStore();
 
   const [selectedLayer, setSelectedLayer] = useState<LayerData | undefined>(undefined);
-  const [radius, setRadius] = useState<string>("");
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
     if (selectedLayer) {
-      setNewLayerName(`buffer(${selectedLayer.name}, ${radius}m)`);
+      setNewLayerName(`voronoi(${selectedLayer.name})`);
     }
-  }, [selectedLayer, radius]);
+  }, [selectedLayer]);
 
   const onFormSubmit = () => {
-    if (!selectedLayer || radius === "") {
-      alert("Please select a layer and enter a radius");
+    if (!selectedLayer) {
+      alert("Please select a layer");
       return false;
     };
-    const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
-    const result = buffer(layer, radius as unknown as number * 0.001, { units: 'kilometers' });
+    const layer = flatten(selectedLayer.featureCollection) as FeatureCollection<Point>;
+    const result = voronoi(layer, {bbox: bbox(layer)}) as FeatureCollectionPolygon;
     if (!result) {
       alert("No results found");
       return false;
     }
+    result.features = result.features.filter((feature) =>feature.geometry.type === "Polygon"); // filter out null geometries
     addLayer({
       featureCollection: result,
       name: newLayerName,
@@ -40,19 +43,18 @@ const BufferTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit}>
       
       selected layer: {selectedLayer?.name}
       <SelectLayer 
         selectedLayer={selectedLayer} 
         setSelectedLayer={setSelectedLayer} 
+        renderingType="circle"
       />
       
-      buffer radius [m]: {radius}
-      <input type="number" value={radius} onChange={(e)=>setRadius(e.target.value)} />
-
+      
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }
-export default BufferTool;
+export default VoronoiTool;
