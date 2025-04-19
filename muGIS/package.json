@@ -21,6 +21,7 @@
     "@turf/dissolve": "^7.2.0",
     "@turf/flatten": "^7.2.0",
     "@turf/intersect": "^7.2.0",
+    "@turf/points-within-polygon": "^7.2.0",
     "@turf/union": "^7.2.0",
     "@turf/voronoi": "^7.2.0",
     "lucide-react": "^0.476.0",
