@@ -2,48 +2,55 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
-import SelectLayer from '../SelectLayer';
+import ReactSelect from 'react-select';
 
 const IntersectTool: FC = () => {
 
   const {
+    layers,
     addLayer,
   } = useLayerStore();
 
-  const [selectedLayer1, setSelectedLayer1] = useState<LayerData | undefined>(undefined);
-  const [selectedLayer2, setSelectedLayer2] = useState<LayerData | undefined>(undefined);
-  const [selectedLayer3, setSelectedLayer3] = useState<LayerData | undefined>(undefined);
+  const [selectedLayers, setSelectedLayers] = useState<LayerData[] | undefined>(undefined);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedLayer1 && selectedLayer2) {
-      setNewLayerName(`intersect: ${selectedLayer1.name} & ${selectedLayer2.name}`);
+    if (selectedLayers && selectedLayers.length >= 2) {
+      let inNames = "";
+      selectedLayers.forEach((layer, index) => {
+        inNames += layer.name;
+        if (index < selectedLayers.length - 1) {
+          inNames += ", ";
+        }
+      });
+      setNewLayerName(`intersect(${inNames})`);
     }
-  }, [selectedLayer1, selectedLayer2]);
+  }, [selectedLayers]);
 
   const onFormSubmit = () => {
-    if (!selectedLayer1 || !selectedLayer2 || !selectedLayer3) {
+    if (!selectedLayers || selectedLayers.length < 2) {
       alert("Please select two layers");
       return false;
     };
     const outLayer: FeatureCollectionPolygon = {
       type: "FeatureCollection",
-      features: [],
+      features: (selectedLayers[0].featureCollection as FeatureCollectionPolygon).features,
     };
-    const layer1 = selectedLayer1.featureCollection as FeatureCollectionPolygon;
-    const layer2 = selectedLayer2.featureCollection as FeatureCollectionPolygon;
-    const layer3 = selectedLayer3.featureCollection as FeatureCollectionPolygon;
-    layer1.features.forEach((feature1) => {
-      layer2.features.forEach((feature2) => {
-        layer3.features.forEach((feature3) => {
-          const result = intersect({type:"FeatureCollection",features:[feature1, feature2, feature3]});
+    for (let i = 1; i < selectedLayers.length; i++) {
+      const currentLayer = selectedLayers[i].featureCollection as FeatureCollectionPolygon;
+      const results: FeatureCollectionPolygon["features"] = [];
+      outLayer.features.forEach((feature) => {
+        currentLayer.features.forEach((currentFeature) => {
+          const result = intersect({type:"FeatureCollection",features:[feature, currentFeature]});
           if (result) {
-            outLayer.features.push(result);
+            results.push(result);
           }
         });
       });
-    });
+      outLayer.features = results;
+    }
+
     if (!outLayer || outLayer.features.length === 0) {
       alert("No results found");
       return false;
@@ -58,27 +65,37 @@ const IntersectTool: FC = () => {
   return (
     <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}>
       
-      selected layer1: {selectedLayer1?.name}
-      <SelectLayer 
-        selectedLayer={selectedLayer1} 
-        setSelectedLayer={setSelectedLayer1} 
-        renderingType="fill"
-      />
-
-      selected layer2: {selectedLayer2?.name}
-      <SelectLayer
-        selectedLayer={selectedLayer2} 
-        setSelectedLayer={setSelectedLayer2} 
-        renderingType="fill"
-        unselectableLayerIds={[selectedLayer1?.id]}
-      />
-
-      selected layer3: {selectedLayer3?.name}
-      <SelectLayer
-        selectedLayer={selectedLayer3} 
-        setSelectedLayer={setSelectedLayer3} 
-        renderingType="fill"
-        unselectableLayerIds={[selectedLayer1?.id, selectedLayer2?.id]}
+      <ReactSelect 
+        isMulti={true}
+        options={
+          layers
+            .filter(layer => layer.renderingType === "fill")
+            .map(layer => ({value: layer.id, label: layer.name, color: layer.color}))
+        }
+        value={selectedLayers?.map(layer => ({value: layer.id, label: layer.name, color: layer.color}))}
+        onChange={selectedOptions=>setSelectedLayers(selectedOptions?.map(option=>layers.find(layer=>layer.id===option.value)) as LayerData[])}
+        styles={{
+          control: (base) => ({
+            ...base,
+            backgroundColor: "white",
+            border: "1px solid #ccc",
+            boxShadow: "none",
+            "&:hover": {
+              border: "1px solid #aaa",
+            },
+          }),
+          multiValue: (base, state) => {
+            return { ...base, backgroundColor: `hsl(${state.data.color.h},${state.data.color.s}%,${state.data.color.l}%)`, opacity: state.isFocused ? 0.8 : 1, };
+          },
+          option: (base, state) => {
+            return {
+              ...base,
+              backgroundColor: `hsl(${state.data.color.h},${state.data.color.s}%,${state.data.color.l}%)`,
+              opacity: state.isFocused ? 0.8 : 1,
+              color: "white",
+            };
+          },
+        }}
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
