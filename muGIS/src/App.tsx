@@ -62,6 +62,7 @@ function App() {
         }
       }
       reader.readAsText(file);
+      event.target.value = ""; // reset input value to allow re-uploading the same file
     });
   };
 

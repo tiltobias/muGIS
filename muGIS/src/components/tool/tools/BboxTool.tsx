@@ -18,7 +18,7 @@ const BboxTool: FC = () => {
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedLayers && selectedLayers.length >= 2) {
+    if (selectedLayers && selectedLayers.length >= 1) {
       let inNames = selectedLayers[0].name;
       for (let i = 1; i < selectedLayers.length; i++) {
         inNames += `, ${selectedLayers[i].name}`;
@@ -28,8 +28,8 @@ const BboxTool: FC = () => {
   }, [selectedLayers]);
 
   const onFormSubmit = () => {
-    if (!selectedLayers || selectedLayers.length < 2) {
-      alert("Please select two layers");
+    if (!selectedLayers || selectedLayers.length < 1) {
+      alert("Please select one or more layers");
       return false;
     };
     const features = selectedLayers.flatMap(layer => layer.featureCollection.features) as Feature<Polygon | MultiPolygon>[];
