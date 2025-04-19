@@ -5,6 +5,7 @@ import DifferenceTool from "./DifferenceTool";
 import DissolveTool from "./DissolveTool";
 import VoronoiTool from "./VoronoiTool";
 import BboxTool from "./BboxTool";
+import ClipTool from "./ClipTool";
 
 export { 
     BufferTool,
@@ -14,4 +15,5 @@ export {
     DissolveTool,
     VoronoiTool,
     BboxTool,
+    ClipTool,
 };
