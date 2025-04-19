@@ -18,13 +18,10 @@ const UnionTool: FC = () => {
   // Update the new layer name when the selected layers change
   useEffect(() => {
     if (selectedLayers && selectedLayers.length >= 2) {
-      let inNames = "";
-      selectedLayers.forEach((layer, index) => {
-        inNames += layer.name;
-        if (index < selectedLayers.length - 1) {
-          inNames += ", ";
-        }
-      });
+      let inNames = selectedLayers[0].name;
+      for (let i = 1; i < selectedLayers.length; i++) {
+        inNames += `, ${selectedLayers[i].name}`;
+      }
       setNewLayerName(`union(${inNames})`);
     }
   }, [selectedLayers]);
