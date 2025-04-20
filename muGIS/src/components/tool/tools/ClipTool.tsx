@@ -4,7 +4,11 @@ import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
 import { pointsWithinPolygon } from '@turf/points-within-polygon';
-import { FeatureCollection, Point, MultiPoint } from 'geojson';
+import { FeatureCollection, Point, MultiPoint, LineString, MultiLineString, Feature, Polygon } from 'geojson';
+import { lineSplit } from '@turf/line-split';
+import { booleanWithin } from '@turf/boolean-within';
+import { flatten } from '@turf/flatten';
+import { buffer } from '@turf/buffer';
 
 const ClipTool: FC = () => {
 
@@ -49,7 +53,23 @@ const ClipTool: FC = () => {
         });
       });
     } else if (selectedLayer.renderingType === "line") {
-      throw new Error("Line clipping is not supported yet");
+      const maskLayer: FeatureCollection<Polygon> = flatten(selectedMaskLayer.featureCollection as FeatureCollectionPolygon);
+      const layer: FeatureCollection<LineString> = flatten(selectedLayer.featureCollection as FeatureCollection<LineString|MultiLineString>);
+      maskLayer.features.forEach((maskFeature) => {
+        const maskBuffer = buffer(maskFeature, 0.01, { units: "meters" }) as Feature<Polygon>;
+        layer.features.forEach((line) => {
+          if (booleanWithin(line, maskBuffer)) {
+            outLayer.features.push(line);
+          } else {
+            const split = lineSplit(line, maskFeature);
+            split.features.forEach((splitLine) => {
+              if (booleanWithin(splitLine, maskBuffer)) {
+                outLayer.features.push(splitLine);
+              }
+            });
+          };
+        });
+      });
     } else {
       throw new Error("Unknown rendering type");
     }
