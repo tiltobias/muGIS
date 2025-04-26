@@ -10,6 +10,7 @@ interface ToolModalProps {
 const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div>
@@ -21,10 +22,14 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => 
         <div className="cover" onClick={(e)=>{
           if (e.target === e.currentTarget) setModalOpen(false);  // only close if clicked on the cover
         }}>
-          <div className="modal">
+          <div className={"modal" + (loading ? " loading" : "")}>
             <form onSubmit={(e)=>{
               e.preventDefault();
-              if (onFormSubmit()) setModalOpen(false); // only close the modal if the form is valid
+              setLoading(true);
+              setTimeout(() => {
+                if (onFormSubmit()) setModalOpen(false); // only close the modal if the form is valid
+                setLoading(false);
+              }, 0);
             }}>
               <h3>{buttonLabel}</h3>
 

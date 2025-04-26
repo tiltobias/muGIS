@@ -18,7 +18,7 @@ const DifferenceTool: FC = () => {
   // Update the new layer name when the selected layers change
   useEffect(() => {
     if (selectedLayer1 && selectedLayer2) {
-      setNewLayerName(`difference: ${selectedLayer1.name} - ${selectedLayer2.name}`);
+      setNewLayerName(`difference(${selectedLayer1.name}, ${selectedLayer2.name})`);
     }
   }, [selectedLayer1, selectedLayer2]);
 

@@ -30,10 +30,35 @@
     width: 20em;
     overflow-y: auto;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.3);
+    position: relative;
 }
 
 .modal > form {
     display: flex;
     flex-direction: column;
     gap: 1em;
+}
+
+.modal.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    border: .4em solid #61dafb;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    z-index: 100;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
