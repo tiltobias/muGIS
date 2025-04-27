@@ -35,7 +35,7 @@ function App() {
     }, 1);
     setTimeout(() => {
       clearInterval(interval);
-    }, 301); // time of sidebarContainer transition
+    }, 1); // time of sidebarContainer transition
   }, [mapRef, sidebarOpen]);
 
 
