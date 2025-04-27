@@ -134,17 +134,17 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
               <ul>
                 <li>
                   <button type="button" onClick={handleDeleteLayer}>
-                    <Trash2 />
+                    <Trash2 /> Delete layer
                   </button>
                 </li>
                 <li>
                   <button type="button" onClick={handleDownloadLayer}>
-                    <FileDown />
+                    <FileDown /> Download layer
                   </button>
                 </li>
                 <li>
                   <button type="button" onClick={handleZoomToLayer}>
-                    <ZoomIn />
+                    <ZoomIn /> Zoom to layer
                   </button>
                 </li>
                 <li>
@@ -152,7 +152,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
                     e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
                     setLayerNameEditing(!layerNameEditing);
                   }}>
-                    {!layerNameEditing ? <PencilLine /> : <PencilOff />}
+                    {!layerNameEditing ? <PencilLine /> : <PencilOff />} Edit layer name
                   </button>
                 </li>
               </ul>

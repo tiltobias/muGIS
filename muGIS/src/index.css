@@ -49,12 +49,11 @@ button {
   background-color: var(--bg-color-2);
   color: var(--text-color-2);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: opacity 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  opacity: 0.5;
 }
-button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }

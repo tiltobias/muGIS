@@ -14,7 +14,7 @@ const useThemeStore = create<ThemeStore>((set) => ({
     setTheme: (newTheme: Theme) => set((state) => {
         localStorage.setItem("theme", newTheme);
         if (newTheme === state.theme) {
-            return {  };
+            return state;
         }
         return { theme: newTheme };
     }),

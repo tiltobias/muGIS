@@ -32,7 +32,7 @@ const useMapStore = create<MapStore>((set) => ({
 
     setBasemap: (newBasemap: Basemap) => set((state)=>{
         if (newBasemap.url === state.basemap.url) {
-            return {  }
+            return state;
         }
         return { basemap: newBasemap }
     }),
