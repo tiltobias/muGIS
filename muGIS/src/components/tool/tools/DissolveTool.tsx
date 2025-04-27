@@ -56,9 +56,9 @@ const DissolveTool: FC = () => {
       />
 
       <span>
-        <input type="checkbox" checked={propertyEnabled} onChange={(e)=>setPropertyEnabled(e.target.checked)}  />
+        <input type="checkbox" checked={propertyEnabled} onChange={(e)=>setPropertyEnabled(e.target.checked)} id="checkboxPropertyEnabled" />
 
-        dissolve by property: {selectedProperty}
+        <label htmlFor="checkboxPropertyEnabled">dissolve by property: {propertyEnabled && selectedProperty}</label>
       </span>
       <select required disabled={!propertyEnabled} value={selectedProperty} onChange={(e)=>setSelectedProperty(e.target.value)}>
         <option value="">Select a property</option>
