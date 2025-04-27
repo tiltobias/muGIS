@@ -1,11 +1,3 @@
-:root {
-    /* --primary-color: #282c34;
-    --secondary-color: #61dafb; */
-    --header-height: 4rem;
-    --border-radius: 0.5rem;
-    --min-sidebar-width: 15rem;
-}
-
 .pageContainer {
     height: 100vh;
     display: flex;
@@ -14,8 +6,8 @@
 }
 
 .mainHeader {
-    background-color: #282c34;
-    color: white;
+    background-color: var(--bg-color-1);
+    color: var(--text-color-1);
     padding: .5rem;
     display: flex;
     height: var(--header-height);
@@ -56,9 +48,8 @@
 .sidebar {
     min-width: var(--min-sidebar-width);
     max-width: calc(100vw - var(--min-sidebar-width));
-    background-color: #282c34;
-    color: white;
-    /* transition: width .5s ease; */
+    background-color: var(--bg-color-1);
+    color: var(--text-color-1);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -93,9 +84,9 @@ label[for="layerFileInput"] {
     padding: .5rem;
     text-align: center;
     
-    background-color: white;
-    color: black;
-    border: 1px solid black;
+    background-color: var(--bg-color-2);
+    color: var(--text-color-2);
+    border: 1px solid var(--bg-color-2);
     border-radius: .5rem;
     font-weight: 500;
     display: flex;

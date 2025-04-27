@@ -26,11 +26,11 @@
     pointer-events: none;
 }
 .resizeHandle:hover::before {
-    background-color: black;
+    background-color: var(--accent-color);
     pointer-events: unset;
 }
 .resizeHandle.resizing::before {
-    background-color: #61dafb;
+    background-color: var(--active-color);
     left: calc(var(--min-sidebar-width) - .5em);
 }
 

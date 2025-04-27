@@ -10,7 +10,8 @@
     top: 0;
     right: 100%;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
-    background-color: white;
+    background-color: var(--bg-color-1);
+    color: var(--text-color-1);
 }
 
 .basemapPopover > ul {
