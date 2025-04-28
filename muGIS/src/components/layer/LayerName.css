@@ -13,6 +13,10 @@
     overflow: hidden;
 }
 
+.layerNameContainer > * {
+    flex-grow: 1;
+}
+
 .layerNameContainer form input {
     box-sizing: border-box;
     width: 100%;

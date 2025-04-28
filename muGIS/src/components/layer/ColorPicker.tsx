@@ -1,7 +1,7 @@
 import { FC, useState, useRef } from 'react';
 import { HslaColorPicker, HslaColor } from 'react-colorful';
 import './ColorPicker.css';
-import useClickOutside from '../hooks/useClickOutside';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface ColorPickerProps {
   color: HslaColor;

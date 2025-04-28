@@ -1,11 +1,11 @@
 import { FC, useState, useEffect, useRef } from 'react';
-import ColorPicker, { HslaColor } from "./ColorPicker";
-import "./Layer.css";
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from "lucide-react";
-import useClickOutside from '../hooks/useClickOutside';
+import ColorPicker, { HslaColor } from './ColorPicker';
+import './Layer.css';
+import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
+import useClickOutside from '../../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
-import useLayerStore, { LayerData } from '../hooks/useLayerStore';
-import useMapStore from '../hooks/useMapStore';
+import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
+import useMapStore from '../../hooks/useMapStore';
 import LayerName from './LayerName';
 
 interface LayerProps {
@@ -98,7 +98,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = layerData.id + ".geojson";
+    a.download = layerData.name + ".geojson";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -113,65 +113,63 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const [layerNameEditing, setLayerNameEditing] = useState<boolean>(false);
 
   return (
-    <li className="layerListItem">
-      <div className="layerItem">
-        <ColorPicker 
-          color={layerData.color}
-          onChange={handleChangeColor}
-        />
-        <LayerName 
-          layerId={layerData.id}
-          initialLayerName={layerData.name}
-          isEditing={layerNameEditing}
-          setIsEditing={setLayerNameEditing}
-        />
-        <div className="layerMenu" ref={layerMenu}>
-          <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
-            <Ellipsis />
-          </button>
-          {menuOpen && (
-            <div className="layerMenuPopover">
-              <ul>
-                <li>
-                  <button type="button" onClick={handleDeleteLayer}>
-                    <Trash2 />
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={handleDownloadLayer}>
-                    <FileDown />
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={handleZoomToLayer}>
-                    <ZoomIn />
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={(e)=>{
-                    e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
-                    setLayerNameEditing(!layerNameEditing);
-                  }}>
-                    {!layerNameEditing ? <PencilLine /> : <PencilOff />}
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-        <div className="layerMoveControls">
-          <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
-            <ChevronUp />
-          </button>
-          <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
-            <ChevronDown />
-          </button>
-        </div>
-        <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
-          {layerData.visible ? <Eye /> : <EyeOff />}
+    <div className="layerItem">
+      <ColorPicker 
+        color={layerData.color}
+        onChange={handleChangeColor}
+      />
+      <LayerName 
+        layerId={layerData.id}
+        initialLayerName={layerData.name}
+        isEditing={layerNameEditing}
+        setIsEditing={setLayerNameEditing}
+      />
+      <div className="layerMenu" ref={layerMenu}>
+        <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
+          <Ellipsis />
         </button>
-      </div> 
-    </li>
+        {menuOpen && (
+          <div className="layerMenuPopover">
+            <ul>
+              <li>
+                <button type="button" onClick={handleDeleteLayer}>
+                  <Trash2 /> Delete layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleDownloadLayer}>
+                  <FileDown /> Download layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleZoomToLayer}>
+                  <ZoomIn /> Zoom to layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={(e)=>{
+                  e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
+                  setLayerNameEditing(!layerNameEditing);
+                }}>
+                  {!layerNameEditing ? <PencilLine /> : <PencilOff />} Edit layer name
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      <div className="layerMoveControls">
+        <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
+          <ChevronUp />
+        </button>
+        <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
+          <ChevronDown />
+        </button>
+      </div>
+      <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
+        {layerData.visible ? <Eye /> : <EyeOff />}
+      </button>
+    </div> 
   );
 }
 

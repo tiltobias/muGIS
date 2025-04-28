@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { FeatureCollection, MultiPolygon, Polygon } from "geojson";
-import { HslaColor } from "../components/ColorPicker";
+import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { HslaColor } from '../components/layer/ColorPicker';
 
 export type LayerRenderingType = "fill"|"line"|"circle";
 

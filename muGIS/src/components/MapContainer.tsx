@@ -74,7 +74,7 @@ const MapContainer:FC<MapContainerProps> = () => {
   const [basemapCooldown, setBasemapCooldown] = useState<boolean>(false);
   const queuedBasemap = useRef<Basemap>(basemap); // If basemap changes while cooldown is active, save it here
   const [currentBasemap, setCurrentBasemap] = useState<Basemap>(basemap); // Don't update if basemap is the same (prevents infinite loop)
-   useEffect(() => {
+  useEffect(() => {
     if (queuedBasemap.current.url !== basemap.url) {
       queuedBasemap.current = basemap;
     };

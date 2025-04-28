@@ -1,22 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
 
 import MapContainer from './components/MapContainer'
-import Layer from './components/Layer';
 import { FeatureCollection } from 'geojson';
-import { buffer } from '@turf/buffer';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
 import useMapStore from './hooks/useMapStore';
-import SettingsMenu from './components/SettingsMenu';
+import SettingsMenu from './components/settings/SettingsMenu';
 import Toolbar from './components/Toolbar';
 import ResizeHandle from './components/ResizeHandle';
+import LayerList from './components/layer/LayerList';
 
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [sidebarWidth, setSidebarWidth] = useState(300);
 
   const { 
     layers, 
@@ -28,16 +28,15 @@ function App() {
     mapReady,
   } = useMapStore();
   
-
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-    setTimeout(() => {
+  // Resize map smoothly when sidebar is opened or closed
+  useEffect(() => {
+    const interval = setInterval(() => {
       mapRef.current?.resize();
     }, 1);
-    setTimeout(() => { // just in case
-      mapRef.current?.resize();
-    }, 100);
-  };
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 1); // time of sidebarContainer transition
+  }, [mapRef, sidebarOpen]);
 
 
   const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,25 +62,10 @@ function App() {
         }
       }
       reader.readAsText(file);
+      event.target.value = ""; // reset input value to allow re-uploading the same file
     });
   };
 
-  
-
-  const handleToolBuffer = () => {
-    const inLayer = layers[0];
-    const bufferLayer = buffer(inLayer.featureCollection, 0.05);
-    if (bufferLayer) {
-      addLayer({
-        featureCollection: bufferLayer,
-        name: inLayer.name + "_buffer",
-      });
-    } else {
-      console.error("Buffer operation failed");
-    }
-  }
-
-  const [sidebarWidth, setSidebarWidth] = useState(300);
 
   return (
     <div className="pageContainer">
@@ -89,8 +73,7 @@ function App() {
         <h1>
           μGIS
         </h1>
-        <button type="button" onClick={handleSidebarToggle}>Sidebar</button>
-        <button type="button" onClick={handleToolBuffer}>Buffer</button>
+        <button type="button" onClick={()=>setSidebarOpen(!sidebarOpen)}>Sidebar</button>
         <Toolbar />
         
         <SettingsMenu />
@@ -105,15 +88,7 @@ function App() {
             </button>
             <div className="layerListContainer">
               {mapReady && (
-                <ol className="layerList">
-                  {layers.map((layer, index) => (
-                    <Layer 
-                      key={layer.id} 
-                      layerData={layer} 
-                      layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                    />
-                  ))}
-                </ol>
+                <LayerList />
               )}
             </div>
             <div className="sidebarFooter">

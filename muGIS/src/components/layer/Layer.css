@@ -1,14 +1,10 @@
-.layerListItem {
-  list-style-type: decimal;
-  margin: .5rem 0;
-  padding: 0 .5rem 0 0;
-}
-
 .layerItem {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: .2rem;
+  background-color: var(--bg-color-1);
+  color: var(--text-color-1);
 }
 
 .layerMoveControls {
@@ -35,8 +31,11 @@
   position: absolute;
   z-index: 2;
   top: 100%;
+  right: -200%;
+  text-wrap: nowrap;
   box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
-  background-color: white;
+  background-color: var(--bg-color-1);
+  color: var(--text-color-1);
 }
 
 .layerMenuPopover > ul {

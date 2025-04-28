@@ -1,10 +1,11 @@
-import { FC, useState, useRef } from 'react';
-import "./SettingsMenu.css";
-import useClickOutside from '../hooks/useClickOutside';
-import { Settings, File, Save, FolderOpen, GraduationCap } from 'lucide-react';
-import useLayerStore, { LayerData } from '../hooks/useLayerStore';
-import useMapStore, { Basemap } from '../hooks/useMapStore';
+import { FC, useState, useRef, useEffect } from 'react';
+import './SettingsMenu.css';
+import useClickOutside from '../../hooks/useClickOutside';
+import { Settings, File, Save, FolderOpen, GraduationCap, Sun, Moon } from 'lucide-react';
+import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
+import useMapStore, { Basemap } from '../../hooks/useMapStore';
 import BasemapMenu from './BasemapMenu';
+import useThemeStore from '../../hooks/useThemeStore';
 
 interface MugisFile {
   layers: LayerData[];
@@ -30,6 +31,10 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     setBasemap,
     resetMapStore,
   } = useMapStore();
+  const {
+    theme,
+    setTheme,
+  } = useThemeStore();
 
   const handleResetProject = () => {
     resetLayerStore();
@@ -77,6 +82,11 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
     reader.readAsText(files[0]);
   }
 
+  // Update css variables on theme change
+  useEffect(()=>{
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme])
+
   return (
     <div className="settings" ref={settingsContainer}>
       <button type="button" onClick={()=>{setSettingsOpen(!settingsOpen)}}>
@@ -103,6 +113,11 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
             </li>
             <li>
               <BasemapMenu />
+            </li>
+            <li>
+              <button type="button" onClick={()=>{setTheme(theme === "light" ? "dark" : "light")}}>
+                {theme === "light" ? <Sun /> : <Moon />} Toggle theme
+              </button>
             </li>
             <li>
               <button type="button" onClick={()=>{}}>
