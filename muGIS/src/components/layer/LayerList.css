@@ -1,0 +1,15 @@
+.layerList {
+    padding: 0 0 0 2rem;
+    margin: 0;
+}
+
+.layerListItem {
+    list-style-type: decimal;
+    margin: .5rem 0;
+    padding: 0 .5rem 0 0;
+    cursor: grab;
+}
+
+.layerListItem:active {
+    cursor: grabbing;
+}

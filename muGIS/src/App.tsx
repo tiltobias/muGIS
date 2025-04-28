@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 import MapContainer from './components/MapContainer'
-import Layer from './components/layer/Layer';
 import { FeatureCollection } from 'geojson';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
@@ -12,6 +11,7 @@ import useMapStore from './hooks/useMapStore';
 import SettingsMenu from './components/settings/SettingsMenu';
 import Toolbar from './components/Toolbar';
 import ResizeHandle from './components/ResizeHandle';
+import LayerList from './components/layer/LayerList';
 
 function App() {
 
@@ -88,15 +88,7 @@ function App() {
             </button>
             <div className="layerListContainer">
               {mapReady && (
-                <ol className="layerList">
-                  {layers.map((layer, index) => (
-                    <Layer 
-                      key={layer.id} 
-                      layerData={layer} 
-                      layerAboveId={index === 0 ? undefined : layers[index-1].id}
-                    />
-                  ))}
-                </ol>
+                <LayerList />
               )}
             </div>
             <div className="sidebarFooter">

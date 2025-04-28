@@ -63,11 +63,6 @@
     scrollbar-width: thin;
 }
 
-.layerList {
-    padding: 0 0 0 2rem;
-    margin: 0;
-}
-
 .sidebarFooter {
     display: flex;
     align-items: center;

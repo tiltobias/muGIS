@@ -1,14 +1,10 @@
-.layerListItem {
-  list-style-type: decimal;
-  margin: .5rem 0;
-  padding: 0 .5rem 0 0;
-}
-
 .layerItem {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: .2rem;
+  background-color: var(--bg-color-1);
+  color: var(--text-color-1);
 }
 
 .layerMoveControls {

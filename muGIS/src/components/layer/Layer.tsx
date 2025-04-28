@@ -113,65 +113,63 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const [layerNameEditing, setLayerNameEditing] = useState<boolean>(false);
 
   return (
-    <li className="layerListItem">
-      <div className="layerItem">
-        <ColorPicker 
-          color={layerData.color}
-          onChange={handleChangeColor}
-        />
-        <LayerName 
-          layerId={layerData.id}
-          initialLayerName={layerData.name}
-          isEditing={layerNameEditing}
-          setIsEditing={setLayerNameEditing}
-        />
-        <div className="layerMenu" ref={layerMenu}>
-          <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
-            <Ellipsis />
-          </button>
-          {menuOpen && (
-            <div className="layerMenuPopover">
-              <ul>
-                <li>
-                  <button type="button" onClick={handleDeleteLayer}>
-                    <Trash2 /> Delete layer
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={handleDownloadLayer}>
-                    <FileDown /> Download layer
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={handleZoomToLayer}>
-                    <ZoomIn /> Zoom to layer
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={(e)=>{
-                    e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
-                    setLayerNameEditing(!layerNameEditing);
-                  }}>
-                    {!layerNameEditing ? <PencilLine /> : <PencilOff />} Edit layer name
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-        <div className="layerMoveControls">
-          <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
-            <ChevronUp />
-          </button>
-          <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
-            <ChevronDown />
-          </button>
-        </div>
-        <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
-          {layerData.visible ? <Eye /> : <EyeOff />}
+    <div className="layerItem">
+      <ColorPicker 
+        color={layerData.color}
+        onChange={handleChangeColor}
+      />
+      <LayerName 
+        layerId={layerData.id}
+        initialLayerName={layerData.name}
+        isEditing={layerNameEditing}
+        setIsEditing={setLayerNameEditing}
+      />
+      <div className="layerMenu" ref={layerMenu}>
+        <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
+          <Ellipsis />
         </button>
-      </div> 
-    </li>
+        {menuOpen && (
+          <div className="layerMenuPopover">
+            <ul>
+              <li>
+                <button type="button" onClick={handleDeleteLayer}>
+                  <Trash2 /> Delete layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleDownloadLayer}>
+                  <FileDown /> Download layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleZoomToLayer}>
+                  <ZoomIn /> Zoom to layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={(e)=>{
+                  e.stopPropagation(); // Prevent useClickOutside from setting isEditing to false.
+                  setLayerNameEditing(!layerNameEditing);
+                }}>
+                  {!layerNameEditing ? <PencilLine /> : <PencilOff />} Edit layer name
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      <div className="layerMoveControls">
+        <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
+          <ChevronUp />
+        </button>
+        <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
+          <ChevronDown />
+        </button>
+      </div>
+      <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
+        {layerData.visible ? <Eye /> : <EyeOff />}
+      </button>
+    </div> 
   );
 }
 
