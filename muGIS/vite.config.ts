@@ -12,7 +12,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes("@turf")) return "vendor-turf";
             if (id.includes("mapbox")) return "vendor-mapbox";
-            if (id.includes("react")) return "vendor-react";
+            // if (id.includes("react")) return "vendor-react";
             return "vendor";
           }
         }
