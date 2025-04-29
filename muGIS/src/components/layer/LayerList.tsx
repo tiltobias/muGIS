@@ -23,6 +23,7 @@ const LayerList: FC<LayerListProps> = () => {
 
   const handleDragOver = (e: React.DragEvent<HTMLLIElement>, layerId: string) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = 'move'; 
     if (draggingLayerId === null || draggingLayerId === layerId) return;
     if (layers.findIndex(layer => layer.id === draggingLayerId) < layers.findIndex(layer => layer.id === layerId)) {
       moveLayerDown(draggingLayerId);

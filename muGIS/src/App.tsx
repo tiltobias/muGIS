@@ -39,8 +39,7 @@ function App() {
   }, [mapRef, sidebarOpen]);
 
 
-  const handleLoadDataLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+  const loadFiles = (files: FileList | null) => {
     if (!files) {
       console.log("no file selected");
       return;
@@ -62,13 +61,28 @@ function App() {
         }
       }
       reader.readAsText(file);
-      event.target.value = ""; // reset input value to allow re-uploading the same file
     });
+  };
+
+  const handleLoadFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    loadFiles(files);
+    event.target.value = ""; // reset input value to allow re-uploading the same file
+  };
+
+  const handleLoadFileDrag = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    loadFiles(files);
   };
 
 
   return (
-    <div className="pageContainer">
+    <div 
+      className="pageContainer"
+      onDragOver={(e)=>e.preventDefault()} // allow dropping files
+      onDrop={handleLoadFileDrag}
+    >
       <header className="mainHeader">
         <h1>
           μGIS
@@ -96,7 +110,7 @@ function App() {
                 <Upload />
                 Upload GeoJSON file
               </label>
-              <input id="layerFileInput" type="file" multiple accept=".geojson" onChange={handleLoadDataLayer} />
+              <input id="layerFileInput" type="file" multiple accept=".geojson" onChange={handleLoadFileInput} />
             </div>
           </aside>
         </div>
