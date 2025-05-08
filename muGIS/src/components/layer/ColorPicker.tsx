@@ -2,6 +2,7 @@ import { FC, useState, useRef } from 'react';
 import { HslaColorPicker, HslaColor } from 'react-colorful';
 import './ColorPicker.css';
 import useClickOutside from '../../hooks/useClickOutside';
+import LayerLineIcon from '../icons/LayerLine';
 
 interface ColorPickerProps {
   color: HslaColor;
@@ -25,9 +26,11 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
           setOpenPicker(!openPicker);
         }}
         style={{
-          backgroundColor: `hsl(${color.h},${color.s}%,${color.l}%)`
+          color: `hsl(${color.h},${color.s}%,${color.l}%)`
         }}
-      ></button>
+      >
+        <LayerLineIcon />
+      </button>
     
       {openPicker && (
         <div className="colorPickerPopover" >

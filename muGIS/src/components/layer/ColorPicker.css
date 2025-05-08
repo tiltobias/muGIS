@@ -5,7 +5,11 @@
 .colorPickerButton {
     aspect-ratio: 1/1;
     width: unset;
-    height: auto;
+    height: 3em;
+}
+.colorPickerButton svg {
+    width: 100%;
+    height: 100%;
 }
 
 .colorPickerPopover {
