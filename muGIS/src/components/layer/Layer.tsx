@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from './ColorPicker';
 import './Layer.css';
-import { Eye, EyeOff, ChevronUp, ChevronDown, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
+import { Eye, EyeOff, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
 import useClickOutside from '../../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
@@ -19,8 +19,6 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
   const layerMenu = useRef<HTMLDivElement>(null);
   useClickOutside(layerMenu, ()=>{setMenuOpen(false)});
   const { 
-    moveLayerUp, 
-    moveLayerDown, 
     deleteLayer, 
     toggleLayerVisibility, 
     changeLayerColor,
@@ -126,7 +124,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
         isEditing={layerNameEditing}
         setIsEditing={setLayerNameEditing}
       />
-      <div className="layerMenu" ref={layerMenu}>
+      <div className={`layerMenu ${menuOpen ? "open" : ""}`} ref={layerMenu}>
         <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
           <Ellipsis />
         </button>
@@ -159,14 +157,6 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
             </ul>
           </div>
         )}
-      </div>
-      <div className="layerMoveControls">
-        <button type="button" onClick={()=>moveLayerUp(layerData.id)}>
-          <ChevronUp />
-        </button>
-        <button type="button" onClick={()=>moveLayerDown(layerData.id)}>
-          <ChevronDown />
-        </button>
       </div>
       <button type="button" onClick={()=>toggleLayerVisibility(layerData.id)}>
         {layerData.visible ? <Eye /> : <EyeOff />}

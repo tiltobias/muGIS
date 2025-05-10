@@ -10,14 +10,29 @@
     top: 100%;
     right: 0;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
-    background-color: var(--bg-color-1);
-    color: var(--text-color-1);
+    background-color: var(--bg-color-2);
+    color: var(--text-color-2);
+    padding: var(--border-radius) 0;
+    border-radius: var(--border-radius);
 }
 
 .settingsPopover > ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+
+.settingsPopover > ul > li {
+    background-color: var(--bg-color-1);
+}
+
+.settingsPopover > ul button {
+    width: 100%;
+    padding: .5em;
+    gap: .3rem;
+    background-color: var(--bg-color-2);
+    border-radius: 0;
+    display: flex;
 }
 
 
