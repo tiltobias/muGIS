@@ -114,9 +114,11 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
 
   return (
     <div className="layerItem">
+      <span className="layerItemHelper"></span>
       <ColorPicker 
         color={layerData.color}
         onChange={handleChangeColor}
+        layerType={layerData.renderingType}
       />
       <LayerName 
         layerId={layerData.id}

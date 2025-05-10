@@ -2,14 +2,16 @@ import { FC, useState, useRef } from 'react';
 import { HslaColorPicker, HslaColor } from 'react-colorful';
 import './ColorPicker.css';
 import useClickOutside from '../../hooks/useClickOutside';
-import LayerLineIcon from '../icons/LayerLine';
+import {LayerLineIcon, LayerPointIcon, LayerPolygonIcon} from '../icons/';
+import { LayerRenderingType } from '../../hooks/useLayerStore';
 
 interface ColorPickerProps {
   color: HslaColor;
   onChange: (color: HslaColor) => void;
+  layerType: LayerRenderingType;
 }
 
-const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
+const ColorPicker:FC<ColorPickerProps> = ({color, onChange, layerType}) => {
 
   const [openPicker, setOpenPicker] = useState<boolean>(false);
   const colorPicker = useRef<HTMLDivElement>(null);
@@ -29,7 +31,9 @@ const ColorPicker:FC<ColorPickerProps> = ({color, onChange}) => {
           color: `hsl(${color.h},${color.s}%,${color.l}%)`
         }}
       >
-        <LayerLineIcon />
+        {layerType === 'circle' && <LayerPointIcon />}
+        {layerType === 'line' && <LayerLineIcon />}
+        {layerType === 'fill' && <div className="polygonShrinker"><LayerPolygonIcon /></div>}
       </button>
     
       {openPicker && (

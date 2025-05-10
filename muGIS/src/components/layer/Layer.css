@@ -7,6 +7,12 @@
   color: var(--text-color-1);
 }
 
+.layerItemHelper {
+  display: inline-block;
+  height: 12px;
+  margin-left: -.2rem; /* to counter the flex gap */
+}
+
 .layerMoveControls {
   display: flex;
   flex-direction: column;
