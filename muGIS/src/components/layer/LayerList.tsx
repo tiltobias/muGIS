@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import useLayerStore from '../../hooks/useLayerStore';
 import Layer from './Layer';
 import './LayerList.css';
@@ -15,6 +15,17 @@ const LayerList: FC<LayerListProps> = () => {
   } = useLayerStore();
 
   const [draggingLayerId, setDraggingLayerId] = useState<string | null>(null);
+  const [mouseoverLayerId, setMouseoverLayerId] = useState<string | null>(null);
+  const [hoveringLayerId, setHoveringLayerId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (draggingLayerId !== null) {
+      setHoveringLayerId(draggingLayerId);
+    } else {
+      setHoveringLayerId(mouseoverLayerId);
+    }
+  }, [draggingLayerId, mouseoverLayerId, setHoveringLayerId]);
+
 
   const handleDragStart = (e: React.DragEvent<HTMLLIElement>, layerId: string) => {
     setDraggingLayerId(layerId);
@@ -43,10 +54,12 @@ const LayerList: FC<LayerListProps> = () => {
         <li 
           key={layer.id} 
           draggable 
-          className="layerListItem"
+          className={`layerListItem ${hoveringLayerId === layer.id ? 'hovering' : ''}`}
           onDragStart={(e)=>handleDragStart(e, layer.id)}
           onDragOver={(e)=>handleDragOver(e, layer.id)}
-          onDrop={handleDrop}
+          onDragEnd={handleDrop}
+          onMouseOver={()=>setMouseoverLayerId(layer.id)}
+          onMouseOut={()=>setMouseoverLayerId(null)}
         >
           <Layer 
             layerData={layer} 

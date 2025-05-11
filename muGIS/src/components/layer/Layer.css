@@ -8,6 +8,18 @@
   line-height: 2.6em;
 }
 
+.layerListItem.hovering::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5rem;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-color-2);
+  opacity: .3;
+  pointer-events: none;
+}
+
 .layerItemHelper { /* <span> that aligns li::marker */
   display: inline-block;
   height: 12px;
@@ -22,7 +34,7 @@
 }
 
 
-.layerItem:hover .layerMenu, /* show when hovering */
+.layerListItem.hovering .layerMenu, /* show when hovering */
 .layerMenu.open, /* show when menu is open */
 .layerItem:has(input) .layerMenu { /* show when layerName is editing */
   display: block;
