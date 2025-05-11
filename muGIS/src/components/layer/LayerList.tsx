@@ -15,16 +15,13 @@ const LayerList: FC<LayerListProps> = () => {
   } = useLayerStore();
 
   const [draggingLayerId, setDraggingLayerId] = useState<string | null>(null);
-  const [mouseoverLayerId, setMouseoverLayerId] = useState<string | null>(null);
   const [hoveringLayerId, setHoveringLayerId] = useState<string | null>(null);
 
   useEffect(() => {
     if (draggingLayerId !== null) {
       setHoveringLayerId(draggingLayerId);
-    } else {
-      setHoveringLayerId(mouseoverLayerId);
-    }
-  }, [draggingLayerId, mouseoverLayerId, setHoveringLayerId]);
+    };
+  }, [draggingLayerId]);
 
 
   const handleDragStart = (e: React.DragEvent<HTMLLIElement>, layerId: string) => {
@@ -58,8 +55,8 @@ const LayerList: FC<LayerListProps> = () => {
           onDragStart={(e)=>handleDragStart(e, layer.id)}
           onDragOver={(e)=>handleDragOver(e, layer.id)}
           onDragEnd={handleDrop}
-          onMouseOver={()=>setMouseoverLayerId(layer.id)}
-          onMouseOut={()=>setMouseoverLayerId(null)}
+          onMouseOver={()=>draggingLayerId === null ? setHoveringLayerId(layer.id) : undefined}
+          onMouseOut={()=>draggingLayerId === null ? setHoveringLayerId(null) : undefined}
         >
           <Layer 
             layerData={layer} 
