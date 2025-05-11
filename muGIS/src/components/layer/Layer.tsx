@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from './ColorPicker';
 import './Layer.css';
-import { Eye, EyeOff, Trash2, Ellipsis, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
+import { Eye, EyeOff, Trash2, EllipsisVertical, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
 import useClickOutside from '../../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
@@ -123,10 +123,11 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
         initialLayerName={layerData.name}
         isEditing={layerNameEditing}
         setIsEditing={setLayerNameEditing}
+        closeMenu={()=>setMenuOpen(false)}
       />
       <div className={`layerMenu ${menuOpen ? "open" : ""}`} ref={layerMenu}>
         <button type="button" onClick={()=>{setMenuOpen(!menuOpen)}}>
-          <Ellipsis />
+          <EllipsisVertical />
         </button>
         {menuOpen && (
           <div className="layerMenuPopover">

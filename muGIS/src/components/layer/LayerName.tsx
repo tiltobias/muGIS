@@ -1,15 +1,17 @@
 import { FC, useState, useRef, useEffect } from 'react';
 import useLayerStore from '../../hooks/useLayerStore';
 import './LayerName.css';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface LayerNameProps {
   layerId: string;
   initialLayerName: string;
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  closeMenu: () => void;
 }
 
-const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, setIsEditing}) => {
+const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, setIsEditing, closeMenu}) => {
 
   const { 
     changeLayerName, 
@@ -24,18 +26,24 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
     }
   }, [isEditing, inputRef]);
 
-  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
-    changeLayerName(layerId, layerName);
-    setIsEditing(false);
-  }
+  useClickOutside(inputRef, () => {
+    if (isEditing) {
+      changeLayerName(layerId, layerName);
+      setIsEditing(false);
+      closeMenu();
+    }
+  });
 
   return (
     <div className="layerNameContainer">
       {isEditing ? (
 
         <form 
-          onSubmit={handleSubmit}
+          onSubmit={(e)=>{
+            e.preventDefault();
+            changeLayerName(layerId, layerName);
+            setIsEditing(false);
+          }}
         >
           <input 
             type="text" 
@@ -43,7 +51,7 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
             onChange={(e)=>setLayerName(e.target.value)} 
             ref={inputRef} 
             onFocus={()=>setIsEditing(true)}
-            onBlur={()=>handleSubmit()} // instead of useClickOutside (more reliable)
+            onBlur={()=>changeLayerName(layerId, layerName)} 
           />
         </form>
 

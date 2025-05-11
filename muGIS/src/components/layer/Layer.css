@@ -22,8 +22,9 @@
 }
 
 
-.layerItem:hover .layerMenu,
-.layerMenu.open {
+.layerItem:hover .layerMenu, /* show when hovering */
+.layerMenu.open, /* show when menu is open */
+.layerItem:has(input) .layerMenu { /* show when layerName is editing */
   display: block;
 }
 
