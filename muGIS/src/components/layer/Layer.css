@@ -6,24 +6,22 @@
   background-color: var(--bg-color-1);
   color: var(--text-color-1);
   line-height: 2.6em;
+  padding: 0 .5rem 0 0;
 }
 
-.layerListItem.hovering::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -5rem;
-  right: 0;
-  bottom: 0;
+.layerListItem.hovering .layerItem, /* show when hovering */
+.layerItem:has(input), /* show when layerName is editing */
+.layerItem:has(.layerMenu.open), /* show when menu is open */
+.layerItem:has(.colorPickerPopover) { /* show when color picker is open */
   background-color: var(--bg-color-2);
-  opacity: .3;
-  pointer-events: none;
+  color: var(--text-color-2);
 }
 
-.layerItemHelper { /* <span> that aligns li::marker */
-  display: inline-block;
-  height: 12px;
-  margin-left: -.2rem; /* to counter the flex gap */
+.layerIndex {
+  width: 1.6em;
+  text-align: right;
+  flex-shrink: 0;
+  margin-right: .1em;
 }
 
 .layerItem button {
@@ -36,6 +34,7 @@
 
 .layerListItem.hovering .layerMenu, /* show when hovering */
 .layerMenu.open, /* show when menu is open */
+.layerItem:has(.colorPickerPopover) .layerMenu, /* show when color picker is open */
 .layerItem:has(input) .layerMenu { /* show when layerName is editing */
   display: block;
 }

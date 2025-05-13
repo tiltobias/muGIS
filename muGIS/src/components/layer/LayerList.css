@@ -1,12 +1,12 @@
 .layerList {
-    padding: 0 0 0 2rem;
+    padding: 0;
     margin: 0;
 }
 
 .layerListItem {
-    list-style-type: decimal;
+    list-style-type: none;
     margin: .5rem 0;
-    padding: 0 .5rem 0 0;
+    padding: 0;
     cursor: grab;
     user-select: none;
     position: relative;

@@ -61,6 +61,7 @@ const LayerList: FC<LayerListProps> = () => {
           <Layer 
             layerData={layer} 
             layerAboveId={index === 0 ? undefined : layers[index-1].id}
+            index={index}
           />
         </li>
       ))}

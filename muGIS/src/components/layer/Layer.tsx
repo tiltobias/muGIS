@@ -11,9 +11,10 @@ import LayerName from './LayerName';
 interface LayerProps {
   layerData: LayerData;
   layerAboveId: string | undefined;
+  index: number;
 }
 
-const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
+const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
   
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const layerMenu = useRef<HTMLDivElement>(null);
@@ -112,7 +113,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId}) => {
 
   return (
     <div className="layerItem">
-      <span className="layerItemHelper"></span>
+      <span className="layerIndex">{index+1}.</span>
       <ColorPicker 
         color={layerData.color}
         onChange={handleChangeColor}
