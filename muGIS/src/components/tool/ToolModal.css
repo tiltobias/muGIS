@@ -28,10 +28,12 @@
     border-radius: var(--border-radius);
     padding: 2em;
     margin: 1em;
-    width: 20em;
+    width: 24em;
     overflow-y: auto;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.3);
     position: relative;
+    box-sizing: border-box;
+    max-height: calc(100vh - 4em);
 }
 
 .modal > form {

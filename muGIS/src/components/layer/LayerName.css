@@ -7,13 +7,14 @@
     justify-content: stretch;
 }
 
-.layerNameContainer > div {
+.layerName {
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-.layerNameContainer > * {
+.layerNameContainer > form,
+.layerName {
     flex-grow: 1;
 }
 

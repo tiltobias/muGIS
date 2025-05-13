@@ -2,12 +2,13 @@
     position: relative;
 }
 
-.colorPicker button.colorPickerButton {
+.colorPickerButton {
     width: 2em;
     background: none;
     padding: 0;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 .colorPickerButton svg {
     width: 100%;

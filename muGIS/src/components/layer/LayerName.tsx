@@ -57,7 +57,7 @@ const LayerName:FC<LayerNameProps> = ({layerId, initialLayerName, isEditing, set
 
       ) : (
 
-        <div>
+        <div className="layerName">
           <span onDoubleClick={()=>setIsEditing(true)}>{layerName}</span>
         </div>
 
