@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { dissolve } from '@turf/dissolve';
 import ToolModal from '../ToolModal';
-import SelectLayer from '../SelectLayer';
+import SelectLayers from '../SelectLayers';
 import { flatten } from '@turf/flatten';
 
 const DissolveTool: FC = () => {
@@ -11,28 +11,28 @@ const DissolveTool: FC = () => {
     addLayer,
   } = useLayerStore();
 
-  const [selectedLayer, setSelectedLayer] = useState<LayerData | undefined>(undefined);
+  const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [propertyEnabled, setPropertyEnabled] = useState<boolean>(false);
   const [selectedProperty, setSelectedProperty] = useState<string | undefined>(undefined);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedLayer) {
+    if (selectedLayer[0]) {
       if (propertyEnabled && selectedProperty) {
-        setNewLayerName(`dissolve(${selectedLayer.name}, ${selectedProperty})`);
+        setNewLayerName(`dissolve(${selectedLayer[0].name}, ${selectedProperty})`);
       } else {
-        setNewLayerName(`dissolve(${selectedLayer.name})`);
+        setNewLayerName(`dissolve(${selectedLayer[0].name})`);
       }
     }
   }, [selectedLayer, propertyEnabled, selectedProperty]);
 
   const onFormSubmit = () => {
-    if (!selectedLayer) {
+    if (!selectedLayer[0]) {
       alert("Please select a layer");
       return false;
     };
-    const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
+    const layer = selectedLayer[0].featureCollection as FeatureCollectionPolygon;
     const result = !(propertyEnabled && selectedProperty) ? dissolve(flatten(layer)) : dissolve(flatten(layer), { propertyName: selectedProperty });
     if (!result || result.features.length === 0) {
       alert("No results found");
@@ -48,10 +48,10 @@ const DissolveTool: FC = () => {
   return (
     <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit}>
       
-      selected layer: {selectedLayer?.name}
-      <SelectLayer 
-        selectedLayer={selectedLayer} 
-        setSelectedLayer={setSelectedLayer} 
+      select layer: 
+      <SelectLayers 
+        selectedLayers={selectedLayer} 
+        setSelectedLayers={setSelectedLayer} 
         renderingType="fill"
       />
 
@@ -62,7 +62,7 @@ const DissolveTool: FC = () => {
       </span>
       <select required disabled={!propertyEnabled} value={selectedProperty} onChange={(e)=>setSelectedProperty(e.target.value)}>
         <option value="">Select a property</option>
-        {selectedLayer?.featureCollection.features[0].properties && Object.keys(selectedLayer.featureCollection.features[0].properties).map((property) => (
+        {selectedLayer[0]?.featureCollection.features[0].properties && Object.keys(selectedLayer[0].featureCollection.features[0].properties).map((property) => (
             <option key={property} value={property}>{property}</option>
         ))}
       </select>

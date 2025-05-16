@@ -8,12 +8,16 @@ interface SelectLayersProps {
   selectedLayers: LayerData[];
   setSelectedLayers: React.Dispatch<React.SetStateAction<LayerData[]>>;
   renderingType?: LayerRenderingType;
+  multiple?: boolean;
+  unselectableLayerIds?: (string | undefined)[];
 }
 
 const SelectLayers: FC<SelectLayersProps> = ({ 
   selectedLayers, 
   setSelectedLayers,
   renderingType = undefined,
+  multiple = false,
+  unselectableLayerIds = [],
 }) => {
   const {
     layers,
@@ -33,12 +37,20 @@ const SelectLayers: FC<SelectLayersProps> = ({
     }
   }, [selectOpen, selectedLayers]);
 
+  useEffect(() => {
+    selectedLayers.forEach((layer) => {
+      if (unselectableLayerIds.includes(layer.id)) {
+        setSelectedLayers((old) => old.filter((selectedLayer) => selectedLayer.id !== layer.id));
+      }
+    });
+  }, [unselectableLayerIds, selectedLayers, setSelectedLayers]);
+
   return (
     <div className="selectLayersContainer" ref={selectLayersRef} onClick={()=>{setSelectOpen(!selectOpen)}}>
       <ol className="selectedList">
         {selectedLayers.length === 0 ? 
           (
-            <p>No layers selected</p>
+            <p>No layer selected</p>
           ) : 
           layers.map((layer, index) => {
             if (renderingType && layer.renderingType !== renderingType) return null;
@@ -61,18 +73,23 @@ const SelectLayers: FC<SelectLayersProps> = ({
       </ol>
 
       {selectOpen && (
-        <div className="selectListContainer" onClick={(e)=>{e.stopPropagation()}} ref={popoverRef}>
+        <div className="selectListContainer" onClick={(e)=>{if (multiple) e.stopPropagation()}} ref={popoverRef}>
           <h4>Select Layers</h4>
           <ol className="selectList">
             {layers.map((layer, index) => {
               if (renderingType && layer.renderingType !== renderingType) return null;
               if (selectedLayers.some((selectedLayer) => selectedLayer.id === layer.id)) return null;
+              if (unselectableLayerIds.includes(layer.id)) return null;
               return (
                 <li 
                   key={layer.id} 
                   className="selectListItem"
                   onClick={()=>{
-                    setSelectedLayers((old)=>[...old, layer])
+                    if (multiple) {
+                      setSelectedLayers((old)=>[...old, layer])  
+                    } else {
+                      setSelectedLayers([layer]);
+                    }
                   }}
                 >
                   <LayerOption

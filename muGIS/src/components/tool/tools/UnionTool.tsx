@@ -56,6 +56,7 @@ const UnionTool: FC = () => {
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
         renderingType="fill"
+        multiple
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />

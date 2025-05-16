@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { buffer } from '@turf/buffer';
 import ToolModal from '../ToolModal';
-import SelectLayer from '../SelectLayer';
+import SelectLayers from '../SelectLayers';
 
 const BufferTool: FC = () => {
 
@@ -10,23 +10,23 @@ const BufferTool: FC = () => {
     addLayer,
   } = useLayerStore();
 
-  const [selectedLayer, setSelectedLayer] = useState<LayerData | undefined>(undefined);
+  const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [radius, setRadius] = useState<string>("");
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedLayer) {
-      setNewLayerName(`buffer(${selectedLayer.name}, ${radius}m)`);
+    if (selectedLayer[0]) {
+      setNewLayerName(`buffer(${selectedLayer[0].name}, ${radius}m)`);
     }
   }, [selectedLayer, radius]);
 
   const onFormSubmit = () => {
-    if (!selectedLayer || radius === "") {
+    if (!selectedLayer[0] || radius === "") {
       alert("Please select a layer and enter a radius");
       return false;
     };
-    const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
+    const layer = selectedLayer[0].featureCollection as FeatureCollectionPolygon;
     const result = buffer(layer, radius as unknown as number * 0.001, { units: 'kilometers' });
     if (!result || result.features.length === 0) {
       alert("No results found");
@@ -42,10 +42,9 @@ const BufferTool: FC = () => {
   return (
     <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit}>
       
-      selected layer: {selectedLayer?.name}
-      <SelectLayer 
-        selectedLayer={selectedLayer} 
-        setSelectedLayer={setSelectedLayer} 
+      <SelectLayers
+        selectedLayers={selectedLayer} 
+        setSelectedLayers={setSelectedLayer} 
       />
       
       buffer radius [m]: {radius}

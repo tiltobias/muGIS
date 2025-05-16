@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
-import SelectLayer from '../SelectLayer';
+import SelectLayers from '../SelectLayers';
 import { pointsWithinPolygon } from '@turf/points-within-polygon';
 import { FeatureCollection, Point, MultiPoint, LineString, MultiLineString, Feature, Polygon } from 'geojson';
 import { lineSplit } from '@turf/line-split';
@@ -16,19 +16,19 @@ const ClipTool: FC = () => {
     addLayer,
   } = useLayerStore();
 
-  const [selectedMaskLayer, setSelectedMaskLayer] = useState<LayerData | undefined>(undefined);
-  const [selectedLayer, setSelectedLayer] = useState<LayerData | undefined>(undefined);
+  const [selectedMaskLayer, setSelectedMaskLayer] = useState<LayerData[]>([]);
+  const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedMaskLayer && selectedLayer) {
-      setNewLayerName(`clip(${selectedLayer.name}, ${selectedMaskLayer.name})`);
+    if (selectedMaskLayer[0] && selectedLayer[0]) {
+      setNewLayerName(`clip(${selectedLayer[0].name}, ${selectedMaskLayer[0].name})`);
     }
   }, [selectedLayer, selectedMaskLayer]);
 
   const onFormSubmit = () => {
-    if (!selectedMaskLayer || !selectedLayer) {
+    if (!selectedMaskLayer[0] || !selectedLayer[0]) {
       alert("Please select two layers");
       return false;
     };
@@ -37,13 +37,13 @@ const ClipTool: FC = () => {
       features: [],
     } as FeatureCollection;
     
-    if (selectedLayer.renderingType === "circle") {
+    if (selectedLayer[0].renderingType === "circle") {
       outLayer = pointsWithinPolygon(
-        selectedLayer.featureCollection as FeatureCollection<Point|MultiPoint>, 
-        selectedMaskLayer.featureCollection as FeatureCollectionPolygon);
-    } else if (selectedLayer.renderingType === "fill") {
-      const maskLayer = selectedMaskLayer.featureCollection as FeatureCollectionPolygon;
-      const layer = selectedLayer.featureCollection as FeatureCollectionPolygon;
+        selectedLayer[0].featureCollection as FeatureCollection<Point|MultiPoint>, 
+        selectedMaskLayer[0].featureCollection as FeatureCollectionPolygon);
+    } else if (selectedLayer[0].renderingType === "fill") {
+      const maskLayer = selectedMaskLayer[0].featureCollection as FeatureCollectionPolygon;
+      const layer = selectedLayer[0].featureCollection as FeatureCollectionPolygon;
       maskLayer.features.forEach((maskFeature) => {
         layer.features.forEach((feature) => {
           const result = intersect({type:"FeatureCollection",features:[feature, maskFeature]});
@@ -52,9 +52,9 @@ const ClipTool: FC = () => {
           }
         });
       });
-    } else if (selectedLayer.renderingType === "line") {
-      const maskLayer: FeatureCollection<Polygon> = flatten(selectedMaskLayer.featureCollection as FeatureCollectionPolygon);
-      const layer: FeatureCollection<LineString> = flatten(selectedLayer.featureCollection as FeatureCollection<LineString|MultiLineString>);
+    } else if (selectedLayer[0].renderingType === "line") {
+      const maskLayer: FeatureCollection<Polygon> = flatten(selectedMaskLayer[0].featureCollection as FeatureCollectionPolygon);
+      const layer: FeatureCollection<LineString> = flatten(selectedLayer[0].featureCollection as FeatureCollection<LineString|MultiLineString>);
       maskLayer.features.forEach((maskFeature) => {
         const maskBuffer = buffer(maskFeature, 0.01, { units: "meters" }) as Feature<Polygon>;
         layer.features.forEach((line) => {
@@ -89,18 +89,18 @@ const ClipTool: FC = () => {
   return (
     <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit}>
       
-      selected layer: {selectedLayer?.name}
-      <SelectLayer 
-        selectedLayer={selectedLayer} 
-        setSelectedLayer={setSelectedLayer} 
+      select layer: 
+      <SelectLayers 
+        selectedLayers={selectedLayer} 
+        setSelectedLayers={setSelectedLayer} 
       />
 
-      selected mask layer: {selectedMaskLayer?.name}
-      <SelectLayer
-        selectedLayer={selectedMaskLayer} 
-        setSelectedLayer={setSelectedMaskLayer} 
+      select mask layer: 
+      <SelectLayers
+        selectedLayers={selectedMaskLayer} 
+        setSelectedLayers={setSelectedMaskLayer} 
         renderingType="fill"
-        unselectableLayerIds={[selectedLayer?.id]}
+        unselectableLayerIds={[selectedLayer[0]?.id]}
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />

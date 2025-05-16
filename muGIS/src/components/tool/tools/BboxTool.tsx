@@ -56,6 +56,7 @@ const BboxTool: FC = () => {
       <SelectLayers 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
+        multiple
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />

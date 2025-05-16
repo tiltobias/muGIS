@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { difference } from '@turf/difference';
 import ToolModal from '../ToolModal';
-import SelectLayer from '../SelectLayer';
+import SelectLayers from '../SelectLayers';
 import { combine } from '@turf/combine';
 
 const DifferenceTool: FC = () => {
@@ -11,19 +11,19 @@ const DifferenceTool: FC = () => {
     addLayer,
   } = useLayerStore();
 
-  const [selectedLayer1, setSelectedLayer1] = useState<LayerData | undefined>(undefined);
-  const [selectedLayer2, setSelectedLayer2] = useState<LayerData | undefined>(undefined);
+  const [selectedLayer1, setSelectedLayer1] = useState<LayerData[]>([]);
+  const [selectedLayer2, setSelectedLayer2] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
-    if (selectedLayer1 && selectedLayer2) {
-      setNewLayerName(`difference(${selectedLayer1.name}, ${selectedLayer2.name})`);
+    if (selectedLayer1[0] && selectedLayer2[0]) {
+      setNewLayerName(`difference(${selectedLayer1[0].name}, ${selectedLayer2[0].name})`);
     }
   }, [selectedLayer1, selectedLayer2]);
 
   const onFormSubmit = () => {
-    if (!selectedLayer1 || !selectedLayer2) {
+    if (!selectedLayer1[0] || !selectedLayer2[0]) {
       alert("Please select two layers");
       return false;
     };
@@ -31,8 +31,8 @@ const DifferenceTool: FC = () => {
       type: "FeatureCollection",
       features: [],
     };
-    const layerBase = selectedLayer1.featureCollection as FeatureCollectionPolygon;
-    const layerSubtract = selectedLayer2.featureCollection as FeatureCollectionPolygon;
+    const layerBase = selectedLayer1[0].featureCollection as FeatureCollectionPolygon;
+    const layerSubtract = selectedLayer2[0].featureCollection as FeatureCollectionPolygon;
     const subtractPolygon = (combine(layerSubtract) as FeatureCollectionPolygon).features[0];
     layerBase.features.forEach((feature) => {
       const result = difference({type:"FeatureCollection",features:[feature, subtractPolygon]});
@@ -54,19 +54,19 @@ const DifferenceTool: FC = () => {
   return (
     <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit}>
       
-      selected base layer: {selectedLayer1?.name}
-      <SelectLayer 
-        selectedLayer={selectedLayer1} 
-        setSelectedLayer={setSelectedLayer1} 
+      select base layer: 
+      <SelectLayers 
+        selectedLayers={selectedLayer1} 
+        setSelectedLayers={setSelectedLayer1} 
         renderingType="fill"
       />
 
-      selected layer to subtract: {selectedLayer2?.name}
-      <SelectLayer
-        selectedLayer={selectedLayer2} 
-        setSelectedLayer={setSelectedLayer2} 
+      select layer to subtract: 
+      <SelectLayers
+        selectedLayers={selectedLayer2} 
+        setSelectedLayers={setSelectedLayer2} 
         renderingType="fill"
-        unselectableLayerIds={[selectedLayer1?.id]}
+        unselectableLayerIds={[selectedLayer1[0]?.id]}
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
