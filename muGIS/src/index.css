@@ -16,8 +16,8 @@
 
 [data-theme="light"] {
   color-scheme: only light;
-  --bg-color-1: #f0f0f0;
-  --bg-color-2: #ffffff;
+  --bg-color-2: #f0f0f0;
+  --bg-color-1: #ffffff;
   --text-color-1: #000000;
   --text-color-2: #333333;
   --accent-color: #000000;
@@ -56,4 +56,8 @@ button:hover {
 }
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+input[type="file"] {
+  display: none;
 }

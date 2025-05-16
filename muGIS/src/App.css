@@ -70,21 +70,8 @@
     padding: .5rem;
 }
 
-#layerFileInput {
-    display: none;
-}
-
-label[for="layerFileInput"] {
-    cursor: pointer;
-    padding: .5rem;
-    text-align: center;
-    
-    background-color: var(--bg-color-2);
-    color: var(--text-color-2);
-    border: 1px solid var(--bg-color-2);
-    border-radius: var(--border-radius);
-    font-weight: 500;
+.sidebarFooter button {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
 }
-

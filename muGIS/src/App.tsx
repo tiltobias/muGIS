@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -76,6 +76,11 @@ function App() {
     loadFiles(files);
   };
 
+  const fileInput = useRef<HTMLInputElement>(null);
+  const handleUploadFile = () => {
+    if (fileInput.current) fileInput.current.click();
+  }
+
 
   return (
     <div 
@@ -106,11 +111,10 @@ function App() {
               )}
             </div>
             <div className="sidebarFooter">
-              <label htmlFor="layerFileInput">
-                <Upload />
-                Upload GeoJSON file
-              </label>
-              <input id="layerFileInput" type="file" multiple accept=".geojson" onChange={handleLoadFileInput} />
+              <button type="button" onClick={handleUploadFile}>
+                <Upload /> Upload GeoJSON file
+              </button>
+              <input ref={fileInput} type="file" multiple accept=".geojson" onChange={handleLoadFileInput} />
             </div>
           </aside>
         </div>

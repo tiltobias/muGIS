@@ -34,8 +34,3 @@
     border-radius: 0;
     display: flex;
 }
-
-
-input[type="file"] {
-    display: none;
-}
