@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { dissolve } from '@turf/dissolve';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 import { flatten } from '@turf/flatten';
 
 const DissolveTool: FC = () => {
@@ -49,7 +49,7 @@ const DissolveTool: FC = () => {
     <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit}>
       
       select layer: 
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
         renderingType="fill"

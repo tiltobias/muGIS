@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData } from '../../../hooks/useLayerStore';
 import { union } from '@turf/union';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 import { Feature, Polygon, MultiPolygon } from 'geojson';
 
 const UnionTool: FC = () => {
@@ -52,7 +52,7 @@ const UnionTool: FC = () => {
   return (
     <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit}>
       
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
         renderingType="fill"

@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { buffer } from '@turf/buffer';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 
 const BufferTool: FC = () => {
 
@@ -42,7 +42,7 @@ const BufferTool: FC = () => {
   return (
     <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit}>
       
-      <SelectLayers
+      <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
       />

@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { voronoi } from '@turf/voronoi';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 import { FeatureCollection, Point } from 'geojson';
 import { flatten } from '@turf/flatten';
 import { bbox } from '@turf/bbox';
@@ -46,7 +46,7 @@ const VoronoiTool: FC = () => {
     <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit}>
       
       select layer: 
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
         renderingType="circle"

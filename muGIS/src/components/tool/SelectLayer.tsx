@@ -1,10 +1,10 @@
 import { FC, useState, useRef, useEffect } from 'react';
 import useLayerStore, { LayerData, LayerRenderingType } from '../../hooks/useLayerStore';
 import LayerOption from './LayerOption';
-import './SelectLayers.css'
+import './SelectLayer.css'
 import useClickOutside from '../../hooks/useClickOutside';
 
-interface SelectLayersProps {
+interface SelectLayerProps {
   selectedLayers: LayerData[];
   setSelectedLayers: React.Dispatch<React.SetStateAction<LayerData[]>>;
   renderingType?: LayerRenderingType;
@@ -12,7 +12,7 @@ interface SelectLayersProps {
   unselectableLayerIds?: (string | undefined)[];
 }
 
-const SelectLayers: FC<SelectLayersProps> = ({ 
+const SelectLayer: FC<SelectLayerProps> = ({ 
   selectedLayers, 
   setSelectedLayers,
   renderingType = undefined,
@@ -108,4 +108,4 @@ const SelectLayers: FC<SelectLayersProps> = ({
     </div>
   );
 }
-export default SelectLayers;
+export default SelectLayer;

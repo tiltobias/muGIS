@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 
 const IntersectTool: FC = () => {
 
@@ -61,7 +61,7 @@ const IntersectTool: FC = () => {
   return (
     <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}>
       
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
         renderingType="fill"

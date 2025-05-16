@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { difference } from '@turf/difference';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 import { combine } from '@turf/combine';
 
 const DifferenceTool: FC = () => {
@@ -55,14 +55,14 @@ const DifferenceTool: FC = () => {
     <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit}>
       
       select base layer: 
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayer1} 
         setSelectedLayers={setSelectedLayer1} 
         renderingType="fill"
       />
 
       select layer to subtract: 
-      <SelectLayers
+      <SelectLayer 
         selectedLayers={selectedLayer2} 
         setSelectedLayers={setSelectedLayer2} 
         renderingType="fill"

@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 import { pointsWithinPolygon } from '@turf/points-within-polygon';
 import { FeatureCollection, Point, MultiPoint, LineString, MultiLineString, Feature, Polygon } from 'geojson';
 import { lineSplit } from '@turf/line-split';
@@ -90,13 +90,13 @@ const ClipTool: FC = () => {
     <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit}>
       
       select layer: 
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
       />
 
       select mask layer: 
-      <SelectLayers
+      <SelectLayer 
         selectedLayers={selectedMaskLayer} 
         setSelectedLayers={setSelectedMaskLayer} 
         renderingType="fill"

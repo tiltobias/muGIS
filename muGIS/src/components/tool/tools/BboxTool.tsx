@@ -4,7 +4,7 @@ import { bbox } from '@turf/bbox';
 import ToolModal from '../ToolModal';
 import { Feature, Polygon, MultiPolygon } from 'geojson';
 import { bboxPolygon } from '@turf/bbox-polygon';
-import SelectLayers from '../SelectLayers';
+import SelectLayer from '../SelectLayer';
 
 const BboxTool: FC = () => {
 
@@ -53,7 +53,7 @@ const BboxTool: FC = () => {
   return (
     <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit}>
       
-      <SelectLayers 
+      <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
         multiple
