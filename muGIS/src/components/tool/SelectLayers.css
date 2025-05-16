@@ -1,4 +1,72 @@
+.selectLayersContainer {
+  position: relative;
+  padding: var(--border-radius) 0;
+  border: solid .1em var(--accent-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.selectLayersContainer:has(.selectListContainer) {
+  border-color: var(--active-color);
+}
+
+.selectedList {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+  user-select: none;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  max-height: 200px;
+}
+
+.selectedList > p {
+  margin: 0;
+  font-style: italic;
+  padding: 0 0 0 1em;
+}
+
+.selectedList .layerItem {
+  line-height: normal;
+}
+
+
+
+
+.selectListContainer {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  position: fixed;
+  width: 100%;
+  border-radius: var(--border-radius);
+  padding: var(--border-radius) 0;
+  background-color: var(--bg-color-2);
+  max-height: 200px;
+  z-index: 100;
+  box-shadow: 0 2px 15px 0 rgba(0,0,0,0.7);
+  box-sizing: border-box;
+  cursor: default;
+}
+
+.selectListContainer h4 {
+  margin: 0 0 var(--border-radius) 1.5em;
+}
+
 .selectList {
   list-style: none;
   padding: 0;
+  background-color: var(--bg-color-1);
+  margin: 0;
+  user-select: none;
+}
+
+.selectList .layerItem {
+  background-color: var(--bg-color-2);
+  cursor: pointer;
+}
+
+.selectList .layerItem:hover {
+  opacity: 0.8;
 }

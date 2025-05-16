@@ -8,7 +8,6 @@ import { Feature, Polygon, MultiPolygon } from 'geojson';
 const UnionTool: FC = () => {
 
   const {
-    // layers,
     addLayer,
   } = useLayerStore();
 
@@ -53,7 +52,6 @@ const UnionTool: FC = () => {
   return (
     <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit}>
       
-      selected layers: {selectedLayers?.map(layer => layer.name).join(", ")}
       <SelectLayers 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}

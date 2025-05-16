@@ -5,10 +5,11 @@
 .colorPickerButton {
     width: 2em;
     background: none;
-    padding: 0;
+    padding: .2em;
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 .colorPickerButton svg {
     width: 100%;

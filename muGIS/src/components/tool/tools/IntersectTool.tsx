@@ -2,16 +2,15 @@ import { FC, useState, useEffect } from 'react';
 import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hooks/useLayerStore';
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
-import ReactSelect from 'react-select';
+import SelectLayers from '../SelectLayers';
 
 const IntersectTool: FC = () => {
 
   const {
-    layers,
     addLayer,
   } = useLayerStore();
 
-  const [selectedLayers, setSelectedLayers] = useState<LayerData[] | undefined>(undefined);
+  const [selectedLayers, setSelectedLayers] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
@@ -62,37 +61,10 @@ const IntersectTool: FC = () => {
   return (
     <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}>
       
-      <ReactSelect 
-        isMulti={true}
-        options={
-          layers
-            .filter(layer => layer.renderingType === "fill")
-            .map(layer => ({value: layer.id, label: layer.name, color: layer.color}))
-        }
-        value={selectedLayers?.map(layer => ({value: layer.id, label: layer.name, color: layer.color}))}
-        onChange={selectedOptions=>setSelectedLayers(selectedOptions?.map(option=>layers.find(layer=>layer.id===option.value)) as LayerData[])}
-        styles={{
-          control: (base) => ({
-            ...base,
-            backgroundColor: "white",
-            border: "1px solid #ccc",
-            boxShadow: "none",
-            "&:hover": {
-              border: "1px solid #aaa",
-            },
-          }),
-          multiValue: (base, state) => {
-            return { ...base, backgroundColor: `hsl(${state.data.color.h},${state.data.color.s}%,${state.data.color.l}%)`, opacity: state.isFocused ? 0.8 : 1, };
-          },
-          option: (base, state) => {
-            return {
-              ...base,
-              backgroundColor: `hsl(${state.data.color.h},${state.data.color.s}%,${state.data.color.l}%)`,
-              opacity: state.isFocused ? 0.8 : 1,
-              color: "white",
-            };
-          },
-        }}
+      <SelectLayers 
+        selectedLayers={selectedLayers} 
+        setSelectedLayers={setSelectedLayers}
+        renderingType="fill"
       />
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />

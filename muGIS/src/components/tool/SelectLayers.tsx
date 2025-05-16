@@ -1,7 +1,8 @@
-import { FC, useState } from 'react';
+import { FC, useState, useRef, useEffect } from 'react';
 import useLayerStore, { LayerData, LayerRenderingType } from '../../hooks/useLayerStore';
 import LayerOption from './LayerOption';
 import './SelectLayers.css'
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface SelectLayersProps {
   selectedLayers: LayerData[];
@@ -10,8 +11,8 @@ interface SelectLayersProps {
 }
 
 const SelectLayers: FC<SelectLayersProps> = ({ 
-  // selectedLayers, 
-  // setSelectedLayers,
+  selectedLayers, 
+  setSelectedLayers,
   renderingType = undefined,
 }) => {
   const {
@@ -19,22 +20,61 @@ const SelectLayers: FC<SelectLayersProps> = ({
   } = useLayerStore();
 
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
+  const selectLayersRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(selectLayersRef, ()=>{setSelectOpen(false)});
+
+  useEffect(() => {
+    if (selectLayersRef.current && popoverRef.current) {
+      popoverRef.current?.style.setProperty('max-height', `${window.innerHeight - selectLayersRef.current?.getBoundingClientRect().bottom - 10}px`);
+      popoverRef.current?.style.setProperty('width', `${selectLayersRef.current?.getBoundingClientRect().width}px`);
+      popoverRef.current?.style.setProperty('top', `${selectLayersRef.current?.getBoundingClientRect().bottom + window.scrollY}px`);
+    }
+  }, [selectOpen, selectedLayers]);
 
   return (
-    <div>
-      <ul className="selectedList">
+    <div className="selectLayersContainer" ref={selectLayersRef} onClick={()=>{setSelectOpen(!selectOpen)}}>
+      <ol className="selectedList">
+        {selectedLayers.length === 0 ? 
+          (
+            <p>No layers selected</p>
+          ) : 
+          layers.map((layer, index) => {
+            if (renderingType && layer.renderingType !== renderingType) return null;
+            if (!selectedLayers.some((selectedLayer) => selectedLayer.id === layer.id)) return null;
+            return (
+              <li key={layer.id}>
+                <LayerOption
+                  name={layer.name}
+                  type={layer.renderingType}
+                  index={index}
+                  color={layer.color}
+                  onRemove={() => {
+                    setSelectedLayers((old) => old.filter((selectedLayer) => selectedLayer.id !== layer.id));
+                  }}
+                />
+              </li>
+            );
+          })
+        }
+      </ol>
 
-      </ul>
-      <button type="button" className="addLayerButton" onClick={() => setSelectOpen(!selectOpen)}>
-        Add Layer
-      </button>
       {selectOpen && (
-        <div className="layerListContainer">
+        <div className="selectListContainer" onClick={(e)=>{e.stopPropagation()}} ref={popoverRef}>
+          <h4>Select Layers</h4>
           <ol className="selectList">
             {layers.map((layer, index) => {
               if (renderingType && layer.renderingType !== renderingType) return null;
+              if (selectedLayers.some((selectedLayer) => selectedLayer.id === layer.id)) return null;
               return (
-                <li key={layer.id} className="selectListItem">
+                <li 
+                  key={layer.id} 
+                  className="selectListItem"
+                  onClick={()=>{
+                    setSelectedLayers((old)=>[...old, layer])
+                  }}
+                >
                   <LayerOption
                     name={layer.name}
                     type={layer.renderingType}
@@ -43,7 +83,8 @@ const SelectLayers: FC<SelectLayersProps> = ({
                   />
                 </li>
               );
-            })}
+            }) || <p>No layers available</p>
+            }
           </ol>
         </div>
       )}

@@ -2,15 +2,17 @@ import { FC } from 'react';
 import { LayerRenderingType } from '../../hooks/useLayerStore';
 import { HslaColor } from '../layer/ColorPicker';
 import { LayerPointIcon, LayerLineIcon, LayerPolygonIcon } from '../icons';
+import { SquareX } from 'lucide-react';
 
 interface LayerOptionProps {
   name: string;
   type: LayerRenderingType;
   index: number;
   color: HslaColor;
+  onRemove?: () => void;
 }
 
-const LayerOption: FC<LayerOptionProps> = ({ name, type, index, color }) => {
+const LayerOption: FC<LayerOptionProps> = ({ name, type, index, color, onRemove }) => {
   return (
     <div className="layerItem">
       <span className="layerIndex">{index+1}.</span>
@@ -27,6 +29,17 @@ const LayerOption: FC<LayerOptionProps> = ({ name, type, index, color }) => {
       <div className="layerName">
         <span>{name}</span>
       </div>
+      {onRemove && (
+        <button 
+          type="button" 
+          onClick={(e)=>{
+            onRemove();
+            e.stopPropagation();
+          }}
+        >
+          <SquareX />
+        </button>
+      )}
     </div>
   );
 };
