@@ -1,5 +1,6 @@
 import { ReactNode, FC, useState } from 'react';
 import "./ToolModal.css";
+import { X } from 'lucide-react';
 
 interface ToolModalProps {
   children: ReactNode | ReactNode[];
@@ -31,11 +32,10 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => 
                 setLoading(false);
               }, 0);
             }}>
+              <button type="button" className="modalCloseButton" onClick={()=>setModalOpen(false)}><X /></button>
               <h3>{buttonLabel}</h3>
 
               {children}
-
-              <button type="button" onClick={()=>setModalOpen(false)}>Close</button>
 
               <button type="submit">Submit</button>
             </form>

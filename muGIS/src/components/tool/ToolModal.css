@@ -36,6 +36,17 @@
     max-height: calc(100vh - 4em);
 }
 
+.modalCloseButton {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-2);
+    display: flex;
+}
+
 .modal > form {
     display: flex;
     flex-direction: column;
