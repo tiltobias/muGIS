@@ -4,6 +4,7 @@ import LayerList from './layer/LayerList';
 import useLayerStore from '../../hooks/useLayerStore';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useMapStore from '../../hooks/useMapStore';
+import './Sidebar.css';
 
 interface SidebarProps {
   handleLoadFileInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
