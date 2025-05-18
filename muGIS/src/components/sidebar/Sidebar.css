@@ -40,3 +40,26 @@
   align-items: center;
   gap: .5rem;
 }
+
+
+.sidebarHeader {
+  scrollbar-gutter: stable; /* to mimick the padding width of the layerList */
+  scrollbar-width: thin; /* === */
+  overflow-y: auto; /* === */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 1.6em 0 .6em 0;
+}
+
+.sidebarHeader > h2 {
+  margin: 0 0 0 1em;
+}
+
+.sidebarHeader > button {
+  display: flex;
+  padding: .5em .7em;
+  background: none;
+}
