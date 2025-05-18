@@ -2,10 +2,10 @@ import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from './ColorPicker';
 import './Layer.css';
 import { Eye, EyeOff, Trash2, EllipsisVertical, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
-import useClickOutside from '../../hooks/useClickOutside';
+import useClickOutside from '../../../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
-import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
-import useMapStore from '../../hooks/useMapStore';
+import useLayerStore, { LayerData } from '../../../hooks/useLayerStore';
+import useMapStore from '../../../hooks/useMapStore';
 import LayerName from './LayerName';
 
 interface LayerProps {

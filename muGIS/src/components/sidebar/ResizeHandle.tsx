@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, useRef, useCallback } from "react";
-import useMapStore from "../hooks/useMapStore";
+import useMapStore from "../../hooks/useMapStore";
 import "./ResizeHandle.css";
 
 interface ResizeHandleProps {

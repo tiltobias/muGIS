@@ -1,42 +1,16 @@
-import { useState, useEffect, useRef } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import './App.css'
-
 import MapContainer from './components/MapContainer'
 import { FeatureCollection } from 'geojson';
-import { Eye, EyeOff, Upload } from 'lucide-react';
 import useLayerStore from './hooks/useLayerStore';
-import useMapStore from './hooks/useMapStore';
 import SettingsMenu from './components/settings/SettingsMenu';
 import Toolbar from './components/Toolbar';
-import ResizeHandle from './components/ResizeHandle';
-import LayerList from './components/layer/LayerList';
+import Sidebar from './components/sidebar/Sidebar';
 
 function App() {
 
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const [sidebarWidth, setSidebarWidth] = useState(300);
-
   const { 
-    layers, 
-    addLayer,  
-    toggleLayerVisibilityAll 
+    addLayer, 
   } = useLayerStore();
-  const {
-    mapRef,
-    mapReady,
-  } = useMapStore();
-  
-  // Resize map smoothly when sidebar is opened or closed
-  useEffect(() => {
-    const interval = setInterval(() => {
-      mapRef.current?.resize();
-    }, 1);
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 1); // time of sidebarContainer transition
-  }, [mapRef, sidebarOpen]);
 
 
   const loadFiles = (files: FileList | null) => {
@@ -64,22 +38,15 @@ function App() {
     });
   };
 
-  const handleLoadFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    loadFiles(files);
-    event.target.value = ""; // reset input value to allow re-uploading the same file
+  const handleLoadFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    loadFiles(e.target.files);
+    e.target.value = ""; // reset input value to allow re-uploading the same file
   };
 
-  const handleLoadFileDrag = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const files = event.dataTransfer.files;
-    loadFiles(files);
+  const handleLoadFileDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    loadFiles(e.dataTransfer.files);
   };
-
-  const fileInput = useRef<HTMLInputElement>(null);
-  const handleUploadFile = () => {
-    if (fileInput.current) fileInput.current.click();
-  }
 
 
   return (
@@ -92,32 +59,14 @@ function App() {
         <h1>
           μGIS
         </h1>
-        <button type="button" onClick={()=>setSidebarOpen(!sidebarOpen)}>Sidebar</button>
         <Toolbar />
         
         <SettingsMenu />
       </header>
       <main className="mainContainer">
-        <div className={`sidebarContainer ${sidebarOpen ? "open" : ""}`}>
-          <ResizeHandle setWidth={setSidebarWidth} setOpen={setSidebarOpen} />
-          <aside className="sidebar" style={{ width: `${sidebarWidth}px` }}>
-            <h2>Sidebar</h2>
-            <button type="button" onClick={toggleLayerVisibilityAll}>
-              {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
-            </button>
-            <div className="layerListContainer">
-              {mapReady && (
-                <LayerList />
-              )}
-            </div>
-            <div className="sidebarFooter">
-              <button type="button" onClick={handleUploadFile}>
-                <Upload /> Upload GeoJSON file
-              </button>
-              <input ref={fileInput} type="file" multiple accept=".geojson" onChange={handleLoadFileInput} />
-            </div>
-          </aside>
-        </div>
+        <Sidebar 
+          handleLoadFileInput={handleLoadFileInput}
+        />
         <div className="mapFlexContainer">
           <MapContainer />
         </div>

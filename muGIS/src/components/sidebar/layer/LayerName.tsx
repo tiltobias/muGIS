@@ -1,7 +1,7 @@
 import { FC, useState, useRef, useEffect } from 'react';
-import useLayerStore from '../../hooks/useLayerStore';
+import useLayerStore from '../../../hooks/useLayerStore';
 import './LayerName.css';
-import useClickOutside from '../../hooks/useClickOutside';
+import useClickOutside from '../../../hooks/useClickOutside';
 
 interface LayerNameProps {
   layerId: string;

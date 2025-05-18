@@ -1,9 +1,9 @@
 import { FC, useState, useRef } from 'react';
 import { HslaColorPicker, HslaColor } from 'react-colorful';
 import './ColorPicker.css';
-import useClickOutside from '../../hooks/useClickOutside';
-import {LayerLineIcon, LayerPointIcon, LayerPolygonIcon} from '../icons/';
-import { LayerRenderingType } from '../../hooks/useLayerStore';
+import useClickOutside from '../../../hooks/useClickOutside';
+import {LayerLineIcon, LayerPointIcon, LayerPolygonIcon} from '../../icons/';
+import { LayerRenderingType } from '../../../hooks/useLayerStore';
 
 interface ColorPickerProps {
   color: HslaColor;
