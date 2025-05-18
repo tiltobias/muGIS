@@ -9,6 +9,7 @@ import { lineSplit } from '@turf/line-split';
 import { booleanWithin } from '@turf/boolean-within';
 import { flatten } from '@turf/flatten';
 import { buffer } from '@turf/buffer';
+import { ClipIcon } from '../../icons';
 
 const ClipTool: FC = () => {
 
@@ -87,7 +88,7 @@ const ClipTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />}>
       
       select layer: 
       <SelectLayer 

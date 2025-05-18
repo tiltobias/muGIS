@@ -3,6 +3,7 @@ import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hoo
 import { intersect } from '@turf/intersect';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
+import { IntersectIcon } from '../../icons';
 
 const IntersectTool: FC = () => {
 
@@ -59,7 +60,7 @@ const IntersectTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />}>
       
       <SelectLayer 
         selectedLayers={selectedLayers} 

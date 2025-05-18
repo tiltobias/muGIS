@@ -1,0 +1,35 @@
+export default function Clip({size = 120}: {size?: number}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 6.35 6.35"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m.661 2.249h3.44v3.44h-3.44z"
+        style={{
+          fill: "#7ea57e",
+          fillOpacity: 0.392,
+          stroke: "#565a5d",
+          strokeWidth: 0.265,
+          strokeLinecap: "round",
+          strokeDasharray: ".264583 .529167"
+        }}
+      />
+      <path
+        d="m5.953 2.249a1.852 1.852 0 0 1 -1.852 1.852 1.852 1.852 0 0 1 -1.852-1.852 1.852 1.852 0 0 1 1.852-1.852 1.852 1.852 0 0 1 1.852 1.852z"
+        style={{
+          fill: "#7ea57e",
+          fillOpacity: 0.392,
+          stroke: "#565a5d",
+          strokeWidth: 0.265,
+          strokeLinecap: "round",
+          strokeDasharray: ".264583 .529167"
+        }}
+      />
+      <path d="m2.249 2.249a1.852 1.852 0 0 0 1.852 1.852v-1.852z" fill="#7c96a8" stroke="#517083" strokeWidth=".26458"/>
+    </svg>
+  );
+}

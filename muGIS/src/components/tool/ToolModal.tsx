@@ -6,17 +6,18 @@ interface ToolModalProps {
   children: ReactNode | ReactNode[];
   buttonLabel: string;
   onFormSubmit: () => boolean; // function to be called on form submit, should return true if the form is valid and false if not
+  buttonIcon?: ReactNode;
 }
 
-const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit}) => {
+const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, buttonIcon}) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div>
-      <button type="button" onClick={()=>setModalOpen(!modalOpen)}>
-        {buttonLabel}
+      <button type="button" className="toolButton" onClick={()=>setModalOpen(!modalOpen)}>
+        {buttonIcon} {buttonLabel}
       </button>
       
       {modalOpen && (

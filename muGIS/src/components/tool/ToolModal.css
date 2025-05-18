@@ -1,10 +1,12 @@
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+.toolButton {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.toolButton > svg {
+    height: 100%;
+    width: 100%;
 }
 
 .cover {
@@ -66,6 +68,15 @@
     border-top-color: transparent;
     animation: spin 1s linear infinite;
     z-index: 100;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes spin {

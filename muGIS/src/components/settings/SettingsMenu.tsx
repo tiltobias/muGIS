@@ -115,7 +115,13 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
               <BasemapMenu />
             </li>
             <li>
-              <button type="button" onClick={()=>{setTheme(theme === "light" ? "dark" : "light")}}>
+              <button 
+                type="button" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTheme(theme === "light" ? "dark" : "light");
+                }}
+              >
                 {theme === "light" ? <Sun /> : <Moon />} Toggle theme
               </button>
             </li>

@@ -4,6 +4,7 @@ import { dissolve } from '@turf/dissolve';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
 import { flatten } from '@turf/flatten';
+import { DissolveIcon } from '../../icons';
 
 const DissolveTool: FC = () => {
 
@@ -46,7 +47,7 @@ const DissolveTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />}>
       
       select layer: 
       <SelectLayer 

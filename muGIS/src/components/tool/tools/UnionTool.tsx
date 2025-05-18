@@ -4,6 +4,7 @@ import { union } from '@turf/union';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
 import { Feature, Polygon, MultiPolygon } from 'geojson';
+import { UnionIcon } from '../../icons';
 
 const UnionTool: FC = () => {
 
@@ -50,7 +51,7 @@ const UnionTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />}>
       
       <SelectLayer 
         selectedLayers={selectedLayers} 

@@ -72,9 +72,9 @@ const useLayerStore = create<LayerStore>((set) => ({
         }
         if (!newLayer.name) {
             newLayer.name = 
-                renderingType === "fill" ? "polygon layer" :
-                renderingType === "line" ? "line layer" :
-                renderingType === "circle" ? "point layer" : "not possible";
+                renderingType === "fill" ? "polygon" :
+                renderingType === "line" ? "line" :
+                renderingType === "circle" ? "point" : "not possible";
         };
         const color: HslaColor = {
             h: Math.floor(Math.random()*360), 

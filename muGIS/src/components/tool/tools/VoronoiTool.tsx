@@ -6,6 +6,7 @@ import SelectLayer from '../SelectLayer';
 import { FeatureCollection, Point } from 'geojson';
 import { flatten } from '@turf/flatten';
 import { bbox } from '@turf/bbox';
+import { VoronoiIcon } from '../../icons';
 
 const VoronoiTool: FC = () => {
 
@@ -43,7 +44,7 @@ const VoronoiTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />}>
       
       select layer: 
       <SelectLayer 

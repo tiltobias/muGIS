@@ -4,6 +4,7 @@ import { difference } from '@turf/difference';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
 import { combine } from '@turf/combine';
+import { DifferenceIcon } from '../../icons';
 
 const DifferenceTool: FC = () => {
 
@@ -52,7 +53,7 @@ const DifferenceTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />}>
       
       select base layer: 
       <SelectLayer 

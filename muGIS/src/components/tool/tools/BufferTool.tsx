@@ -3,6 +3,7 @@ import useLayerStore, { LayerData, FeatureCollectionPolygon } from '../../../hoo
 import { buffer } from '@turf/buffer';
 import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
+import { BufferIcon } from '../../icons';
 
 const BufferTool: FC = () => {
 
@@ -40,7 +41,7 @@ const BufferTool: FC = () => {
   }
 
   return (
-    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit}>
+    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />}>
       
       <SelectLayer 
         selectedLayers={selectedLayer} 
