@@ -15,6 +15,8 @@ const VoronoiTool: FC = () => {
   } = useLayerStore();
 
   const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
+  const [bboxEnabled, setBboxEnabled] = useState<boolean>(false);
+  const [selectedBboxLayer, setSelectedBboxLayer] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
@@ -30,7 +32,8 @@ const VoronoiTool: FC = () => {
       return false;
     };
     const layer = flatten(selectedLayer[0].featureCollection) as FeatureCollection<Point>;
-    const result = voronoi(layer, {bbox: bbox(layer)}) as FeatureCollectionPolygon;
+    const bboxBase = bboxEnabled && selectedBboxLayer[0] ? flatten(selectedBboxLayer[0].featureCollection) as FeatureCollection : layer;
+    const result = voronoi(layer, {bbox: bbox(bboxBase)}) as FeatureCollectionPolygon;
     if (!result || result.features.length === 0) {
       alert("No results found");
       return false;
@@ -39,6 +42,7 @@ const VoronoiTool: FC = () => {
     addLayer({
       featureCollection: result,
       name: newLayerName,
+      outline: true,
     })
     return true;
   }
@@ -53,6 +57,18 @@ const VoronoiTool: FC = () => {
         renderingType="circle"
       />
       
+      <span>
+        <input type="checkbox" checked={bboxEnabled} onChange={(e)=>setBboxEnabled(e.target.checked)} id="checkboxPropertyEnabled" />
+
+        <label htmlFor="checkboxPropertyEnabled">use custom bounding box: {bboxEnabled}</label>
+      </span>
+      {bboxEnabled && 
+        <SelectLayer 
+          selectedLayers={selectedBboxLayer} 
+          setSelectedLayers={setSelectedBboxLayer} 
+        />
+      }
+
       
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>

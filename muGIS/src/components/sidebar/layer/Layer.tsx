@@ -46,6 +46,7 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
           layerData.renderingType === "fill" ? {
             "fill-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,
             "fill-opacity": layerData.color.a,
+            ...layerData.outline ? {"fill-outline-color": "black"} : {},
           } :
           layerData.renderingType === "line" ? {
             "line-color": `hsl(${layerData.color.h},${layerData.color.s}%,${layerData.color.l}%)`,

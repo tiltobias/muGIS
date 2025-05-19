@@ -12,11 +12,13 @@ export interface LayerData {
   visible: boolean;
   color: HslaColor;
   updater?: number;
+  outline?: boolean;
 }
 
 export interface NewLayerData {
     featureCollection: FeatureCollection;
     name: string | null;
+    outline?: boolean;
 }
 
 export interface LayerOption {
@@ -90,6 +92,7 @@ const useLayerStore = create<LayerStore>((set) => ({
             renderingType: renderingType,
             visible: true,
             color: color,
+            outline: newLayer.outline,
         };
         return { layers: [layerData, ...state.layers] }
     }),
