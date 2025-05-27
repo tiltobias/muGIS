@@ -1,0 +1,27 @@
+.attributeTable {
+  height: calc(100vh - 4em);
+  width: calc(100vw - 4em);
+  max-width: 60em;
+  max-height: 40em;
+  font-size: 1rem;
+  background-color: var(--bg-color-1);
+  color: var(--text-color-1);
+  border-radius: var(--border-radius);
+  padding: 2em;
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableContainer {
+  flex-grow: 1;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+
+.tableContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}

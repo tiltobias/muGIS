@@ -5,6 +5,7 @@ import useLayerStore from '../../hooks/useLayerStore';
 import { Eye, EyeOff, Upload } from 'lucide-react';
 import useMapStore from '../../hooks/useMapStore';
 import './Sidebar.css';
+import AttributeTable from '../tool/AttributeTable';
 
 interface SidebarProps {
   handleLoadFileInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -46,6 +47,7 @@ const Sidebar: FC<SidebarProps> = ({ handleLoadFileInput }) => {
       <aside className="sidebar" style={{ width: `${sidebarWidth}px` }}>
         <div className="sidebarHeader">
           <h2>Layers</h2>
+          <AttributeTable />
           <button type="button" onClick={toggleLayerVisibilityAll}>
             {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
           </button>
