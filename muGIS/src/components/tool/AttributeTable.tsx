@@ -1,5 +1,5 @@
 import { FC, useState, useMemo } from 'react';
-import { FileSearch, X } from 'lucide-react';
+import { FileSearch, X, ArrowUp, ArrowDown } from 'lucide-react';
 import './AttributeTable.css';
 import { LayerData } from '../../hooks/useLayerStore';
 import SelectLayer from './SelectLayer';
@@ -50,7 +50,15 @@ const AttributeTable: FC = () => {
                   <thead>
                     <tr>
                       {headers.map((header, index) => (
-                        <th key={index}>{header}</th>
+                        <th key={index}>
+                          <button type="button">
+                            {header}
+                            <span className="sortIcons">
+                              <ArrowUp className="sortIcon" />
+                              <ArrowDown className="sortIcon" />
+                            </span>
+                          </button>
+                        </th>
                       ))}
                     </tr>
                   </thead>
