@@ -34,8 +34,7 @@
 }
 
 .tableContainer th {
-  padding: 0.5em 0;
-  text-align: left;
+  padding: 0;
 }
 
 .tableContainer thead::after {
@@ -49,5 +48,26 @@
 }
 
 .tableContainer tbody td {
-  padding: .3em 0;
+  padding: .3em 1em .3em 0;
+}
+
+.tableContainer thead button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: .5em 0;
+  text-align: left;
+}
+
+.sortIcon {
+  width: 1.2em;
+  height: 1.2em;
+  fill: var(--text-color-1);
+  padding: 0 .7em 0 .3em;
+}
+
+.sortIcon svg {
+  width: 100%;
+  height: 100%;
 }

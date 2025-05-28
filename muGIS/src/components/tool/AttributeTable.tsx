@@ -25,6 +25,38 @@ const AttributeTable: FC = () => {
     return Array.from(keySet);
   }, [features]);
 
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortAscending, setSortAscending] = useState<boolean>(true);
+
+  const sortedFeatures = useMemo(() => {
+    if (!sortKey) return features;
+
+    return [...features].sort((a, b) => {
+      const aValue: string | number = a && sortKey in a ? (a[sortKey] as string | number) ?? '' : '';
+      const bValue: string | number = b && sortKey in b ? (b[sortKey] as string | number) ?? '' : '';
+
+      if (aValue === bValue) return 0;
+      if (aValue === undefined) return 1;
+      if (bValue === undefined) return -1;
+      if (aValue < bValue) return sortAscending ? -1 : 1;
+      if (aValue > bValue) return sortAscending ? 1 : -1;
+      return 0;
+    });
+  }, [features, sortKey, sortAscending]);
+
+  const handleSort = (key: string) => {
+    if (sortKey === key) {
+      if (sortAscending) {
+        setSortAscending(false);
+      } else {
+        setSortKey(null);
+      }
+    } else {
+      setSortKey(key);
+      setSortAscending(true);
+    }
+  };
+
   return (
     <div>
       <button type="button" className="toolButton" onClick={() => setTableOpen(!tableOpen)}>
@@ -51,19 +83,22 @@ const AttributeTable: FC = () => {
                     <tr>
                       {headers.map((header, index) => (
                         <th key={index}>
-                          <button type="button">
+                          <button type="button" onClick={() => handleSort(header)}>
                             {header}
-                            <span className="sortIcons">
-                              <ArrowUp className="sortIcon" />
-                              <ArrowDown className="sortIcon" />
-                            </span>
+                            <div className="sortIcon">
+                              {sortKey === header && (
+                                sortAscending ? 
+                                  <ArrowUp /> : 
+                                  <ArrowDown />                              
+                              )}
+                            </div>
                           </button>
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {features.map((props, index) => (
+                    {sortedFeatures.map((props, index) => (
                       <tr key={index}>
                         {headers.map((header, headerIndex) => (
                           <td key={headerIndex}>
