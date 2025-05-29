@@ -22,9 +22,13 @@ const VoronoiTool: FC = () => {
   // Update the new layer name when the selected layers change
   useEffect(() => {
     if (selectedLayer[0]) {
-      setNewLayerName(`voronoi(${selectedLayer[0].name})`);
+      if (bboxEnabled && selectedBboxLayer[0]) {
+        setNewLayerName(`voronoi(${selectedLayer[0].name}, ${selectedBboxLayer[0].name})`);
+      } else {
+        setNewLayerName(`voronoi(${selectedLayer[0].name})`);
+      }
     }
-  }, [selectedLayer]);
+  }, [selectedLayer, selectedBboxLayer, bboxEnabled]);
 
   const onFormSubmit = () => {
     if (!selectedLayer[0]) {
