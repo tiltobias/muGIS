@@ -10,15 +10,25 @@ export { default as LayerPolygonIcon } from './LayerPolygon';
 // export { default as BboxIcon } from './Bbox';
 // export { default as ClipIcon } from './Clip';
 
-import { CircleDotDashed, SquaresIntersect, SquaresExclude, SquaresSubtract, SquaresUnite, Percent, Maximize, Scissors } from 'lucide-react';
+import { 
+  CircleDotDashed, 
+  SquaresIntersect, 
+  SquaresExclude, 
+  SquaresSubtract, 
+  SquaresUnite, 
+  // Percent, 
+  Maximize, 
+  Scissors, 
+} from 'lucide-react';
+import ToolVoronoi from './ToolVoronoi';
 
 export {
   CircleDotDashed as BufferIcon,
   SquaresIntersect as IntersectIcon,
-  SquaresUnite as UnionIcon,
+  SquaresExclude as UnionIcon,
   SquaresSubtract as DifferenceIcon,
-  SquaresExclude as DissolveIcon,
-  Percent as VoronoiIcon,
+  SquaresUnite as DissolveIcon,
+  ToolVoronoi as VoronoiIcon,
   Scissors as ClipIcon,
   Maximize as BboxIcon,
 }
