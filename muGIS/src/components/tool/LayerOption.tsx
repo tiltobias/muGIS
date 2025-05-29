@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { LayerRenderingType } from '../../hooks/useLayerStore';
-import { HslaColor } from '../layer/ColorPicker';
+import { HslaColor } from '../sidebar/layer/ColorPicker';
 import { LayerPointIcon, LayerLineIcon, LayerPolygonIcon } from '../icons';
 import { SquareX } from 'lucide-react';
 
