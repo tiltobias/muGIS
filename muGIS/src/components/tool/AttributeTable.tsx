@@ -1,26 +1,36 @@
-import { FC, useState, useMemo } from 'react';
-import { FileSearch, X, ArrowUp, ArrowDown } from 'lucide-react';
+import { FC, useState, useMemo, useEffect } from 'react';
+import { FileSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus } from 'lucide-react';
 import './AttributeTable.css';
-import { LayerData } from '../../hooks/useLayerStore';
+import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
 import SelectLayer from './SelectLayer';
-import { GeoJsonProperties } from 'geojson';
+import { Feature, GeoJsonProperties } from 'geojson';
 
 const AttributeTable: FC = () => {
 
   const [tableOpen, setTableOpen] = useState<boolean>(false);
   const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
+  const [features, setFeatures] = useState<Feature[]>([]);
 
-  const features: GeoJsonProperties[] = useMemo(() => {
-    return selectedLayer.length > 0 ? selectedLayer[0].featureCollection.features.map((feature) => feature.properties) : [];
+  useEffect(() => {
+    setFeatures(
+      selectedLayer.length > 0 ? selectedLayer[0].featureCollection.features.map(
+        (feature, index) => {
+          const newProps: GeoJsonProperties = {...(feature.properties || {}), mugisSelected: false, mugisIndex: index};
+          return {...feature, properties: newProps} as Feature;
+        }
+      ) : []
+    );
   }, [selectedLayer]);
 
   const headers: string[] = useMemo(() => {
     const keySet = new Set<string>();
-    features.forEach((props) => {
-      if (props) {
-        Object.keys(props).forEach(key => keySet.add(key));
+    features.forEach((feature) => {
+      if (feature && feature.properties) {
+        Object.keys(feature.properties).forEach(key => keySet.add(key));
       }
     });
+    keySet.delete('mugisSelected');
+    keySet.delete('mugisIndex');
     
     return Array.from(keySet);
   }, [features]);
@@ -32,8 +42,8 @@ const AttributeTable: FC = () => {
     if (!sortKey) return features;
 
     return [...features].sort((a, b) => {
-      const aValue: string | number = a && sortKey in a ? (a[sortKey] as string | number) ?? '' : '';
-      const bValue: string | number = b && sortKey in b ? (b[sortKey] as string | number) ?? '' : '';
+      const aValue: string | number = a && a.properties && sortKey in a.properties ? (a.properties[sortKey] as string | number) ?? '' : '';
+      const bValue: string | number = b && b.properties && sortKey in b.properties ? (b.properties[sortKey] as string | number) ?? '' : '';
 
       if (aValue === bValue) return 0;
       if (aValue === undefined) return 1;
@@ -57,6 +67,30 @@ const AttributeTable: FC = () => {
     }
   };
 
+  const {
+    addLayer,
+  } = useLayerStore();
+
+  const handleSubmit = () => {
+    if (selectedLayer.length === 0 || features.length === 0) return;
+
+    const selectedFeatures = features.filter(feature => feature.properties?.mugisSelected).map(
+      (feature) => (
+        {...feature, properties: {...feature.properties, mugisSelected: undefined, mugisIndex: undefined}} as Feature
+      ));
+    if (selectedFeatures.length === 0) return;
+
+    addLayer({
+      featureCollection: {
+        type: 'FeatureCollection',
+        features: selectedFeatures,
+      },
+      name: `selection(${selectedLayer[0].name})`,
+      outline: selectedLayer[0].outline,
+    });
+    setTableOpen(false);
+  }
+
   return (
     <div>
       <button type="button" className="toolButton" onClick={() => setTableOpen(!tableOpen)}>
@@ -76,11 +110,35 @@ const AttributeTable: FC = () => {
               setSelectedLayers={setSelectedLayer}
             />
 
+            <button type="button" onClick={handleSubmit}>Create Layer From Selection</button>
+
             <div className="tableContainer">
               {selectedLayer.length > 0 && (
                 <table>
                   <thead>
                     <tr>
+                      <th>
+                        <button type="button" className="selectAll" onClick={() => {
+                          if (features.every((feature) => !feature.properties?.mugisSelected)) {
+                            setFeatures((prev) => prev.map((f) => {
+                              const newProps = {...(f.properties || {}), mugisSelected: true};
+                              return {...f, properties: newProps} as Feature;
+                            }));
+                          } else {
+                            setFeatures((prev) => prev.map((f) => {
+                              const newProps = {...(f.properties || {}), mugisSelected: false};
+                              return {...f, properties: newProps} as Feature;
+                            }));
+                          }
+                        }}>
+                          {features.every((feature) => feature.properties!.mugisSelected) ? 
+                            <SquareCheck /> : 
+                          features.every((feature) => !feature.properties!.mugisSelected) ? 
+                            <Square /> : 
+                            <SquareMinus />
+                          }
+                        </button>
+                      </th>
                       {headers.map((header, index) => (
                         <th key={index}>
                           <button type="button" onClick={() => handleSort(header)}>
@@ -98,11 +156,24 @@ const AttributeTable: FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedFeatures.map((props, index) => (
-                      <tr key={index}>
+                    {sortedFeatures.map((feature, index) => (
+                      <tr key={index} className={feature.properties?.mugisSelected ? 'selected' : ''}>
+                        <td>
+                          <button type="button" onClick={() => {
+                            setFeatures((prev) => prev.map((f, i) => {
+                              if (i === feature.properties?.mugisIndex) {
+                                const newProps = {...(f.properties || {}), mugisSelected: !f.properties?.mugisSelected};
+                                return {...f, properties: newProps} as Feature;
+                              }
+                              return f;
+                            }))
+                          }}>
+                            { feature.properties!.mugisSelected ? <SquareCheck /> : <Square />}
+                          </button>
+                        </td>
                         {headers.map((header, headerIndex) => (
                           <td key={headerIndex}>
-                            {props ? props[header] : ''}
+                            {feature.properties ? feature.properties[header] : ''}
                           </td>
                         ))}
                       </tr>

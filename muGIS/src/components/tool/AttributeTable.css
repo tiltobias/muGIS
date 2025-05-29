@@ -51,6 +51,21 @@
   padding: .3em 1em .3em 0;
 }
 
+.tableContainer tbody td:has(button) {
+  padding: 0;
+}
+
+.tableContainer tbody button {
+  background: none;
+  padding: .3em 1em .3em 1em;
+  display: flex;
+  border: 0;
+}
+
+.tableContainer tbody tr.selected {
+  background-color: var(--bg-color-2);
+}
+
 .tableContainer thead button {
   background: none;
   border: none;
@@ -58,6 +73,13 @@
   align-items: center;
   padding: .5em 0;
   text-align: left;
+}
+
+.tableContainer .selectAll {
+  background: none;
+  padding: .3em 1em .3em 1em;
+  display: flex;
+  border: 0;
 }
 
 .sortIcon {
