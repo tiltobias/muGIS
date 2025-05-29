@@ -47,10 +47,12 @@ const Sidebar: FC<SidebarProps> = ({ handleLoadFileInput }) => {
       <aside className="sidebar" style={{ width: `${sidebarWidth}px` }}>
         <div className="sidebarHeader">
           <h2>Layers</h2>
-          <AttributeTable />
-          <button type="button" onClick={toggleLayerVisibilityAll}>
-            {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
-          </button>
+          <div className="sidebarHeaderActions">
+            <AttributeTable />
+            <button type="button" onClick={toggleLayerVisibilityAll}>
+              {layers.every(layer => layer.visible) ? <Eye /> : <EyeOff />}
+            </button>
+          </div>
         </div>
         <div className="layerListContainer">
           {mapReady && (

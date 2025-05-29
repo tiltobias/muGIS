@@ -1,12 +1,13 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import ColorPicker, { HslaColor } from './ColorPicker';
 import './Layer.css';
-import { Eye, EyeOff, Trash2, EllipsisVertical, FileDown, ZoomIn, PencilLine, PencilOff } from 'lucide-react';
+import { Eye, EyeOff, Trash2, EllipsisVertical, FileDown, ZoomIn, PencilLine, PencilOff, TextSearch } from 'lucide-react';
 import useClickOutside from '../../../hooks/useClickOutside';
 import { bbox } from '@turf/bbox';
 import useLayerStore, { LayerData } from '../../../hooks/useLayerStore';
 import useMapStore from '../../../hooks/useMapStore';
 import LayerName from './LayerName';
+import useAttributeTableStore from '../../../hooks/useAttributeTableStore';
 
 interface LayerProps {
   layerData: LayerData;
@@ -27,6 +28,9 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
   const { 
     mapRef 
   } = useMapStore();
+  const {
+    openTableWithLayer,
+  } = useAttributeTableStore();
   
 
   // Add layer to map on mount of layer component (Runs only on mount/component creation)
@@ -155,6 +159,13 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
                   setLayerNameEditing(!layerNameEditing);
                 }}>
                   {!layerNameEditing ? <PencilLine /> : <PencilOff />} Edit layer name
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={()=>{
+                  openTableWithLayer([layerData]);
+                }}>
+                  <TextSearch /> Attribute table
                 </button>
               </li>
             </ul>

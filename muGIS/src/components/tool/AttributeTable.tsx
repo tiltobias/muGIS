@@ -1,14 +1,20 @@
 import { FC, useState, useMemo, useEffect } from 'react';
-import { FileSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus } from 'lucide-react';
+import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus } from 'lucide-react';
 import './AttributeTable.css';
-import useLayerStore, { LayerData } from '../../hooks/useLayerStore';
+import useLayerStore from '../../hooks/useLayerStore';
 import SelectLayer from './SelectLayer';
 import { Feature, GeoJsonProperties } from 'geojson';
+import useAttributeTableStore from '../../hooks/useAttributeTableStore';
 
 const AttributeTable: FC = () => {
 
-  const [tableOpen, setTableOpen] = useState<boolean>(false);
-  const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
+  const {
+    selectedLayer,
+    setSelectedLayer,
+    tableOpen,
+    setTableOpen,
+  } = useAttributeTableStore();
+
   const [features, setFeatures] = useState<Feature[]>([]);
 
   useEffect(() => {
@@ -94,7 +100,7 @@ const AttributeTable: FC = () => {
   return (
     <div>
       <button type="button" className="toolButton" onClick={() => setTableOpen(!tableOpen)}>
-        <FileSearch />
+        <TextSearch />
       </button>
 
       {tableOpen && (
