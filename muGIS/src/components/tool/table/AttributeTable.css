@@ -93,3 +93,16 @@
   width: 100%;
   height: 100%;
 }
+
+.tableInputHeader {
+  display: flex;
+  gap: 1em;
+}
+
+.tableInputHeader > :first-child {
+  flex-grow: 1;
+}
+
+.openFilterButton {
+  padding-inline: 3em;
+}

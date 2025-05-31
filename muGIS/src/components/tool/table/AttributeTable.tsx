@@ -1,10 +1,11 @@
 import { FC, useState, useMemo, useEffect } from 'react';
 import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus } from 'lucide-react';
 import './AttributeTable.css';
-import useLayerStore from '../../hooks/useLayerStore';
-import SelectLayer from './SelectLayer';
+import useLayerStore from '../../../hooks/useLayerStore';
+import SelectLayer from '../SelectLayer';
 import { Feature, GeoJsonProperties } from 'geojson';
-import useAttributeTableStore from '../../hooks/useAttributeTableStore';
+import useAttributeTableStore from '../../../hooks/useAttributeTableStore';
+import Filter from './Filter';
 
 const AttributeTable: FC = () => {
 
@@ -13,6 +14,7 @@ const AttributeTable: FC = () => {
     setSelectedLayer,
     tableOpen,
     setTableOpen,
+    filters,
   } = useAttributeTableStore();
 
   const [features, setFeatures] = useState<Feature[]>([]);
@@ -41,13 +43,40 @@ const AttributeTable: FC = () => {
     return Array.from(keySet);
   }, [features]);
 
+  const [filterOpen, setFilterOpen] = useState<boolean>(false);
+
+  const filteredFeatures = useMemo(() => {
+    return features.filter(feature => {
+      return filters.every(filter => {
+        const { attribute, operator, value } = filter;
+        const featureValue = feature.properties?.[attribute];
+        switch (operator) {
+          case '=':
+            return featureValue === value;
+          case '!=':
+            return featureValue !== value;
+          case '<':
+            return featureValue < value;
+          case '<=':
+            return featureValue <= value;
+          case '>':
+            return featureValue > value;
+          case '>=':
+            return featureValue >= value;
+          default:
+            return true;
+        }
+      });
+    });
+  }, [features, filters]);
+
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortAscending, setSortAscending] = useState<boolean>(true);
 
-  const sortedFeatures = useMemo(() => {
-    if (!sortKey) return features;
+  const sortedFilteredFeatures = useMemo(() => {
+    if (!sortKey) return filteredFeatures;
 
-    return [...features].sort((a, b) => {
+    return [...filteredFeatures].sort((a, b) => {
       const aValue: string | number = a && a.properties && sortKey in a.properties ? (a.properties[sortKey] as string | number) ?? '' : '';
       const bValue: string | number = b && b.properties && sortKey in b.properties ? (b.properties[sortKey] as string | number) ?? '' : '';
 
@@ -58,7 +87,7 @@ const AttributeTable: FC = () => {
       if (aValue > bValue) return sortAscending ? 1 : -1;
       return 0;
     });
-  }, [features, sortKey, sortAscending]);
+  }, [filteredFeatures, sortKey, sortAscending]);
 
   const handleSort = (key: string) => {
     if (sortKey === key) {
@@ -80,7 +109,7 @@ const AttributeTable: FC = () => {
   const handleSubmit = () => {
     if (selectedLayer.length === 0 || features.length === 0) return;
 
-    const selectedFeatures = features.filter(feature => feature.properties?.mugisSelected).map(
+    const selectedFeatures = filteredFeatures.filter(feature => feature.properties?.mugisSelected).map(
       (feature) => (
         {...feature, properties: {...feature.properties, mugisSelected: undefined, mugisIndex: undefined}} as Feature
       ));
@@ -97,6 +126,8 @@ const AttributeTable: FC = () => {
     setTableOpen(false);
   }
 
+  
+
   return (
     <div>
       <button type="button" className="toolButton" onClick={() => setTableOpen(!tableOpen)}>
@@ -111,12 +142,19 @@ const AttributeTable: FC = () => {
             <button type="button" className="modalCloseButton" onClick={()=>setTableOpen(false)}><X /></button>
             <h3>Attribute Table</h3>
 
-            <SelectLayer 
-              selectedLayers={selectedLayer} 
-              setSelectedLayers={setSelectedLayer}
-            />
+            <div className="tableInputHeader">
+              <SelectLayer 
+                selectedLayers={selectedLayer} 
+                setSelectedLayers={setSelectedLayer}
+              />
+              <button type="button" className="openFilterButton" onClick={() => setFilterOpen(!filterOpen)}>Filter on attributes</button>
+            </div>
 
-            <button type="button" onClick={handleSubmit}>Create Layer From Selection</button>
+            {filterOpen && (
+              <div className="filterContainer">
+                <Filter headers={headers} />
+              </div>
+            )}
 
             <div className="tableContainer">
               {selectedLayer.length > 0 && (
@@ -162,7 +200,7 @@ const AttributeTable: FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedFeatures.map((feature, index) => (
+                    {sortedFilteredFeatures.map((feature, index) => (
                       <tr key={index} className={feature.properties?.mugisSelected ? 'selected' : ''}>
                         <td>
                           <button type="button" onClick={() => {
@@ -189,6 +227,13 @@ const AttributeTable: FC = () => {
                 </table>
               )}
             </div>
+
+            <button type="button" onClick={handleSubmit}>
+              Create Layer From Selection
+              {filteredFeatures.filter(feature => feature.properties?.mugisSelected).length > 0 && (
+                ` (${filteredFeatures.filter(feature => feature.properties?.mugisSelected).length} selected)`
+              )}
+            </button>
           </div>
         </div>
       )}
