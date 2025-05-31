@@ -1,10 +1,10 @@
 import { FC, useState, useMemo, useEffect } from 'react';
-import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus } from 'lucide-react';
+import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus, Funnel } from 'lucide-react';
 import './AttributeTable.css';
 import useLayerStore from '../../../hooks/useLayerStore';
 import SelectLayer from '../SelectLayer';
 import { Feature, GeoJsonProperties } from 'geojson';
-import useAttributeTableStore from '../../../hooks/useAttributeTableStore';
+import useAttributeTableStore, { FilterNumberOperator, FilterStringOperator} from '../../../hooks/useAttributeTableStore';
 import Filter from './Filter';
 
 const AttributeTable: FC = () => {
@@ -43,28 +43,95 @@ const AttributeTable: FC = () => {
     return Array.from(keySet);
   }, [features]);
 
+  const headerTypes: (string | null)[] = useMemo(() => {
+    return headers.map(header => {
+      const values = features.map(feature => feature.properties?.[header] as unknown).filter(value => value !== undefined && value !== null);
+      if (values.every(value => typeof value === 'number')) {
+        return 'number';
+      } else  {
+        return 'string'; // Default to string if not all values are numbers
+      }
+    });
+  }, [headers, features]);
+
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
   const filteredFeatures = useMemo(() => {
     return features.filter(feature => {
       return filters.every(filter => {
-        const { attribute, operator, value } = filter;
-        const featureValue = feature.properties?.[attribute];
-        switch (operator) {
-          case '=':
-            return featureValue === value;
-          case '!=':
-            return featureValue !== value;
-          case '<':
-            return featureValue < value;
-          case '<=':
-            return featureValue <= value;
-          case '>':
-            return featureValue > value;
-          case '>=':
-            return featureValue >= value;
-          default:
-            return true;
+        const { active, attribute, attributeType, operator, value } = filter;
+        if (!active) return true; // If filter is not active, do not filter out the feature
+        
+        if (attributeType === 'number') {
+          const featureValue = feature.properties?.[attribute] as number | undefined | null;
+
+          // Enable filtering in or out features with undefined values
+          if (featureValue === undefined || featureValue === null) {
+            switch (operator) {
+              case '=':
+                return value === undefined || value === '' || Number.isNaN(value);
+              case '!=':
+                return value !== undefined && value !== '' && !Number.isNaN(value);
+              default:
+                return false;
+            }
+          }
+          
+          const val = value as number;
+          switch (operator as FilterNumberOperator) {
+            case '=':
+              return featureValue === val;
+            case '!=':
+              return featureValue !== val;
+            case '<':
+              return featureValue < val;
+            case '<=':
+              return featureValue <= val;
+            case '>':
+              return featureValue > val;
+            case '>=':
+              return featureValue >= val;
+            default:
+              return false;
+          }
+          
+
+        } else { // If attributeType is string
+          const featureValue = feature.properties?.[attribute] as string | undefined | null;
+          
+          // Enable filtering in or out features with undefined values
+          if (featureValue === undefined || featureValue === null) {
+            switch (operator) {
+              case '=':
+                return value === undefined || value === '';
+              case '!=':
+                return value !== undefined && value !== '';
+              default:
+                return false;
+            }
+          }
+
+          const val = value as string;
+          switch (operator as FilterStringOperator) {
+            case '=':
+              return featureValue === val;
+            case '!=':
+              return featureValue !== val;
+            case 'contains':
+              return featureValue.includes(val);
+            case 'does not contain':
+              return !featureValue.includes(val);
+            case 'starts with':
+              return featureValue.startsWith(val);
+            case 'does not start with':
+              return !featureValue.startsWith(val);
+            case 'ends with':
+              return featureValue.endsWith(val);
+            case 'does not end with':
+              return !featureValue.endsWith(val);
+            default:
+              return false;
+          }
         }
       });
     });
@@ -147,13 +214,13 @@ const AttributeTable: FC = () => {
                 selectedLayers={selectedLayer} 
                 setSelectedLayers={setSelectedLayer}
               />
-              <button type="button" className="openFilterButton" onClick={() => setFilterOpen(!filterOpen)}>Filter on attributes</button>
+              <button type="button" className="openFilterButton" onClick={() => setFilterOpen(!filterOpen)}>
+                <Funnel /> { filterOpen ? 'Close Filter' : 'Open Filter' }
+              </button>
             </div>
 
             {filterOpen && (
-              <div className="filterContainer">
-                <Filter headers={headers} />
-              </div>
+              <Filter headers={headers} headerTypes={headerTypes} />
             )}
 
             <div className="tableContainer">
@@ -163,7 +230,7 @@ const AttributeTable: FC = () => {
                     <tr>
                       <th>
                         <button type="button" className="selectAll" onClick={() => {
-                          if (features.every((feature) => !feature.properties?.mugisSelected)) {
+                          if (filteredFeatures.every((feature) => !feature.properties?.mugisSelected)) {
                             setFeatures((prev) => prev.map((f) => {
                               const newProps = {...(f.properties || {}), mugisSelected: true};
                               return {...f, properties: newProps} as Feature;
@@ -175,9 +242,9 @@ const AttributeTable: FC = () => {
                             }));
                           }
                         }}>
-                          {features.every((feature) => feature.properties!.mugisSelected) ? 
+                          {filteredFeatures.every((feature) => feature.properties!.mugisSelected) ? 
                             <SquareCheck /> : 
-                          features.every((feature) => !feature.properties!.mugisSelected) ? 
+                          filteredFeatures.every((feature) => !feature.properties!.mugisSelected) ? 
                             <Square /> : 
                             <SquareMinus />
                           }

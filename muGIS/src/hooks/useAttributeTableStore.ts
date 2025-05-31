@@ -1,13 +1,29 @@
 import { create } from 'zustand';
 import { LayerData } from './useLayerStore';
 
-export type FilterOperator = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'contains' | 'startsWith' | 'endsWith';
+
+export const filterNumberOperators = ['=', '!=', '<', '<=', '>', '>='] as const;
+export const filterStringOperators = ['=', '!=', 'contains', 'does not contain', 'starts with', 'does not start with', 'ends with', 'does not end with'] as const;
+
+export type FilterNumberOperator = typeof filterNumberOperators[number];
+export type FilterStringOperator = typeof filterStringOperators[number];
+export type FilterOperator = FilterNumberOperator | FilterStringOperator;
 
 export interface Filter {
+  active: boolean;
   attribute: string;
+  attributeType: 'number' | 'string';
   operator: FilterOperator;
-  value: string;
+  value: number | string;
 }
+
+const defaultFilter: Filter = {
+  active: false,
+  attribute: '',
+  attributeType: 'string',
+  operator: '=',
+  value: '',
+};
 
 interface AttributeTableStore {
   selectedLayer: LayerData[];
@@ -16,6 +32,7 @@ interface AttributeTableStore {
   setTableOpen: (open: boolean) => void;
   openTableWithLayer: (layer: LayerData[]) => void;
   filters: Filter[];
+  resetFilters: () => void;
   addFilter: () => void;
   removeFilter: (index: number) => void;
   updateFilter: (index: number, filter: Filter) => void;
@@ -44,16 +61,23 @@ const useAttributeTableStore = create<AttributeTableStore>((set) => ({
     return { tableOpen: true, selectedLayer: layer };
   }),
 
-  filters: [],
+  filters: [{ ...defaultFilter }],
+
+  resetFilters: () => set(() => ({
+    filters: [{ ...defaultFilter }],
+  })),
 
   addFilter: () => set((state) => {
-    const newFilter: Filter = { attribute: '', operator: '=', value: '' };
+    const newFilter: Filter = { ...defaultFilter };
     return { filters: [...state.filters, newFilter] };
   }),
 
   removeFilter: (index: number) => set((state) => {
     const filters = [...state.filters];
     filters.splice(index, 1);
+    if (filters.length === 0) {
+      filters.push({ ...defaultFilter });
+    }
     return { filters };
   }),
 

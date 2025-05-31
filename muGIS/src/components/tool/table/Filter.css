@@ -1,0 +1,6 @@
+.filterContainer {
+  max-height: 12em;
+  overflow-y: auto;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+}
