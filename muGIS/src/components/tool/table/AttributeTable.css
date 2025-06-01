@@ -108,4 +108,9 @@
   display: flex;
   align-items: center;
   gap: .5em;
+  border: 2px solid transparent;
+}
+
+.openFilterButton.active {
+  border: 2px solid var(--active-color);
 }

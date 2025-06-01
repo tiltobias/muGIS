@@ -28,6 +28,7 @@ const AttributeTable: FC = () => {
         }
       ) : []
     );
+    console.log('Selected layer changed:', selectedLayer);
   }, [selectedLayer]);
 
   const headers: string[] = useMemo(() => {
@@ -37,9 +38,17 @@ const AttributeTable: FC = () => {
         Object.keys(feature.properties).forEach(key => keySet.add(key));
       }
     });
-    keySet.delete('mugisSelected');
-    keySet.delete('mugisIndex');
-    
+
+    keySet.delete('mugisSelected'); 
+    keySet.delete('mugisIndex'); 
+    // Remove keys that dont have valid values in all features (arrays, null, undefined)
+    keySet.forEach(header => {
+      const values = features.map(feature => feature.properties?.[header] as unknown);
+      if (values.every(value => Array.isArray(value) || value === null || value === undefined)) {
+        keySet.delete(header);
+      }
+    });
+
     return Array.from(keySet);
   }, [features]);
 
@@ -214,7 +223,7 @@ const AttributeTable: FC = () => {
                 selectedLayers={selectedLayer} 
                 setSelectedLayers={setSelectedLayer}
               />
-              <button type="button" className="openFilterButton" onClick={() => setFilterOpen(!filterOpen)}>
+              <button type="button" className={`openFilterButton ${filters.some(filter => filter.active) ? 'active' : ''}`} onClick={() => setFilterOpen(!filterOpen)}>
                 <Funnel /> { filterOpen ? 'Close Filter' : 'Open Filter' }
               </button>
             </div>
@@ -284,7 +293,7 @@ const AttributeTable: FC = () => {
                         </td>
                         {headers.map((header, headerIndex) => (
                           <td key={headerIndex}>
-                            {feature.properties ? feature.properties[header] : ''}
+                            {feature.properties && !Array.isArray(feature.properties[header]) && feature.properties[header] !== null && feature.properties[header] !== undefined ? String(feature.properties[header]) : ''}
                           </td>
                         ))}
                       </tr>
