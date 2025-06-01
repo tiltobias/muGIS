@@ -123,21 +123,21 @@ const AttributeTable: FC = () => {
           const val = value as string;
           switch (operator as FilterStringOperator) {
             case '=':
-              return featureValue === val;
+              return String(featureValue) === val;
             case '!=':
-              return featureValue !== val;
+              return String(featureValue) !== val;
             case 'contains':
-              return featureValue.includes(val);
+              return String(featureValue).includes(val);
             case 'does not contain':
-              return !featureValue.includes(val);
+              return !String(featureValue).includes(val);
             case 'starts with':
-              return featureValue.startsWith(val);
+              return String(featureValue).startsWith(val);
             case 'does not start with':
-              return !featureValue.startsWith(val);
+              return !String(featureValue).startsWith(val);
             case 'ends with':
-              return featureValue.endsWith(val);
+              return String(featureValue).endsWith(val);
             case 'does not end with':
-              return !featureValue.endsWith(val);
+              return !String(featureValue).endsWith(val);
             default:
               return false;
           }
