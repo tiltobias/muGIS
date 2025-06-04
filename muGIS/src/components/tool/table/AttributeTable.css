@@ -31,6 +31,7 @@
   position: sticky;
   top: 0;
   background-color: var(--bg-color-1);
+  z-index: 100;
 }
 
 .tableContainer th {
@@ -51,8 +52,16 @@
   padding: .3em 1em .3em 0;
 }
 
-.tableContainer tbody td:has(button) {
+.tableContainer tbody td:has(button),
+.tableContainer thead th:first-child {
   padding: 0;
+  position: sticky;
+  left: 0;
+  background-color: var(--bg-color-1);
+}
+
+tr.selected td:has(button) {
+  background-color: var(--bg-color-2);
 }
 
 .tableContainer tbody button {
