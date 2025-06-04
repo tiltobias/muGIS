@@ -64,6 +64,11 @@ const useLayerStore = create<LayerStore>((set) => ({
             };
         };
         const t = newLayer.featureCollection.features[0].geometry.type;
+        newLayer.featureCollection.features.forEach((feature) => {
+            if (feature.geometry.type !== t) {
+                throw new Error(`All features must have the same geometry type, found both ${t} and ${feature.geometry.type}`);
+            }
+        });
         const renderingType: LayerRenderingType | null = 
             t === "Polygon" || t === "MultiPolygon" ? "fill" :
             t === "LineString" || t === "MultiLineString" ? "line" :

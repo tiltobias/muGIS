@@ -32,6 +32,7 @@ function App() {
           });
         } catch (error) {
           console.log(error);
+          alert("Error loading file: " + file.name + "\n" + (error instanceof Error ? error.message : String(error)));
         }
       }
       reader.readAsText(file);
