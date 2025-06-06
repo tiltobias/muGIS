@@ -14,6 +14,11 @@
   flex-direction: column;
 }
 
+.tableContainerContainer {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
 .tableContainer {
   flex-grow: 1;
   overflow: auto;
@@ -31,7 +36,7 @@
   position: sticky;
   top: 0;
   background-color: var(--bg-color-1);
-  z-index: 100;
+  z-index: 10;
 }
 
 .tableContainer th {
@@ -58,6 +63,9 @@
   position: sticky;
   left: 0;
   background-color: var(--bg-color-1);
+}
+.tableContainer thead th:first-child {
+  z-index: 11;
 }
 
 tr.selected td:has(button) {
@@ -122,4 +130,33 @@ tr.selected td:has(button) {
 
 .openFilterButton.active {
   border: 2px solid var(--active-color);
+}
+
+.tableFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .5em;
+  margin-bottom: .5em;
+}
+
+.tableFooterRight {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+
+.tablePagination {
+  display: flex;
+}
+
+.tablePagination button {
+  background: none;
+  padding: .5em 0;
+  display: flex;
+  border: none;
+}
+
+.tablePagination button:disabled {
+  opacity: 0.3;
 }

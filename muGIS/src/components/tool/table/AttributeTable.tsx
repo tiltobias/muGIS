@@ -1,5 +1,5 @@
 import { FC, useState, useMemo, useEffect } from 'react';
-import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus, Funnel } from 'lucide-react';
+import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus, Funnel, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import './AttributeTable.css';
 import useLayerStore from '../../../hooks/useLayerStore';
 import SelectLayer from '../SelectLayer';
@@ -65,9 +65,15 @@ const AttributeTable: FC = () => {
 
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
+  const activeFilters = useMemo(() => {
+    return filters.filter(filter => filter.active)
+  }, [filters]);
+
   const filteredFeatures = useMemo(() => {
+    if (activeFilters.length === 0) return features; // If no active filters, return all features
+
     return features.filter(feature => {
-      return filters.every(filter => {
+      return activeFilters.every(filter => {
         const { active, attribute, attributeType, operator, value } = filter;
         if (!active) return true; // If filter is not active, do not filter out the feature
         
@@ -144,7 +150,7 @@ const AttributeTable: FC = () => {
         }
       });
     });
-  }, [features, filters]);
+  }, [features, activeFilters]);
 
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortAscending, setSortAscending] = useState<boolean>(true);
@@ -202,7 +208,8 @@ const AttributeTable: FC = () => {
     setTableOpen(false);
   }
 
-  
+  const [tablePage, setTablePage] = useState<number>(1);
+
 
   return (
     <div>
@@ -276,7 +283,7 @@ const AttributeTable: FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedFilteredFeatures.map((feature, index) => (
+                    {sortedFilteredFeatures.slice((tablePage - 1) * 100, tablePage * 100).map((feature, index) => (
                       <tr key={index} className={feature.properties?.mugisSelected ? 'selected' : ''}>
                         <td>
                           <button type="button" onClick={() => {
@@ -303,6 +310,28 @@ const AttributeTable: FC = () => {
                 </table>
               )}
             </div>
+            {selectedLayer.length > 0 && (
+              <div className="tableFooter">
+                <span>Showing {filteredFeatures.length} of {features.length} features</span>
+                <div className="tableFooterRight">
+                  <span>{(tablePage - 1) * 100 + 1}–{Math.min(tablePage * 100, filteredFeatures.length)} of {filteredFeatures.length}</span>
+                  <div className="tablePagination">
+                    <button type="button" onClick={() => setTablePage(1)} disabled={tablePage <= 1}>
+                      <ChevronsLeft />
+                    </button>
+                    <button type="button" onClick={() => setTablePage(prev => Math.max(1, prev - 1))} disabled={tablePage <= 1}>
+                      <ChevronLeft />
+                    </button>
+                    <button type="button" onClick={() => setTablePage(prev => Math.min(Math.ceil(filteredFeatures.length / 100), prev + 1))} disabled={tablePage >= Math.ceil(filteredFeatures.length / 100)}>
+                      <ChevronRight />
+                    </button>
+                    <button type="button" onClick={() => setTablePage(Math.ceil(filteredFeatures.length / 100))} disabled={tablePage >= Math.ceil(filteredFeatures.length / 100)}>
+                      <ChevronsRight />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <button type="button" onClick={handleSubmit}>
               Create Layer From Selection
