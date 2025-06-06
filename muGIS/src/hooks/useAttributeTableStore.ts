@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { LayerData } from './useLayerStore';
+import { Feature } from 'geojson';
 
 
 export const filterNumberOperators = ['=', '!=', '<', '<=', '>', '>='] as const;
@@ -8,6 +9,7 @@ export const filterStringOperators = ['=', '!=', 'contains', 'does not contain',
 export type FilterNumberOperator = typeof filterNumberOperators[number];
 export type FilterStringOperator = typeof filterStringOperators[number];
 export type FilterOperator = FilterNumberOperator | FilterStringOperator;
+export type FilterConnector = 'and' | 'or';
 
 export interface Filter {
   active: boolean;
@@ -36,6 +38,8 @@ interface AttributeTableStore {
   addFilter: () => void;
   removeFilter: (index: number) => void;
   updateFilter: (index: number, filter: Filter) => void;
+  filterConnector: FilterConnector;
+  setFilterConnector: (connector: FilterConnector) => void;
 }
 
 const useAttributeTableStore = create<AttributeTableStore>((set) => ({
@@ -87,6 +91,89 @@ const useAttributeTableStore = create<AttributeTableStore>((set) => ({
     return { filters };
   }),
 
+  filterConnector: 'and',
+
+  setFilterConnector: (connector: FilterConnector) => set(() => ({
+    filterConnector: connector,
+  })),
+
 }));
 
 export default useAttributeTableStore;
+
+export function applyFilter(feature: Feature, filter: Filter) {
+  const { active, attribute, attributeType, operator, value } = filter;
+  if (!active) return true; // If filter is not active, do not filter out the feature
+
+  if (attributeType === 'number') {
+    const featureValue = feature.properties?.[attribute] as number | undefined | null;
+
+    // Enable filtering in or out features with undefined values
+    if (featureValue === undefined || featureValue === null) {
+      switch (operator) {
+        case '=':
+          return value === undefined || value === '' || Number.isNaN(value);
+        case '!=':
+          return value !== undefined && value !== '' && !Number.isNaN(value);
+        default:
+          return false;
+      }
+    }
+        
+    const val = value as number;
+    switch (operator as FilterNumberOperator) {
+      case '=':
+        return featureValue === val;
+      case '!=':
+        return featureValue !== val;
+      case '<':
+        return featureValue < val;
+      case '<=':
+        return featureValue <= val;
+      case '>':
+        return featureValue > val;
+      case '>=':
+        return featureValue >= val;
+      default:
+        return false;
+    }
+    
+
+  } else { // If attributeType is string
+    const featureValue = feature.properties?.[attribute] as string | undefined | null;
+    
+    // Enable filtering in or out features with undefined values
+    if (featureValue === undefined || featureValue === null) {
+      switch (operator) {
+        case '=':
+          return value === undefined || value === '';
+        case '!=':
+          return value !== undefined && value !== '';
+        default:
+          return false;
+      }
+    }
+
+    const val = value as string;
+    switch (operator as FilterStringOperator) {
+      case '=':
+        return String(featureValue) === val;
+      case '!=':
+        return String(featureValue) !== val;
+      case 'contains':
+        return String(featureValue).includes(val);
+      case 'does not contain':
+        return !String(featureValue).includes(val);
+      case 'starts with':
+        return String(featureValue).startsWith(val);
+      case 'does not start with':
+        return !String(featureValue).startsWith(val);
+      case 'ends with':
+        return String(featureValue).endsWith(val);
+      case 'does not end with':
+        return !String(featureValue).endsWith(val);
+      default:
+        return false;
+    }
+  }
+}

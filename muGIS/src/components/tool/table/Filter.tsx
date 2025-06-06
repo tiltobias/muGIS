@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import useAttributeTableStore, { FilterOperator, filterNumberOperators, filterStringOperators, FilterNumberOperator, FilterStringOperator } from '../../../hooks/useAttributeTableStore';
 import './Filter.css';
-import { Circle, CircleCheck, Trash2 } from 'lucide-react';
+import { Square, SquareCheck, Trash2 } from 'lucide-react';
 
 interface FilterProps {
   headers: string[]; // The headers of the attribute table, used to populate filter options
@@ -15,6 +15,8 @@ const Filter: FC<FilterProps> = ({ headers, headerTypes }) => {
     addFilter, 
     removeFilter, 
     updateFilter, 
+    filterConnector,
+    setFilterConnector,
   } = useAttributeTableStore();
 
   return (
@@ -52,12 +54,19 @@ const Filter: FC<FilterProps> = ({ headers, headerTypes }) => {
           <button type="button" onClick={() => {
             updateFilter(index, { ...filter, active: !filter.active });
           }}>
-            {filter.active ? <CircleCheck /> : <Circle />}
+            {filter.active ? <SquareCheck /> : <Square />}
           </button>
           <button onClick={() => removeFilter(index)}><Trash2 /></button>
         </div>
       ))}
       <button onClick={addFilter}>Add Filter</button>
+      <div className="filterConnector">
+        <span>Combine filters by: </span>
+        <select value={filterConnector} onChange={(e) => setFilterConnector(e.target.value as 'and' | 'or')}>
+          <option value="and">AND</option>
+          <option value="or">OR</option>
+        </select>
+      </div>
     </div>
   )
 }

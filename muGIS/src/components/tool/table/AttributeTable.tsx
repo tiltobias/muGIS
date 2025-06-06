@@ -4,8 +4,8 @@ import './AttributeTable.css';
 import useLayerStore from '../../../hooks/useLayerStore';
 import SelectLayer from '../SelectLayer';
 import { Feature, GeoJsonProperties } from 'geojson';
-import useAttributeTableStore, { FilterNumberOperator, FilterStringOperator} from '../../../hooks/useAttributeTableStore';
-import Filter from './Filter';
+import useAttributeTableStore, { applyFilter } from '../../../hooks/useAttributeTableStore';
+import FilterPanel from './Filter';
 
 const AttributeTable: FC = () => {
 
@@ -15,6 +15,7 @@ const AttributeTable: FC = () => {
     tableOpen,
     setTableOpen,
     filters,
+    filterConnector,
   } = useAttributeTableStore();
 
   const [features, setFeatures] = useState<Feature[]>([]);
@@ -73,84 +74,11 @@ const AttributeTable: FC = () => {
     if (activeFilters.length === 0) return features; // If no active filters, return all features
 
     return features.filter(feature => {
-      return activeFilters.every(filter => {
-        const { active, attribute, attributeType, operator, value } = filter;
-        if (!active) return true; // If filter is not active, do not filter out the feature
-        
-        if (attributeType === 'number') {
-          const featureValue = feature.properties?.[attribute] as number | undefined | null;
-
-          // Enable filtering in or out features with undefined values
-          if (featureValue === undefined || featureValue === null) {
-            switch (operator) {
-              case '=':
-                return value === undefined || value === '' || Number.isNaN(value);
-              case '!=':
-                return value !== undefined && value !== '' && !Number.isNaN(value);
-              default:
-                return false;
-            }
-          }
-          
-          const val = value as number;
-          switch (operator as FilterNumberOperator) {
-            case '=':
-              return featureValue === val;
-            case '!=':
-              return featureValue !== val;
-            case '<':
-              return featureValue < val;
-            case '<=':
-              return featureValue <= val;
-            case '>':
-              return featureValue > val;
-            case '>=':
-              return featureValue >= val;
-            default:
-              return false;
-          }
-          
-
-        } else { // If attributeType is string
-          const featureValue = feature.properties?.[attribute] as string | undefined | null;
-          
-          // Enable filtering in or out features with undefined values
-          if (featureValue === undefined || featureValue === null) {
-            switch (operator) {
-              case '=':
-                return value === undefined || value === '';
-              case '!=':
-                return value !== undefined && value !== '';
-              default:
-                return false;
-            }
-          }
-
-          const val = value as string;
-          switch (operator as FilterStringOperator) {
-            case '=':
-              return String(featureValue) === val;
-            case '!=':
-              return String(featureValue) !== val;
-            case 'contains':
-              return String(featureValue).includes(val);
-            case 'does not contain':
-              return !String(featureValue).includes(val);
-            case 'starts with':
-              return String(featureValue).startsWith(val);
-            case 'does not start with':
-              return !String(featureValue).startsWith(val);
-            case 'ends with':
-              return String(featureValue).endsWith(val);
-            case 'does not end with':
-              return !String(featureValue).endsWith(val);
-            default:
-              return false;
-          }
-        }
-      });
+      return filterConnector === 'and' ? 
+        activeFilters.every(filter => applyFilter(feature, filter)) : 
+        activeFilters.some(filter => applyFilter(feature, filter));
     });
-  }, [features, activeFilters]);
+  }, [features, activeFilters, filterConnector]);
 
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortAscending, setSortAscending] = useState<boolean>(true);
@@ -236,7 +164,7 @@ const AttributeTable: FC = () => {
             </div>
 
             {filterOpen && (
-              <Filter headers={headers} headerTypes={headerTypes} />
+              <FilterPanel headers={headers} headerTypes={headerTypes} />
             )}
 
             <div className="tableContainer">
