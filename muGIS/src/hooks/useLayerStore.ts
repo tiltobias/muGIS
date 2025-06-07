@@ -29,6 +29,13 @@ export interface LayerOption {
 
 export type FeatureCollectionPolygon = FeatureCollection<Polygon | MultiPolygon>;
 
+function getRenderingType(t: string): LayerRenderingType | null {
+    return t === "Polygon" || t === "MultiPolygon" ? "fill" :
+           t === "LineString" || t === "MultiLineString" ? "line" :
+           t === "Point" || t === "MultiPoint" ? "circle" :
+           null;
+}
+
 interface LayerStore {
     layers: LayerData[];
     resetLayerStore: () => void;
@@ -64,16 +71,12 @@ const useLayerStore = create<LayerStore>((set) => ({
             };
         };
         const t = newLayer.featureCollection.features[0].geometry.type;
+        const renderingType = getRenderingType(t);
         newLayer.featureCollection.features.forEach((feature) => {
-            if (feature.geometry.type !== t) {
-                throw new Error(`All features must have the same geometry type, found both ${t} and ${feature.geometry.type}`);
+            if (getRenderingType(feature.geometry.type) !== renderingType) {
+                throw new Error(`All features must have the same geometry (rendering) type, found both ${t} and ${feature.geometry.type}`);
             }
         });
-        const renderingType: LayerRenderingType | null = 
-            t === "Polygon" || t === "MultiPolygon" ? "fill" :
-            t === "LineString" || t === "MultiLineString" ? "line" :
-            t === "Point" || t === "MultiPoint" ? "circle" :
-            null;
         if (!renderingType) {
             throw new Error("Unsupported geometry type: " + t);
         }
