@@ -38,7 +38,7 @@ const Select: FC<SelectProps> = ({
         {selectedOption ? (
           <div className="layerItem">
             <div className="layerName">{selectedOption}</div>
-            {clearable && (
+            {clearable && selectOpen && (
               <button
                 type="button"
                 onClick={(e) => {

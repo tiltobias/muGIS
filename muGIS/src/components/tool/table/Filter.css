@@ -5,7 +5,38 @@
   scrollbar-width: thin;
 }
 
-.filterRow .selectLayersContainer {
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterHeader button {
+  display: flex;
+  align-items: center;
+}
+
+.filterRows {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+}
+
+.filterRow {
+  display: flex;
+  align-items: stretch;
+  /* border: .1em solid transparent; */
+}
+
+.filterRow.active {
+  border-color: var(--active-color);
+}
+
+.filterToggle.active {
+  background-color: var(--active-color);
+}
+
+.filterContainer .selectLayersContainer {
   width: 12em;
   display: inline-block;
   scrollbar-gutter: unset;
@@ -15,10 +46,31 @@
   scrollbar-gutter: unset;
 }
 
-.filterRow .layerName {
+.filterContainer .layerName {
   padding-left: 1em;
 }
 
 .filterRow .layerItem button {
   padding: 0;
+}
+
+.filterRow input[type="text"] {
+  box-sizing: border-box;
+  padding: var(--border-radius) 0;
+  border: solid .1em var(--accent-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: inherit;
+  box-sizing: border-box;
+}
+
+.filterRow input[type="text"]:focus {
+  outline: none;
+  border-color: var(--active-color);
+}
+
+.filterRow > button {
+  display: flex;
+  align-items: center;
+  padding: 0 .5em;
 }
