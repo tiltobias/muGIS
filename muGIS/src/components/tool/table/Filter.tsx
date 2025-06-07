@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import useAttributeTableStore, { FilterOperator, filterNumberOperators, filterStringOperators, FilterNumberOperator, FilterStringOperator } from '../../../hooks/useAttributeTableStore';
+import useAttributeTableStore, { FilterOperator, filterNumberOperators, filterStringOperators } from '../../../hooks/useAttributeTableStore';
 import './Filter.css';
 import { Square, SquareCheck, Trash2 } from 'lucide-react';
+import Select from '../Select';
 
 interface FilterProps {
   headers: string[]; // The headers of the attribute table, used to populate filter options
@@ -23,28 +24,19 @@ const Filter: FC<FilterProps> = ({ headers, headerTypes }) => {
     <div className="filterContainer">
       {filters.map((filter, index) => (
         <div key={index} className="filterRow">
-          <select
-            value={filter.attribute}
-            onChange={(e) => updateFilter(index, { ...filter, attribute: e.target.value, attributeType: (headerTypes[headers.indexOf(e.target.value)] || 'string') as 'number' | 'string' })}
-          >
-            <option value="">Select an attribute</option>
-            {headers.map((header) => (
-              <option key={header} value={header}>{header}</option>
-            ))}
-          </select>
-          <select
-            value={filter.operator}
-            onChange={(e) => updateFilter(index, { ...filter, operator: e.target.value as FilterOperator })}
-          >
-            {filter.attributeType === 'number' ? 
-              filterNumberOperators.map((op: FilterNumberOperator) => (
-                <option key={op} value={op}>{op}</option>
-              )) : 
-              filterStringOperators.map((op: FilterStringOperator) => (
-                <option key={op} value={op}>{op}</option>
-              ))
-            }
-          </select>
+          <Select
+            options={headers}
+            selectedOption={filter.attribute}
+            setSelectedOption={(value) => updateFilter(index, { ...filter, attribute: value, attributeType: (headerTypes[headers.indexOf(value)] || 'string') as 'number' | 'string' })}
+            placeholder="Select an attribute"
+            clearable
+          />
+          <Select
+            options={filter.attributeType === 'number' ? [...filterNumberOperators] : [...filterStringOperators]}
+            selectedOption={filter.operator}
+            setSelectedOption={(value) => updateFilter(index, { ...filter, operator: value as FilterOperator })}
+            placeholder="Select operator"
+          />
           <input
             type={filter.attributeType === 'number' ? 'number' : 'text'}
             placeholder={`Enter ${filter.attributeType} value`}

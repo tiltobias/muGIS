@@ -4,3 +4,21 @@
   flex-shrink: 0;
   scrollbar-width: thin;
 }
+
+.filterRow .selectLayersContainer {
+  width: 12em;
+  display: inline-block;
+  scrollbar-gutter: unset;
+}
+
+.filterRow .selectedList {
+  scrollbar-gutter: unset;
+}
+
+.filterRow .layerName {
+  padding-left: 1em;
+}
+
+.filterRow .layerItem button {
+  padding: 0;
+}

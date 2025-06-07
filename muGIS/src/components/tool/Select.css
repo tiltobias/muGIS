@@ -1,0 +1,12 @@
+.selectItem {
+  line-height: 2em;
+  background-color: var(--bg-color-2);
+  padding: 0 1em;
+  cursor: pointer;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.selectItem:hover {
+  opacity: 0.5;
+}
