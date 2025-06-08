@@ -9,7 +9,7 @@ In this tutorial, we'll use GIS tools to help identify **suitable places to live
 
 We are looking for housing areas that meet the following conditions:
 
-- 🧭 Within **2 km** of Studentersamfundet (we'll use Lerkendalsbygget as a proxy point)
+- 🧭 Within **1 km** of Lerkendalsbygget, NTNU Gløshaugen
 - 🚌 Within **300 meters** of **bus route 3**
 - 🚫 At least **200 meters away** from underpasses (considered potentially unsafe)
 
@@ -28,8 +28,10 @@ Ensure the following GeoJSON files are available in your project:
 
 ### 1. Load the Data
 
-1. Start your GIS software (e.g., QGIS).
-2. Load the two GeoJSON files:
+1. Open muGIS in your browser.
+2. Click on the **"Load GeoJSON file"** button in the bottom of the sidebar to the left.
+   - Alternatively, you can drag and drop the files directly into the application window.
+3. Load the two GeoJSON files (can be found in the `docs/tutorial-data/` folder):
    - `busstopp.geojson`
    - `undergang.geojson`
 

@@ -61,7 +61,7 @@ const Sidebar: FC<SidebarProps> = ({ handleLoadFileInput }) => {
         </div>
         <div className="sidebarFooter">
           <button type="button" onClick={handleUploadFile}>
-            <Upload /> Upload GeoJSON file
+            <Upload /> Load GeoJSON file
           </button>
           <input ref={fileInput} type="file" multiple accept=".geojson" onChange={handleLoadFileInput} />
         </div>

@@ -43,7 +43,7 @@ As part of the assignment, we performed a spatial analysis to identify suitable 
 
 - 🚌 Close to bus line 3  
 - 🚫 Avoid underpasses  
-- 🧭 Within range of Studentersamfundet
+- 🧭 Within range of Lerkendalsbygget, NTNU Gløshaugen
 
 👉 [📘 Read the full tutorial](docs/tutorial.md)
 
@@ -52,7 +52,7 @@ As part of the assignment, we performed a spatial analysis to identify suitable 
 To run the project locally:
 
 ```bash
-git clone https://github.com/yourusername/muGIS.git
+git clone https://github.com/tiltobias/muGIS.git
 cd muGIS
 yarn
 yarn dev
@@ -60,7 +60,7 @@ yarn dev
 
 Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## 📁 Project Structure
+<!-- ## 📁 Project Structure -->
 
 <!-- Optionally describe key folders like src/, public/, etc. -->
 
