@@ -100,8 +100,9 @@ const BasemapMenu:FC<BasemapMenuProps> = () => {
                 onMouseEnter={()=>{
                   setBasemap(basemapOption);
                 }}
+                className={`basemapOption ${(savedBasemap===null && basemapOption.name===basemap.name) || (savedBasemap!==null && basemapOption.name===savedBasemap.name) ? "active" : ""}`}
                 >
-                  {(savedBasemap===null && basemapOption.name===basemap.name) || (savedBasemap!==null && basemapOption.name===savedBasemap.name) ? "*" : ""}{basemapOption.name}
+                  {basemapOption.name}
                 </button>
               </li>
             ))}

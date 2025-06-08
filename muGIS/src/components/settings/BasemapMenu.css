@@ -25,3 +25,11 @@
 .basemapPopover > ul > li {
     background-color: var(--bg-color-1);
 }
+
+.basemapPopover > ul > li button {
+    padding-block: .3em;
+}
+
+.basemapPopover > ul > li button.active {
+    background-color: var(--active-color);
+}
