@@ -10,3 +10,15 @@
 .selectItem:hover {
   opacity: 0.5;
 }
+
+.selectLayersContainer.select {
+  scrollbar-gutter: unset;
+}
+
+.selectLayersContainer.select .selectedList {
+  scrollbar-gutter: unset;
+}
+
+.selectLayersContainer.select .layerName {
+  padding-left: 1em;
+}

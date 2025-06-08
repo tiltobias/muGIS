@@ -33,7 +33,7 @@ const Select: FC<SelectProps> = ({
   }, [selectOpen, selectedOption]);
 
   return (
-    <div className="selectLayersContainer" ref={selectRef} onClick={()=>{setSelectOpen(!selectOpen)}}>
+    <div className="selectLayersContainer select" ref={selectRef} onClick={()=>{setSelectOpen(!selectOpen)}}>
       <div className="selectedList">
         {selectedOption ? (
           <div className="layerItem">

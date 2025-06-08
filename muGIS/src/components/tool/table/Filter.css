@@ -42,19 +42,13 @@
   scrollbar-gutter: unset;
 }
 
-.filterRow .selectedList {
-  scrollbar-gutter: unset;
-}
-
-.filterContainer .layerName {
-  padding-left: 1em;
-}
 
 .filterRow .layerItem button {
   padding: 0;
 }
 
-.filterRow input[type="text"] {
+.filterRow input[type="text"],
+.filterRow input[type="number"] {
   box-sizing: border-box;
   padding: var(--border-radius) 0;
   border: solid .1em var(--accent-color);
@@ -64,7 +58,8 @@
   box-sizing: border-box;
 }
 
-.filterRow input[type="text"]:focus {
+.filterRow input[type="text"]:focus,
+.filterRow input[type="number"]:focus {
   outline: none;
   border-color: var(--active-color);
 }

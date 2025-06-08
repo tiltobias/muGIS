@@ -5,6 +5,7 @@ import ToolModal from '../ToolModal';
 import SelectLayer from '../SelectLayer';
 import { flatten } from '@turf/flatten';
 import { DissolveIcon } from '../../icons';
+import Select from '../Select';
 
 const DissolveTool: FC = () => {
 
@@ -14,7 +15,7 @@ const DissolveTool: FC = () => {
 
   const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [propertyEnabled, setPropertyEnabled] = useState<boolean>(false);
-  const [selectedProperty, setSelectedProperty] = useState<string | undefined>(undefined);
+  const [selectedProperty, setSelectedProperty] = useState<string>("");
   const [newLayerName, setNewLayerName] = useState<string>("");
 
   // Update the new layer name when the selected layers change
@@ -61,12 +62,15 @@ const DissolveTool: FC = () => {
 
         <label htmlFor="checkboxPropertyEnabled">dissolve by property: {propertyEnabled && selectedProperty}</label>
       </span>
-      <select required disabled={!propertyEnabled} value={selectedProperty} onChange={(e)=>setSelectedProperty(e.target.value)}>
-        <option value="">Select a property</option>
-        {selectedLayer[0]?.featureCollection.features[0].properties && Object.keys(selectedLayer[0].featureCollection.features[0].properties).map((property) => (
-            <option key={property} value={property}>{property}</option>
-        ))}
-      </select>
+      {propertyEnabled && (
+        <Select
+          options={selectedLayer[0]?.featureCollection.features[0].properties ? Object.keys(selectedLayer[0].featureCollection.features[0].properties) : []}
+          selectedOption={selectedProperty}
+          setSelectedOption={(value) => setSelectedProperty(value)}
+          placeholder="Select a property"
+          clearable
+        />
+      )}
       
 
       <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />

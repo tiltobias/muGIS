@@ -70,3 +70,8 @@
 .selectList .layerItem:hover {
   opacity: 0.5;
 }
+
+.selectList > p {
+  background-color: var(--bg-color-2);
+  margin: 0;
+}

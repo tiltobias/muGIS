@@ -3,7 +3,7 @@
 
 ## 🎯 Objective
 
-In this tutorial, we'll use GIS tools to help identify **suitable places to live for a student in Trondheim**, based on access to public transport and safety concerns.
+In this tutorial, we'll use GIS tools to help identify **suitable places to live for a student in Trondheim**, based on access to public transport, proximity to campus and safety concerns.
 
 ### 🧩 Criteria
 
@@ -19,8 +19,8 @@ We are looking for housing areas that meet the following conditions:
 
 Ensure the following GeoJSON files are available in your project:
 
-- `busstopp.geojson`: locations of all bus stops
-- `undergang.geojson`: locations of underpasses
+- `busstopp.geojson`: locations of all bus stops, with an attribute `bus_lines` indicating which bus lines serve each stop.
+- `undergang.geojson`: locations of underpasses.
 
 ---
 
