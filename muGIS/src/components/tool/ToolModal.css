@@ -116,7 +116,7 @@
 
 input#outputLayerName {
     padding: .5em;
-    border: .1em solid var(--accent-color);
+    border: .1rem solid var(--accent-color);
     border-radius: var(--border-radius);
     position: relative;
     background: none;
@@ -142,4 +142,10 @@ label[for="outputLayerName"],
 .toolNumberInput:focus {
     outline: none;
     border-color: var(--active-color);
+}
+
+.modalErrorMessage {
+    color: var(--bad-color);
+    font-size: 0.875em;
+    margin: 0 0 -.5em 0;
 }

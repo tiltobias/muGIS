@@ -13,6 +13,7 @@ const IntersectTool: FC = () => {
 
   const [selectedLayers, setSelectedLayers] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -27,7 +28,7 @@ const IntersectTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayers || selectedLayers.length < 2) {
-      alert("Please select two layers");
+      setErrorMessage("Please select two layers");
       return false;
     };
     const outLayer: FeatureCollectionPolygon = {
@@ -49,20 +50,23 @@ const IntersectTool: FC = () => {
     }
 
     if (!outLayer || outLayer.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
       featureCollection: outLayer,
       name: newLayerName,
     })
+    setSelectedLayers([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Intersect two or more polygon layers to create a new layer containing the overlapping areas. The output will be a polygon layer containing the intersected geometries.";
 
   return (
-    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />} description={description}>
+    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />} description={description} errorMessage={errorMessage}>
       
       <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 

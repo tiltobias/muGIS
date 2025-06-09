@@ -15,6 +15,7 @@ const BboxTool: FC = () => {
 
   const [selectedLayers, setSelectedLayers] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -29,7 +30,7 @@ const BboxTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayers || selectedLayers.length < 1) {
-      alert("Please select one or more layers");
+      setErrorMessage("Please select one or more layers");
       return false;
     };
     const features = selectedLayers.flatMap(layer => layer.featureCollection.features) as Feature<Polygon | MultiPolygon>[];
@@ -38,7 +39,7 @@ const BboxTool: FC = () => {
       features: features,
     }));
     if (!result) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
@@ -48,13 +49,16 @@ const BboxTool: FC = () => {
       },
       name: newLayerName,
     })
+    setSelectedLayers([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Create a bounding box polygon from one or more layers. The output will be a polygon layer containing the bounding box of all the selected geometries.";
 
   return (
-    <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit} buttonIcon={<BboxIcon />} description={description}>
+    <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit} buttonIcon={<BboxIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select one or more layers:</span>
       <SelectLayer 

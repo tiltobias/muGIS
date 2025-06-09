@@ -18,6 +18,7 @@ const VoronoiTool: FC = () => {
   const [bboxEnabled, setBboxEnabled] = useState<boolean>(false);
   const [selectedBboxLayer, setSelectedBboxLayer] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -32,14 +33,14 @@ const VoronoiTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayer[0]) {
-      alert("Please select a layer");
+      setErrorMessage("Please select a layer");
       return false;
     };
     const layer = flatten(selectedLayer[0].featureCollection) as FeatureCollection<Point>;
     const bboxBase = bboxEnabled && selectedBboxLayer[0] ? flatten(selectedBboxLayer[0].featureCollection) as FeatureCollection : layer;
     const result = voronoi(layer, {bbox: bbox(bboxBase)}) as FeatureCollectionPolygon;
     if (!result || result.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     result.features = result.features.filter((feature) =>feature.geometry.type === "Polygon"); // filter out null geometries
@@ -48,13 +49,18 @@ const VoronoiTool: FC = () => {
       name: newLayerName,
       outline: true,
     })
+    setSelectedLayer([]);
+    setBboxEnabled(false);
+    setSelectedBboxLayer([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Create a Voronoi diagram from a point layer. The output will be a polygon layer containing the Thiessen polygon of each point.";
 
   return (
-    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />} description={description}>
+    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select a point layer:</span>
       <SelectLayer 

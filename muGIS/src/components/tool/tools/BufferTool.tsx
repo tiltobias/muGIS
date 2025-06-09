@@ -14,6 +14,7 @@ const BufferTool: FC = () => {
   const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [radius, setRadius] = useState<string>("");
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -24,26 +25,30 @@ const BufferTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayer[0] || radius === "") {
-      alert("Please select a layer and enter a radius");
+      setErrorMessage("Please select a layer and enter a radius");
       return false;
     };
     const layer = selectedLayer[0].featureCollection as FeatureCollectionPolygon;
     const result = buffer(layer, radius as unknown as number * 0.001, { units: 'kilometers' });
     if (!result || result.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found for the given radius.");
       return false;
     }
     addLayer({
       featureCollection: result,
       name: newLayerName,
     })
+    setSelectedLayer([]);
+    setRadius("");
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Create a buffer around the selected layer's features. The buffer radius is specified in meters, and can be a positive or negative decimal number. The output will be a polygon layer containing the buffered geometries.";
 
   return (
-    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />} description={description}>
+    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select a layer:</span>
       <SelectLayer

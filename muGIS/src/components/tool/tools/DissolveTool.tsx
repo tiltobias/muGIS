@@ -17,6 +17,7 @@ const DissolveTool: FC = () => {
   const [propertyEnabled, setPropertyEnabled] = useState<boolean>(false);
   const [selectedProperty, setSelectedProperty] = useState<string>("");
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -31,26 +32,31 @@ const DissolveTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayer[0]) {
-      alert("Please select a layer");
+      setErrorMessage("Please select a layer");
       return false;
     };
     const layer = selectedLayer[0].featureCollection as FeatureCollectionPolygon;
     const result = !(propertyEnabled && selectedProperty) ? dissolve(flatten(layer)) : dissolve(flatten(layer), { propertyName: selectedProperty });
     if (!result || result.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
       featureCollection: result,
       name: newLayerName,
     })
+    setSelectedLayer([]);
+    setPropertyEnabled(false);
+    setSelectedProperty("");
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Dissolve polygons in a layer based on a property or without any property. The output will be a polygon layer containing the dissolved geometries.";
 
   return (
-    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />} description={description}>
+    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 

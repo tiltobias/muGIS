@@ -14,6 +14,7 @@ const UnionTool: FC = () => {
 
   const [selectedLayers, setSelectedLayers] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -28,7 +29,7 @@ const UnionTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayers || selectedLayers.length < 2) {
-      alert("Please select two layers");
+      setErrorMessage("Please select two layers");
       return false;
     };
     const features = selectedLayers.flatMap(layer => layer.featureCollection.features) as Feature<Polygon | MultiPolygon>[];
@@ -37,7 +38,7 @@ const UnionTool: FC = () => {
       features: features,
     });
     if (!result) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
@@ -47,13 +48,16 @@ const UnionTool: FC = () => {
       },
       name: newLayerName,
     })
+    setSelectedLayers([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Create a union of two or more polygon layers. The output will be a polygon layer containing the union of all the geometries.";
 
   return (
-    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />} description={description}>
+    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 

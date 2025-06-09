@@ -20,6 +20,7 @@ const ClipTool: FC = () => {
   const [selectedMaskLayer, setSelectedMaskLayer] = useState<LayerData[]>([]);
   const [selectedLayer, setSelectedLayer] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -30,7 +31,7 @@ const ClipTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedMaskLayer[0] || !selectedLayer[0]) {
-      alert("Please select two layers");
+      setErrorMessage("Please select two layers");
       return false;
     };
     let outLayer = {
@@ -77,20 +78,24 @@ const ClipTool: FC = () => {
 
 
     if (!outLayer || outLayer.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
       featureCollection: outLayer,
       name: newLayerName,
     })
+    setSelectedLayer([]);
+    setSelectedMaskLayer([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Clip any type of layer with a polygon layer. The output will be a layer of the same type containing only the features that are within the clip layer.";
 
   return (
-    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />} description={description}>
+    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select layer:</span>
       <SelectLayer 

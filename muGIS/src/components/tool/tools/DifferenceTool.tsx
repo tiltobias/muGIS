@@ -15,6 +15,7 @@ const DifferenceTool: FC = () => {
   const [selectedLayer1, setSelectedLayer1] = useState<LayerData[]>([]);
   const [selectedLayer2, setSelectedLayer2] = useState<LayerData[]>([]);
   const [newLayerName, setNewLayerName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Update the new layer name when the selected layers change
   useEffect(() => {
@@ -25,7 +26,7 @@ const DifferenceTool: FC = () => {
 
   const onFormSubmit = () => {
     if (!selectedLayer1[0] || !selectedLayer2[0]) {
-      alert("Please select two layers");
+      setErrorMessage("Please select two layers");
       return false;
     };
     const outLayer: FeatureCollectionPolygon = {
@@ -42,20 +43,24 @@ const DifferenceTool: FC = () => {
       }
     });
     if (!outLayer || outLayer.features.length === 0) {
-      alert("No results found");
+      setErrorMessage("No results found");
       return false;
     }
     addLayer({
       featureCollection: outLayer,
       name: newLayerName,
     })
+    setSelectedLayer1([]);
+    setSelectedLayer2([]);
+    setNewLayerName("");
+    setErrorMessage("");
     return true;
   }
 
   const description = "Create a difference of two polygon layers. The output will be a polygon layer containing the geometries from the first layer that do not intersect with the second layer.";
 
   return (
-    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />} description={description}>
+    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />} description={description} errorMessage={errorMessage}>
 
       <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 

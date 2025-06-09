@@ -8,9 +8,10 @@ interface ToolModalProps {
   onFormSubmit: () => boolean; // function to be called on form submit, should return true if the form is valid and false if not
   buttonIcon?: ReactNode;
   description?: string;
+  errorMessage?: string;
 }
 
-const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, buttonIcon, description}) => {
+const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, buttonIcon, description, errorMessage}) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,6 +51,7 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, butt
 
               {children}
 
+              {errorMessage && <p className="modalErrorMessage">{errorMessage}</p>}
               <button type="submit">Submit</button>
             </form>
           </div>
