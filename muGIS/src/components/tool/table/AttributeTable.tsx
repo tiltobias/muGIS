@@ -115,14 +115,27 @@ const AttributeTable: FC = () => {
     addLayer,
   } = useLayerStore();
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   const handleSubmit = () => {
-    if (selectedLayer.length === 0 || features.length === 0) return;
+    if (selectedLayer.length === 0) {
+      setErrorMessage("Please select a layer");
+      return;
+    }
+
+    if (features.length === 0) {
+      setErrorMessage("No features available in the selected layer");
+      return;
+    }
 
     const selectedFeatures = filteredFeatures.filter(feature => feature.properties?.mugisSelected).map(
       (feature) => (
         {...feature, properties: {...feature.properties, mugisSelected: undefined, mugisIndex: undefined}} as Feature
       ));
-    if (selectedFeatures.length === 0) return;
+    if (selectedFeatures.length === 0) {
+      setErrorMessage("Please select features to create a new layer");
+      return;
+    }
 
     addLayer({
       featureCollection: {
@@ -132,6 +145,7 @@ const AttributeTable: FC = () => {
       name: `selection(${selectedLayer[0].name})`,
       outline: selectedLayer[0].outline,
     });
+    setErrorMessage("");
     setTableOpen(false);
   }
 
@@ -269,6 +283,7 @@ const AttributeTable: FC = () => {
               </div>
             )}
 
+            {errorMessage && <p className="modalErrorMessage">{errorMessage}</p>}
             <button type="button" onClick={handleSubmit}>
               Create Layer From Selection
               {filteredFeatures.filter(feature => feature.properties?.mugisSelected).length > 0 && (

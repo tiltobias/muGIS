@@ -165,3 +165,7 @@ tr.selected td:has(button) {
 .tablePagination button:disabled {
   opacity: 0.3;
 }
+
+.attributeTable .modalErrorMessage {
+  margin: 0;
+}
