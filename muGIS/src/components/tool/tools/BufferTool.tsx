@@ -50,7 +50,7 @@ const BufferTool: FC = () => {
       />
 
       <span className="toolInputLabel">Buffer radius [m]:</span>
-      <input type="number" value={radius} onChange={(e)=>setRadius(e.target.value)} />
+      <input type="number" className="toolNumberInput" value={radius} onChange={(e)=>setRadius(e.target.value)} />
 
 
       <label htmlFor="outputLayerName">Output Layer Name:</label>

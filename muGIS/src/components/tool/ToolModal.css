@@ -104,3 +104,14 @@ label[for="outputLayerName"],
 .toolInputLabel {
     margin-bottom: -1em;
 }
+
+.toolNumberInput {
+    padding: var(--border-radius) 0;
+    border-radius: var(--border-radius);
+    border: .1em solid var(--accent-color);
+    font-size: 1em;
+}
+.toolNumberInput:focus {
+    outline: none;
+    border-color: var(--active-color);
+}
