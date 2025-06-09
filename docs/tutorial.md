@@ -29,7 +29,7 @@ Ensure the following GeoJSON files are available in your project:
 ### 1. Load the Data
 
 1. Open muGIS in your browser.
-2. Click on the **"Load GeoJSON file"** button in the bottom of the sidebar to the left.
+2. Click on the **Load GeoJSON file** button in the bottom of the sidebar to the left.
    - Alternatively, you can drag and drop the files directly into the application window.
 3. Load the two GeoJSON files (can be found in the `docs/tutorial-data/` folder):
    - `busstopp.geojson`
@@ -39,7 +39,7 @@ Ensure the following GeoJSON files are available in your project:
 
 ### 2. Identify Stops Served by Bus Line 3
 
-1. Open the **Attribute Table** of `busstopp.geojson`.
+1. Open the <img src="./icons/text-search.svg" /> **Attribute Table** of `busstopp.geojson`.
 2. Open the **filter** panel.
 3. Set the filter logic to **"OR"**.
 4. Filter based on the `bus_lines` field to match line 3, using:
