@@ -1,5 +1,5 @@
 
-# 🏙️ muGIS Tutorial: Finding Good Housing Locations for Students in Trondheim
+# <img src="../muGIS/public/muGIS_banner.svg" alt="muGIS logo" width="80"> Tutorial: Finding Good Housing Locations for Students in Trondheim
 
 ## 🎯 Objective
 

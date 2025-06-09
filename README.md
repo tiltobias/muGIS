@@ -1,5 +1,5 @@
 
-# <img src="./muGIS/public/muGIS_banner.svg" alt="muGIS logo" width="100">
+# <img src="./muGIS/public/muGIS_banner.svg" alt="muGIS logo" width="200">
 
 _A web-based GIS application built as part of the course [TBA4251 Programming in Geomatics](https://www.ntnu.no/studier/emner/TBA4251) at NTNU._
 
