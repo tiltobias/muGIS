@@ -52,6 +52,7 @@
 
 .filterToggle.active {
   background-color: var(--active-color);
+  color: black;
 }
 
 .filterRow > div {
@@ -79,6 +80,7 @@
   cursor: pointer;
   font-size: inherit;
   box-sizing: border-box;
+  background: none;
 }
 
 .filterRow input[type="text"]:focus,

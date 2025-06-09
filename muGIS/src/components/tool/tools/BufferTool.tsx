@@ -40,13 +40,15 @@ const BufferTool: FC = () => {
     return true;
   }
 
+  const description = "Create a buffer around the selected layer's features. The buffer radius is specified in meters, and can be a positive or negative decimal number. The output will be a polygon layer containing the buffered geometries.";
+
   return (
-    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />}>
-      
+    <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />} description={description}>
+
       <span className="toolInputLabel">Select a layer:</span>
-      <SelectLayer 
-        selectedLayers={selectedLayer} 
-        setSelectedLayers={setSelectedLayer} 
+      <SelectLayer
+        selectedLayers={selectedLayer}
+        setSelectedLayers={setSelectedLayer}
       />
 
       <span className="toolInputLabel">Buffer radius [m]:</span>

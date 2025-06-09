@@ -49,6 +49,32 @@
     display: flex;
 }
 
+.modalHeader {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+}
+
+.modalHeader h3 {
+    margin: 0;
+}
+
+.modalHeader > button {
+    padding: 0;
+    background: none;
+    display: flex;
+    align-items: center;
+    border: none;
+    width: 1.3em;
+    position: relative;
+    top: .1em;
+}
+
+.modalDescription {
+    margin: -.5em 0 0 0;
+    font-style: italic;
+}
+
 .modal > form {
     display: flex;
     flex-direction: column;
@@ -93,6 +119,7 @@ input#outputLayerName {
     border: .1em solid var(--accent-color);
     border-radius: var(--border-radius);
     position: relative;
+    background: none;
 }
 
 input#outputLayerName:focus {
@@ -110,6 +137,7 @@ label[for="outputLayerName"],
     border-radius: var(--border-radius);
     border: .1em solid var(--accent-color);
     font-size: 1em;
+    background: none;
 }
 .toolNumberInput:focus {
     outline: none;

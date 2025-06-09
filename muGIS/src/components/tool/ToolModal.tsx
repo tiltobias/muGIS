@@ -1,18 +1,20 @@
 import { ReactNode, FC, useState } from 'react';
 import "./ToolModal.css";
-import { X } from 'lucide-react';
+import { X, Info } from 'lucide-react';
 
 interface ToolModalProps {
   children: ReactNode | ReactNode[];
   buttonLabel: string;
   onFormSubmit: () => boolean; // function to be called on form submit, should return true if the form is valid and false if not
   buttonIcon?: ReactNode;
+  description?: string;
 }
 
-const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, buttonIcon}) => {
+const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, buttonIcon, description}) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showDescription, setShowDescription] = useState<boolean>(false);
 
   return (
     <div>
@@ -34,7 +36,17 @@ const ToolModal:FC<ToolModalProps> = ({children, buttonLabel, onFormSubmit, butt
               }, 0);
             }}>
               <button type="button" className="modalCloseButton" onClick={()=>setModalOpen(false)}><X /></button>
-              <h3>{buttonLabel}</h3>
+              
+              <div className="modalHeader">
+                <h3>{buttonLabel}</h3>
+                {description && (
+                  <button type="button" onClick={()=>setShowDescription(!showDescription)}>
+                    <Info />
+                  </button>
+                )}
+              </div>
+
+              {showDescription && <p className="modalDescription">{description}</p>}
 
               {children}
 
