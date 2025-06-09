@@ -126,9 +126,13 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
               </button>
             </li>
             <li>
-              <button type="button" onClick={()=>{}}>
-                <GraduationCap /> Start tutorial
-              </button>
+              <a 
+                href="https://github.com/tiltobias/muGIS/blob/main/docs/tutorial.md"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GraduationCap /> Go to tutorial
+              </a>
             </li>
           </ul>
         </div>
