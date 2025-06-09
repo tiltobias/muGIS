@@ -57,9 +57,13 @@ function App() {
       onDrop={handleLoadFileDrag}
     >
       <header className="mainHeader">
-        <h1>
-          μGIS
-        </h1>
+
+        <div className="logo">
+          <a href="https://github.com/tiltobias/muGIS/" target="_blank" rel="noopener noreferrer">
+            <img src="muGIS_banner.svg" alt="muGIS logo" />
+          </a>
+        </div>
+
         <Toolbar />
         
         <SettingsMenu />

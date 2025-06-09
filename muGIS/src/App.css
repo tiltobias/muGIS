@@ -14,10 +14,16 @@
     box-sizing: border-box;
 }
 
-.mainHeader h1 {
+.mainHeader > .logo {
+    display: flex;
+    height: calc(var(--header-height) - 1em);
+    padding: .5em 1em .5em .5em;
+    box-sizing: border-box;
     margin: 0;
-    font-size: 1.5rem;
-    line-height: initial;
+}
+
+.mainHeader > .logo > a {
+    display: flex;
 }
 
 .mainContainer {
