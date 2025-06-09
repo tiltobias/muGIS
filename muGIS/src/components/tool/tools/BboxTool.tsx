@@ -51,9 +51,11 @@ const BboxTool: FC = () => {
     return true;
   }
 
+  const description = "Create a bounding box polygon from one or more layers. The output will be a polygon layer containing the bounding box of all the selected geometries.";
+
   return (
-    <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit} buttonIcon={<BboxIcon />}>
-      
+    <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit} buttonIcon={<BboxIcon />} description={description}>
+
       <span className="toolInputLabel">Select one or more layers:</span>
       <SelectLayer 
         selectedLayers={selectedLayers} 

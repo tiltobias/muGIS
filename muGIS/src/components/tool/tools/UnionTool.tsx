@@ -50,9 +50,11 @@ const UnionTool: FC = () => {
     return true;
   }
 
+  const description = "Create a union of two or more polygon layers. The output will be a polygon layer containing the union of all the geometries.";
+
   return (
-    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />}>
-      
+    <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />} description={description}>
+
       <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 
         selectedLayers={selectedLayers} 

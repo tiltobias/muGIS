@@ -51,9 +51,11 @@ const VoronoiTool: FC = () => {
     return true;
   }
 
+  const description = "Create a Voronoi diagram from a point layer. The output will be a polygon layer containing the Thiessen polygon of each point.";
+
   return (
-    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />}>
-      
+    <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />} description={description}>
+
       <span className="toolInputLabel">Select a point layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 

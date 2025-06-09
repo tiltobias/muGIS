@@ -87,9 +87,11 @@ const ClipTool: FC = () => {
     return true;
   }
 
+  const description = "Clip any type of layer with a polygon layer. The output will be a layer of the same type containing only the features that are within the clip layer.";
+
   return (
-    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />}>
-      
+    <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />} description={description}>
+
       <span className="toolInputLabel">Select layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 

@@ -47,9 +47,11 @@ const DissolveTool: FC = () => {
     return true;
   }
 
+  const description = "Dissolve polygons in a layer based on a property or without any property. The output will be a polygon layer containing the dissolved geometries.";
+
   return (
-    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />}>
-      
+    <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />} description={description}>
+
       <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 

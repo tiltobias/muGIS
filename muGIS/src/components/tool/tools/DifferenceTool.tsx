@@ -52,9 +52,11 @@ const DifferenceTool: FC = () => {
     return true;
   }
 
+  const description = "Create a difference of two polygon layers. The output will be a polygon layer containing the geometries from the first layer that do not intersect with the second layer.";
+
   return (
-    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />}>
-      
+    <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />} description={description}>
+
       <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer1} 

@@ -59,8 +59,10 @@ const IntersectTool: FC = () => {
     return true;
   }
 
+  const description = "Intersect two or more polygon layers to create a new layer containing the overlapping areas. The output will be a polygon layer containing the intersected geometries.";
+
   return (
-    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />}>
+    <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />} description={description}>
       
       <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 
