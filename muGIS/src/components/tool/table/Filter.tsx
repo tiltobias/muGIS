@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import useAttributeTableStore, { FilterOperator, filterNumberOperators, filterStringOperators } from '../../../hooks/useAttributeTableStore';
 import './Filter.css';
-import { Square, SquareCheck, Trash2, SquarePlus } from 'lucide-react';
+import { Square, SquareCheck, Trash2, CopyPlus } from 'lucide-react';
 import Select from '../Select';
 
 interface FilterProps {
@@ -33,7 +33,7 @@ const Filter: FC<FilterProps> = ({ headers, headerTypes }) => {
             clearable={false}
           />
         </div>
-        <button onClick={addFilter}><SquarePlus />Add Filter</button>
+        <button onClick={addFilter}><CopyPlus />Add Filter</button>
       </div>
       <div className="filterRows">
         {filters.map((filter, index) => (

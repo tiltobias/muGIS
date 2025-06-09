@@ -29,7 +29,6 @@ const AttributeTable: FC = () => {
         }
       ) : []
     );
-    console.log('Selected layer changed:', selectedLayer);
   }, [selectedLayer]);
 
   const headers: string[] = useMemo(() => {

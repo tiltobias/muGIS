@@ -89,7 +89,7 @@ const SettingsMenu:FC<SettingsMenuProps> = () => {
 
   return (
     <div className="settings" ref={settingsContainer}>
-      <button type="button" onClick={()=>{setSettingsOpen(!settingsOpen)}}>
+      <button type="button" className="toolButton" onClick={()=>{setSettingsOpen(!settingsOpen)}}>
         <Settings />
       </button>
       {settingsOpen && (
