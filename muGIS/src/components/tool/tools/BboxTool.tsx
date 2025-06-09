@@ -54,13 +54,15 @@ const BboxTool: FC = () => {
   return (
     <ToolModal buttonLabel="Bbox" onFormSubmit={onFormSubmit} buttonIcon={<BboxIcon />}>
       
+      <span className="toolInputLabel">Select one or more layers:</span>
       <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
         multiple
       />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

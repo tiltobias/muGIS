@@ -87,3 +87,20 @@
         transform: translate(-50%, -50%) rotate(360deg);
     }
 }
+
+input#outputLayerName {
+    padding: .5em;
+    border: .1em solid var(--accent-color);
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+input#outputLayerName:focus {
+    outline: none;
+    border-color: var(--active-color);
+}
+
+label[for="outputLayerName"],
+.toolInputLabel {
+    margin-bottom: -1em;
+}

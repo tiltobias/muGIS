@@ -90,13 +90,13 @@ const ClipTool: FC = () => {
   return (
     <ToolModal buttonLabel="Clip" onFormSubmit={onFormSubmit} buttonIcon={<ClipIcon />}>
       
-      select layer: 
+      <span className="toolInputLabel">Select layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
       />
 
-      select mask layer: 
+      <span className="toolInputLabel">Select polygon layer to clip with:</span>
       <SelectLayer 
         selectedLayers={selectedMaskLayer} 
         setSelectedLayers={setSelectedMaskLayer} 
@@ -104,7 +104,8 @@ const ClipTool: FC = () => {
         unselectableLayerIds={[selectedLayer[0]?.id]}
       />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

@@ -53,6 +53,7 @@ const UnionTool: FC = () => {
   return (
     <ToolModal buttonLabel="Union" onFormSubmit={onFormSubmit} buttonIcon={<UnionIcon />}>
       
+      <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
@@ -60,7 +61,8 @@ const UnionTool: FC = () => {
         multiple
       />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

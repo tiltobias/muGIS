@@ -121,15 +121,15 @@ tr.selected td:has(button) {
 }
 
 .openFilterButton {
-  padding-inline: 3em;
+  padding: .2em 3em;
   display: flex;
   align-items: center;
   gap: .5em;
-  border: 2px solid transparent;
+  border: .2em solid transparent;
 }
 
 .openFilterButton.active {
-  border: 2px solid var(--active-color);
+  border-color: var(--active-color);
 }
 
 .tableFooter {

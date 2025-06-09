@@ -55,14 +55,14 @@ const DifferenceTool: FC = () => {
   return (
     <ToolModal buttonLabel="Difference" onFormSubmit={onFormSubmit} buttonIcon={<DifferenceIcon />}>
       
-      select base layer: 
+      <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer1} 
         setSelectedLayers={setSelectedLayer1} 
         renderingType="fill"
       />
 
-      select layer to subtract: 
+      <span className="toolInputLabel">Select polygon layer to subtract:</span>
       <SelectLayer 
         selectedLayers={selectedLayer2} 
         setSelectedLayers={setSelectedLayer2} 
@@ -70,7 +70,8 @@ const DifferenceTool: FC = () => {
         unselectableLayerIds={[selectedLayer1[0]?.id]}
       />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

@@ -43,15 +43,18 @@ const BufferTool: FC = () => {
   return (
     <ToolModal buttonLabel="Buffer" onFormSubmit={onFormSubmit} buttonIcon={<BufferIcon />}>
       
+      <span className="toolInputLabel">Select a layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
       />
-      
-      buffer radius [m]: {radius}
+
+      <span className="toolInputLabel">Buffer radius [m]:</span>
       <input type="number" value={radius} onChange={(e)=>setRadius(e.target.value)} />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

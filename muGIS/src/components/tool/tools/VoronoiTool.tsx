@@ -54,17 +54,17 @@ const VoronoiTool: FC = () => {
   return (
     <ToolModal buttonLabel="Voronoi" onFormSubmit={onFormSubmit} buttonIcon={<VoronoiIcon />}>
       
-      select layer: 
+      <span className="toolInputLabel">Select a point layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
         renderingType="circle"
       />
       
-      <span>
+      <span className={bboxEnabled ? "toolInputLabel" : ""}>
         <input type="checkbox" checked={bboxEnabled} onChange={(e)=>setBboxEnabled(e.target.checked)} id="checkboxPropertyEnabled" />
 
-        <label htmlFor="checkboxPropertyEnabled">use custom bounding box: {bboxEnabled}</label>
+        <label htmlFor="checkboxPropertyEnabled">Use custom bounding box{bboxEnabled && ":"}</label>
       </span>
       {bboxEnabled && 
         <SelectLayer 
@@ -73,8 +73,8 @@ const VoronoiTool: FC = () => {
         />
       }
 
-      
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

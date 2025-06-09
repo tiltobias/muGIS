@@ -22,49 +22,51 @@ const Filter: FC<FilterProps> = ({ headers, headerTypes }) => {
 
   return (
     <div className="filterContainer">
-      <div className="filterHeader">
-        <div className="filterConnector">
-          <span>Combine filters by: </span>
-          <Select
-            options={['and', 'or']}
-            selectedOption={filterConnector}
-            setSelectedOption={(value) => setFilterConnector(value as 'and' | 'or')}
-            placeholder="Select connector"
-            clearable={false}
-          />
-        </div>
-        <button onClick={addFilter}><CopyPlus />Add Filter</button>
-      </div>
-      <div className="filterRows">
-        {filters.map((filter, index) => (
-          <div key={index} className={`filterRow` + (filter.active ? ' active' : '')}>
+      <div className="filterSubContainer">
+        <div className="filterHeader">
+          <button onClick={addFilter}><CopyPlus />Add Filter</button>
+          <div className="filterConnector">
+            <span>Combine filters by: </span>
             <Select
-              options={headers}
-              selectedOption={filter.attribute}
-              setSelectedOption={(value) => updateFilter(index, { ...filter, attribute: value, attributeType: (headerTypes[headers.indexOf(value)] || 'string') as 'number' | 'string' })}
-              placeholder="Select an attribute"
-              clearable
+              options={['and', 'or']}
+              selectedOption={filterConnector}
+              setSelectedOption={(value) => setFilterConnector(value as 'and' | 'or')}
+              placeholder="Select connector"
+              clearable={false}
             />
-            <Select
-              options={filter.attributeType === 'number' ? [...filterNumberOperators] : [...filterStringOperators]}
-              selectedOption={filter.operator}
-              setSelectedOption={(value) => updateFilter(index, { ...filter, operator: value as FilterOperator })}
-              placeholder="Select operator"
-            />
-            <input
-              type={filter.attributeType === 'number' ? 'number' : 'text'}
-              placeholder={`Enter ${filter.attributeType} value`}
-              value={filter.value}
-              onChange={(e) => updateFilter(index, { ...filter, value: filter.attributeType === 'number' ? parseFloat(e.target.value) : e.target.value })}
-            />
-            <button type="button" className={`filterToggle ${filter.active ? 'active' : ''}`} onClick={() => {
-              updateFilter(index, { ...filter, active: !filter.active });
-            }}>
-              {filter.active ? <SquareCheck /> : <Square />}
-            </button>
-            <button onClick={() => removeFilter(index)}><Trash2 /></button>
           </div>
-        ))}
+        </div>
+        <div className="filterRows">
+          {filters.map((filter, index) => (
+            <div key={index} className={`filterRow` + (filter.active ? ' active' : '')}>
+              <Select
+                options={headers}
+                selectedOption={filter.attribute}
+                setSelectedOption={(value) => updateFilter(index, { ...filter, attribute: value, attributeType: (headerTypes[headers.indexOf(value)] || 'string') as 'number' | 'string' })}
+                placeholder="Select an attribute"
+                clearable
+              />
+              <Select
+                options={filter.attributeType === 'number' ? [...filterNumberOperators] : [...filterStringOperators]}
+                selectedOption={filter.operator}
+                setSelectedOption={(value) => updateFilter(index, { ...filter, operator: value as FilterOperator })}
+                placeholder="Select operator"
+              />
+              <input
+                type={filter.attributeType === 'number' ? 'number' : 'text'}
+                placeholder={`Enter ${filter.attributeType} value`}
+                value={filter.value}
+                onChange={(e) => updateFilter(index, { ...filter, value: filter.attributeType === 'number' ? parseFloat(e.target.value) : e.target.value })}
+              />
+              <button type="button" className={`filterToggle ${filter.active ? 'active' : ''}`} onClick={() => {
+                updateFilter(index, { ...filter, active: !filter.active });
+              }}>
+                {filter.active ? <SquareCheck /> : <Square />}
+              </button>
+              <button onClick={() => removeFilter(index)}><Trash2 /></button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

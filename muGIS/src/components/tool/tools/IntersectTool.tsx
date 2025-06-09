@@ -62,6 +62,7 @@ const IntersectTool: FC = () => {
   return (
     <ToolModal buttonLabel="Intersect" onFormSubmit={onFormSubmit} buttonIcon={<IntersectIcon />}>
       
+      <span className="toolInputLabel">Select two or more polygon layers:</span>
       <SelectLayer 
         selectedLayers={selectedLayers} 
         setSelectedLayers={setSelectedLayers}
@@ -69,7 +70,8 @@ const IntersectTool: FC = () => {
         multiple
       />
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }

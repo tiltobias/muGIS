@@ -1,4 +1,12 @@
 .filterContainer {
+  border: .1em solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--border-radius);
+  margin: .5em 0;
+  /* box-shadow: 0 0 .4em rgba(0, 0, 0, 0.2); */
+}
+
+.filterSubContainer {
   max-height: 12em;
   overflow-y: auto;
   flex-shrink: 0;
@@ -9,11 +17,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: .3em;
 }
 
 .filterHeader button {
   display: flex;
   align-items: center;
+}
+
+.filterConnector {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+
+.filterContainer .filterConnector > .selectLayersContainer {
+  width: 4em;
+}
+
+.filterContainer .filterConnector > .selectLayersContainer .selectListContainer {
+  scrollbar-gutter: unset;
 }
 
 .filterRows {
@@ -25,15 +48,15 @@
 .filterRow {
   display: flex;
   align-items: stretch;
-  /* border: .1em solid transparent; */
-}
-
-.filterRow.active {
-  border-color: var(--active-color);
 }
 
 .filterToggle.active {
   background-color: var(--active-color);
+}
+
+.filterRow > div {
+  padding-block: .2em;
+  border-radius: .2em;
 }
 
 .filterContainer .selectLayersContainer {
@@ -50,9 +73,9 @@
 .filterRow input[type="text"],
 .filterRow input[type="number"] {
   box-sizing: border-box;
-  padding: var(--border-radius) 0;
+  padding: .2em 0;
   border: solid .1em var(--accent-color);
-  border-radius: var(--border-radius);
+  border-radius: .2em;
   cursor: pointer;
   font-size: inherit;
   box-sizing: border-box;
@@ -67,5 +90,5 @@
 .filterRow > button {
   display: flex;
   align-items: center;
-  padding: 0 .5em;
+  padding: 0 1em;
 }

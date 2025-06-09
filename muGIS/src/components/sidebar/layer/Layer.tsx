@@ -139,18 +139,10 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
           <div className="layerMenuPopover">
             <ul>
               <li>
-                <button type="button" onClick={handleDeleteLayer}>
-                  <Trash2 /> Delete layer
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={handleDownloadLayer}>
-                  <FileDown /> Download layer
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={handleZoomToLayer}>
-                  <ZoomIn /> Zoom to layer
+                <button type="button" onClick={()=>{
+                  openTableWithLayer([layerData]);
+                }}>
+                  <TextSearch /> Attribute table
                 </button>
               </li>
               <li>
@@ -162,10 +154,18 @@ const Layer:FC<LayerProps> = ({layerData, layerAboveId, index}) => {
                 </button>
               </li>
               <li>
-                <button type="button" onClick={()=>{
-                  openTableWithLayer([layerData]);
-                }}>
-                  <TextSearch /> Attribute table
+                <button type="button" onClick={handleZoomToLayer}>
+                  <ZoomIn /> Zoom to layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleDownloadLayer}>
+                  <FileDown /> Download layer
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={handleDeleteLayer}>
+                  <Trash2 /> Delete layer
                 </button>
               </li>
             </ul>

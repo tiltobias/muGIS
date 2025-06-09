@@ -50,17 +50,17 @@ const DissolveTool: FC = () => {
   return (
     <ToolModal buttonLabel="Dissolve" onFormSubmit={onFormSubmit} buttonIcon={<DissolveIcon />}>
       
-      select layer: 
+      <span className="toolInputLabel">Select a polygon layer:</span>
       <SelectLayer 
         selectedLayers={selectedLayer} 
         setSelectedLayers={setSelectedLayer} 
         renderingType="fill"
       />
 
-      <span>
+      <span className={propertyEnabled ? "toolInputLabel" : ""}>
         <input type="checkbox" checked={propertyEnabled} onChange={(e)=>setPropertyEnabled(e.target.checked)} id="checkboxPropertyEnabled" />
 
-        <label htmlFor="checkboxPropertyEnabled">dissolve by property: {propertyEnabled && selectedProperty}</label>
+        <label htmlFor="checkboxPropertyEnabled">Dissolve by property{propertyEnabled && ":"}</label>
       </span>
       {propertyEnabled && (
         <Select
@@ -73,7 +73,8 @@ const DissolveTool: FC = () => {
       )}
       
 
-      <input type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
+      <label htmlFor="outputLayerName">Output Layer Name:</label>
+      <input id="outputLayerName" type="text" value={newLayerName} onChange={(e)=>setNewLayerName(e.target.value)} />
     </ToolModal>
   );
 }
