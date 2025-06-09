@@ -1,5 +1,5 @@
 import { FC, useState, useMemo, useEffect } from 'react';
-import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus, Funnel, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { TextSearch, X, ArrowUp, ArrowDown, Square, SquareCheck, SquareMinus, Funnel, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Info } from 'lucide-react';
 import './AttributeTable.css';
 import useLayerStore from '../../../hooks/useLayerStore';
 import SelectLayer from '../SelectLayer';
@@ -136,7 +136,9 @@ const AttributeTable: FC = () => {
   }
 
   const [tablePage, setTablePage] = useState<number>(1);
+  const [showDescription, setShowDescription] = useState<boolean>(false);
 
+  const description = "This tool allows you to view and manage the attributes of features in a selected layer. You can filter, sort, and select features, and create a new layer from the selected features. Click on the column headers to sort by attribute. You can select individual features by clicking the checkbox in the first column, or all of them by clicking the checkbox in the header. Use the 'Create Layer From Selection' button to create a new layer from the selected features. To filter the displayed features, click 'Open Filter' and use the filter panel to set your criteria. Use 'Combine filters by AND' to require all conditions to be met, or 'Combine filters by OR' to allow any condition to be met.";
 
   return (
     <div>
@@ -150,7 +152,14 @@ const AttributeTable: FC = () => {
         }}>
           <div className="attributeTable">
             <button type="button" className="modalCloseButton" onClick={()=>setTableOpen(false)}><X /></button>
-            <h3>Attribute Table</h3>
+            <div className="modalHeader">
+              <h3>Attribute Table</h3>
+              <button type="button" className="infoButton" onClick={() => setShowDescription(!showDescription)}>
+                <Info />
+              </button>
+            </div>
+
+            {showDescription && <p className="modalDescription">{description}</p>}
 
             <div className="tableInputHeader">
               <SelectLayer 
