@@ -39,41 +39,50 @@ Ensure the following GeoJSON files are available in your project:
 
 ### 2. Identify Stops Served by Bus Line 3
 
-1. Open the <img src="./icons/text-search.svg" /> **Attribute Table** of `busstopp.geojson`.
-2. Open the **filter** panel.
-3. Set the filter logic to **"OR"**.
-4. Filter based on the `bus_lines` field to match line 3, using:
+1. Open the **Attribute Table** of `busstopp.geojson`. This can be done two ways:
+   - Click the <img src="./icons/text-search.svg" /> icon in the sidebar and select the `busstopp.geojson` layer.
+   - Click the <img src="./icons/ellipsis-vertical.svg" /> icon on the `busstopp.geojson` layer in the sidebar, and then click **"Attribute Table"**.
+2. Press the **"Open Filter"** button to open the filter panel.
+3. Set "Combine filters by:" to `"or"` so that any of the conditions can be true.
+4. Find all bus stops with line 3 by using these four filters (with spaces as shown):
    ```
    bus_lines = '3'
-   bus_lines LIKE '3,%'
-   bus_lines LIKE '% 3,%'
-   bus_lines LIKE '% 3'
+   bus_lines starts with '3,'
+   bus_lines contains ' 3,'
+   bus_lines ends with ' 3'
    ```
-5. Select all matching features (click the select button in the table’s corner).
-6. Right-click and choose **"Create Layer From Selected Features"**.
+   - Click **"Add Filter"** to add more filters as needed.
+   - Check the checkbox next to each filter to apply it.
+5. Select all matching features (click the select button in the table’s corner to select all filtered featuers).
+6. Click **"Create Layer From Selected Features"**.
+   - This creates a new layer containing only the bus stops served by line 3.
+   - The new layer (named `selection(busstopp.geojson)`) will appear at the top of the Layers list.
 7. Rename the new layer to **`buss3`**.
 
 ---
 
 ### 3. Create Buffers
 
-1. Create a **300 meter buffer** around the `buss3` layer.
+1. Create a **300 meter buffer** around the `buss3` layer by using the **Buffer** tool in the toolbar.
    - This shows areas easily reachable from bus line 3.
 2. Create a **200 meter buffer** around `undergang.geojson`.
-   - Rename this buffer to **`Skummelt`** (Norwegian for "scary").
+   - Rename this buffer to **`Skummelt`**.
 
 ---
 
-### 4. Add a Reference Point for Lerkendalsbygget
+### 4. Simplify the View
 
-1. Use the **Add Point** tool to mark Lerkendalsbygget (used as a reference point for Studentersamfundet).
-2. Rename this point to **`Lerka`**.
+1. Hide all the layers to see the map clearly. Press the topmost **eye icon** in the sidebar.
 
 ---
 
-### 5. Simplify the View
+### 5. Create a Reference Point for Lerkendalsbygget
 
-1. Hide unnecessary layers by clicking the **eye icon** in the Layers panel.
+1. Activate *Point drawing mode* by clicking the marker icon in the bottom right of the map. 
+   <br><img src="./icons/drawTools.png" width="70"/>
+2. Now click on the map to place a point at the location of *Lerkendalsbygget* (NTNU Gløshaugen).
+   <br><img src="./icons/lerka.png" width="300"/>
+3. Rename this point to **`Lerka`**.
 
 ---
 
@@ -95,38 +104,23 @@ Ensure the following GeoJSON files are available in your project:
 
 ### 8. Refine the Bus Area
 
-1. Use **Dissolve** on the `buss3` layer to merge multiple features into one.
+1. Use **Dissolve** on the `buffer(buss3, 300m)` layer to merge all the overlapping features into one.
+   - This simplifies the bus area into a single polygon.
+   - Rename this layer to **`buss3Området`**.
 
 ---
 
 ### 9. Find the Final Suitable Zone
 
-1. Use the **Intersect** tool:
-   - Input: the result from the **Difference** operation.
-   - Overlay: the **dissolved buss3** layer.
-   - Output: area that is:
-     - Within walking distance to Studentersamfundet (via Lerka)
-     - Near bus line 3
-     - Away from scary underpasses
+1. Open the **Intersect** tool:
+2. Select the input layers: 
+   - the result from the **Difference** operation (`difference(LerkaOmrådet, Skummelt)`).
+   - `buss3Området`
+3. Output: area that is:
+   - Within walking distance to Studentersamfundet (via Lerka)
+   - Near bus line 3
+   - Away from scary underpasses
 
 🎉 **Done!** You've now isolated suitable places to live for students in Trondheim using spatial analysis.
 
----
-
-## 🧠 Tips
-
-- Use **styling** (colors, transparency) to visualize the layers clearly.
-- Save your project regularly.
-- Export the final result if needed for use in maps, reports, or web tools.
-
----
-
-## 📁 Summary of Output Layers
-
-| Layer Name     | Description                              |
-|----------------|------------------------------------------|
-| `buss3`        | Bus stops served by line 3               |
-| `Skummelt`     | 200m buffer around underpasses           |
-| `Lerka`        | Reference point near Studentersamfundet  |
-| `LerkaOmrådet` | 1000m buffer around Lerka                |
-| *(result)*     | Final safe & accessible housing zone     |
+<img src="./icons/tutorialFerdig.png" />
